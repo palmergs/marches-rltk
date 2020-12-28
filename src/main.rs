@@ -22,6 +22,7 @@ pub mod prelude {
     pub const DISPLAY_WIDTH: i32 = SCREEN_WIDTH;
     pub const DISPLAY_HEIGHT: i32 = SCREEN_HEIGHT;
 
+    // Terminal layers
     pub const FLOOR:usize = 0;
     pub const ITEMS:usize = 1;
     pub const CHARS:usize = 2;
@@ -39,7 +40,6 @@ impl State {
     fn new() -> Self {
         let mut ecs = World::default();
         let mut resources = Resources::default();
-        resources.insert(Rng::new());
 
         Self{
             ecs,
@@ -63,8 +63,12 @@ impl GameState for State {
         ctx.set_active_console(FLOOR);
         ctx.cls();
 
-        let mut rng = Rng::new();
-        println!("random number = {:?}", rng.next_u64());
+        ctx.set_active_console(UI);
+        ctx.print_color_centered(2, GREEN, BLACK, "This game is under construction...");
+
+        self.resources.insert(ctx.key);
+        self.resources.insert(Point::from_tuple(ctx.mouse_pos()));
+
         render_draw_buffer(ctx).expect("render error from draw buffer in tick");
     }
 }
