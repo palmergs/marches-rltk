@@ -33,22 +33,21 @@ impl State {
 
 impl GameState for State {
     fn tick(&mut self, ctx: &mut BTerm) {
-        // ctx.set_active_console(UI_LAYER);
-        // ctx.cls();
+        ctx.set_active_console(UI_LAYER);
+        ctx.cls();
 
-        // ctx.set_active_console(ACTOR_LAYER);
-        // ctx.cls();
+        ctx.set_active_console(ACTOR_LAYER);
+        ctx.cls();
 
-        // ctx.set_active_console(ITEM_LAYER);
-        // ctx.cls();
+        ctx.set_active_console(ITEM_LAYER);
+        ctx.cls();
 
-        // ctx.set_active_console(FLOOR_LAYER);
-        // ctx.cls();
+        ctx.set_active_console(FLOOR_LAYER);
+        ctx.cls();
 
         let mut draw_batch = DrawBatch::new();
         draw_batch.target(UI_LAYER);
-        draw_batch.cls();
-        draw_batch.print_color_centered(2, "This game is under construction...", ColorPair::new(GREEN, BLACK));
+        draw_batch.print_color_centered(2, "This game is under construction...", ColorPair::new(BLUE, BLACK));
         draw_batch.submit(0).expect("drawing UI layer");
 
         self.resources.insert(ctx.key);
