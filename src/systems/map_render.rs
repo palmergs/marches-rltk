@@ -9,6 +9,7 @@ pub fn map_render(
 ) {
     let mut draw_batch = DrawBatch::new();
     draw_batch.target(FLOOR_LAYER);
+    draw_batch.cls();
 
     let offset = camera.offset();
     let color = ColorPair::new(WHITE, BLACK);
