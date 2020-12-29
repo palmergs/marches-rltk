@@ -6,7 +6,7 @@ pub fn spawn_player(ecs: &mut World, pt: Point) {
             Player,
             Actor,
             pt,
-            Render{ color: ColorPair::new(WHITE, BLACK), tile: 1 }
+            Render{ color: ColorPair::new(WHITE, BLACK), tile: 128 + 20 }
         )
     );
 }

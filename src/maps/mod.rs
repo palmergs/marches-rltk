@@ -25,8 +25,13 @@ impl Map {
     pub fn new() -> Self {
         let mut tiles = vec![TileType::Floor; MAP_TILES];
         let mut rng = Rng::new();
-        for _ in 0 .. 1000 {
-            tiles[rng.range(0, MAP_TILES)] = TileType::Wall;
+        for _ in 0 .. 2000 {
+            match rng.range(0, 4) {
+                0 => tiles[rng.range(0, MAP_TILES)] = TileType::Wall,
+                1 => tiles[rng.range(0, MAP_TILES)] = TileType::Door,
+                2 => tiles[rng.range(0, MAP_TILES)] = TileType::Tree,
+                _ => tiles[rng.range(0, MAP_TILES)] = TileType::Wall,
+            }
         }
         Self{
             depth: 0,

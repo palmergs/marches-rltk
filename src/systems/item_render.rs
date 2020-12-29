@@ -13,7 +13,6 @@ pub fn item_render(
 
     let mut draw_batch = DrawBatch::new();
     draw_batch.target(ITEM_LAYER);
-    draw_batch.cls();
 
     let offset = camera.offset();
     renderables.iter(ecs)

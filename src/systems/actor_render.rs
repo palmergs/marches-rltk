@@ -13,12 +13,12 @@ pub fn actor_render(
 
     let mut draw_batch = DrawBatch::new();
     draw_batch.target(ACTOR_LAYER);
-    draw_batch.cls();
 
     let offset = camera.offset();
     renderables
         .iter(ecs)
         .for_each(|(pt, render, _)| {
+            // println!("actor at {:?} real={:?} tile={:?}", *pt - offset, *pt, render.tile);
             draw_batch.set(*pt - offset, render.color, render.tile);
         });
 
