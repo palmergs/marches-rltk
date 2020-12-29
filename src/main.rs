@@ -5,6 +5,7 @@ mod maps;
 mod systems;
 mod spawners;
 mod cameras;
+mod state;
 
 pub mod prelude {
     pub use bracket_lib::prelude::*;
@@ -18,6 +19,7 @@ pub mod prelude {
     pub use crate::systems::*;
     pub use crate::spawners::*;
     pub use crate::cameras::*;
+    pub use crate::state::*;
 
     pub const SCREEN_WIDTH: i32 = 80;
     pub const SCREEN_HEIGHT: i32 = 50;
@@ -28,57 +30,13 @@ pub mod prelude {
     pub const DISPLAY_HEIGHT: i32 = SCREEN_HEIGHT;
 
     // Terminal layers
-    pub const FLOOR:usize = 0;
-    pub const ITEMS:usize = 1;
-    pub const CHARS:usize = 2;
-    pub const UI:usize = 3;
+    pub const FLOOR_LAYER:usize = 0;
+    pub const ITEM_LAYER:usize = 1;
+    pub const ACTOR_LAYER:usize = 2;
+    pub const UI_LAYER:usize = 3;
 }
 
 use prelude::*;
-
-struct State {
-    ecs: World,
-    resources: Resources
-}
-
-impl State {
-    fn new() -> Self {
-        let mut ecs = World::default();
-        spawn_player(&mut ecs, Point::new(MAP_WIDTH / 2, MAP_HEIGHT / 2));
-
-        let mut resources = Resources::default();
-
-        Self{
-            ecs,
-            resources,
-        }
-    }
-}
-
-
-impl GameState for State {
-    fn tick(&mut self, ctx: &mut BTerm) {
-        ctx.set_active_console(UI);
-        ctx.cls();
-
-        ctx.set_active_console(CHARS);
-        ctx.cls();
-
-        ctx.set_active_console(ITEMS);
-        ctx.cls();
-
-        ctx.set_active_console(FLOOR);
-        ctx.cls();
-
-        ctx.set_active_console(UI);
-        ctx.print_color_centered(2, GREEN, BLACK, "This game is under construction...");
-
-        self.resources.insert(ctx.key);
-        self.resources.insert(Point::from_tuple(ctx.mouse_pos()));
-
-        render_draw_buffer(ctx).expect("render error from draw buffer in tick");
-    }
-}
 
 fn main() -> BError {
     let context = BTermBuilder::new()
@@ -86,9 +44,9 @@ fn main() -> BError {
         .with_dimensions(DISPLAY_WIDTH, DISPLAY_HEIGHT)
         .with_tile_dimensions(16, 16)
         .with_resource_path("resources/")
+        .with_font("rogueliketiles.png", 16, 16)
         .with_font("roguelikecreatures.png", 16, 16)
         .with_font("roguelikeitems.png", 16, 16)
-        .with_font("rogueliketiles.png", 16, 16)
         .with_font("terminal8x8.png", 8, 8)
         .with_simple_console(DISPLAY_WIDTH, DISPLAY_HEIGHT, "rogueliketiles.png")
         .with_simple_console_no_bg(DISPLAY_WIDTH, DISPLAY_HEIGHT, "roguelikeitems.png")

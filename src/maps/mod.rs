@@ -8,7 +8,6 @@ pub enum TileType {
     Door,
     DoorOpen,
     Bookshelf,
-    BookshelfEmpty,
     Chest,
     ChestEmpty,
 }
@@ -56,8 +55,8 @@ impl Map {
 
     pub fn distance(&self, idx1: usize, idx2: usize) -> f32 {
         DistanceAlg::Pythagoras.distance2d(
-            self.index_to_point2d(idx1), 
-            self.index_to_point2d(idx2)) 
+            self.index_to_point2d(idx1),
+            self.index_to_point2d(idx2))
     }
 }
 
@@ -84,10 +83,9 @@ impl BaseMap for Map {
 
     fn is_opaque(&self, idx: usize) -> bool {
         let tile = self.tiles[idx];
-        tile != TileType::Wall 
+        tile != TileType::Wall
             && tile != TileType::Tree
-            && tile != TileType::Door 
+            && tile != TileType::Door
             && tile != TileType::Bookshelf
-            && tile != TileType::BookshelfEmpty
     }
 }
