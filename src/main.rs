@@ -3,6 +3,8 @@ extern crate bracket_lib;
 mod components;
 mod maps;
 mod systems;
+mod spawners;
+mod cameras;
 
 pub mod prelude {
     pub use bracket_lib::prelude::*;
@@ -14,11 +16,14 @@ pub mod prelude {
     pub use crate::maps::*;
     pub use crate::components::*;
     pub use crate::systems::*;
+    pub use crate::spawners::*;
+    pub use crate::cameras::*;
 
     pub const SCREEN_WIDTH: i32 = 80;
     pub const SCREEN_HEIGHT: i32 = 50;
-    pub const MAP_WIDTH: i32 = 200;
-    pub const MAP_HEIGHT: i32 = 200;
+    pub const MAP_WIDTH: usize = 200;
+    pub const MAP_HEIGHT: usize = 200;
+    pub const MAP_TILES: usize = MAP_WIDTH * MAP_HEIGHT;
     pub const DISPLAY_WIDTH: i32 = SCREEN_WIDTH;
     pub const DISPLAY_HEIGHT: i32 = SCREEN_HEIGHT;
 
@@ -39,6 +44,8 @@ struct State {
 impl State {
     fn new() -> Self {
         let mut ecs = World::default();
+        spawn_player(&mut ecs, Point::new(MAP_WIDTH / 2, MAP_HEIGHT / 2));
+
         let mut resources = Resources::default();
 
         Self{
