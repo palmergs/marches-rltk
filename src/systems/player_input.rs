@@ -13,12 +13,13 @@ pub fn player_input(
     if state.clone() != TurnState::AwaitingInput { return; }
 
     if let Some(key) = key {
+        println!("key pressed {:?}", key);
         let mut players = <(Entity, &Point)>::query().filter(component::<Player>());
         let (player, location) = players
             .iter(ecs)
             .find_map(|(entity, pos)| Some((*entity, *pos))).unwrap();
 
-        let delta = match key {
+        match key {
             VirtualKeyCode::Left | VirtualKeyCode::Numpad4 => return handle_move(ecs, commands, player, location, Point::new(-1, 0)),
             VirtualKeyCode::Right | VirtualKeyCode::Numpad6 => return handle_move(ecs, commands, player, location, Point::new(1, 0)),
             VirtualKeyCode::Up | VirtualKeyCode::Numpad8 => return handle_move(ecs, commands, player, location, Point::new(0, -1)),
@@ -27,7 +28,7 @@ pub fn player_input(
             VirtualKeyCode::Numpad9 => return handle_move(ecs, commands, player, location, Point::new(1, -1)),
             VirtualKeyCode::Numpad1 => return handle_move(ecs, commands, player, location, Point::new(-1, 1)),
             VirtualKeyCode::Numpad3 => return handle_move(ecs, commands, player, location, Point::new(1, 1)),
-            _ => Point::zero(),
+            _ => (),
         };
     }
 }

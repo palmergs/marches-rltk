@@ -23,11 +23,16 @@ pub struct Map {
 
 impl Map {
     pub fn new() -> Self {
+        let mut tiles = vec![TileType::Floor; MAP_TILES];
+        let mut rng = Rng::new();
+        for _ in 0 .. 1000 {
+            tiles[rng.range(0, MAP_TILES)] = TileType::Wall;
+        }
         Self{
             depth: 0,
             origin: Point::constant(0, 0),
             extent: Point::constant(MAP_WIDTH as i32, MAP_HEIGHT as i32),
-            tiles: vec![TileType::Floor; MAP_TILES],
+            tiles,
             revealed: vec![false; MAP_TILES],
             lighting: vec![0u8; MAP_TILES],
         }
