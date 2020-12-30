@@ -52,7 +52,6 @@ fn handle_move(
         });
 
     if !hit_something {
-        println!("Adding move command: {:?} to {:?}", actor, destination);
         commands.push(((), WantsToMove{ actor, destination }));
     }
 }

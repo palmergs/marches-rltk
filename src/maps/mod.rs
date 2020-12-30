@@ -17,8 +17,7 @@ pub struct Map {
     pub origin: Point,
     pub extent: Point,
     pub tiles: Vec<TileType>,
-    pub revealed: Vec<bool>,
-    pub lighting: Vec<u8>,
+    pub revealed: Vec<bool>
 }
 
 impl Map {
@@ -39,7 +38,6 @@ impl Map {
             extent: Point::constant(MAP_WIDTH as i32, MAP_HEIGHT as i32),
             tiles,
             revealed: vec![false; MAP_TILES],
-            lighting: vec![0u8; MAP_TILES],
         }
     }
 
@@ -93,9 +91,9 @@ impl BaseMap for Map {
 
     fn is_opaque(&self, idx: usize) -> bool {
         let tile = self.tiles[idx];
-        tile != TileType::Wall
-            && tile != TileType::Tree
-            && tile != TileType::Door
-            && tile != TileType::Bookshelf
+        tile == TileType::Wall
+            || tile == TileType::Tree
+            || tile == TileType::Door
+            || tile == TileType::Bookshelf
     }
 }

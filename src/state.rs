@@ -15,6 +15,15 @@ pub struct State {
     computer_schedule: Schedule,
 }
 
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct TickCount(usize);
+
+impl TickCount {
+    pub fn is_short(&self) -> bool { self.0 % 10 == 0 }
+    pub fn is_medium(&self) -> bool { self.0 % 100 == 0 }
+    pub fn is_long(&self) -> bool { self.0 % 1000 == 0 }
+}
+
 impl State {
     pub fn new() -> Self {
         let mut ecs = World::default();
@@ -22,7 +31,13 @@ impl State {
         let player_start = Point::new(MAP_WIDTH / 2, MAP_HEIGHT / 2);
         spawn_player(&mut ecs, player_start);
 
+        let mut rng = Rng::new();
+        for _ in 0..200 {
+            spawn_torch(&mut ecs, Point::new(rng.range(1, MAP_WIDTH - 1), rng.range(1, MAP_HEIGHT - 1)));
+        }
+
         let mut resources = Resources::default();
+        resources.insert(TickCount(0));
         resources.insert(Map::new());
         resources.insert(Camera::new(player_start));
         resources.insert(TurnState::AwaitingInput);
@@ -46,6 +61,10 @@ impl GameState for State {
         draw_batch.print_color_centered(2, "This game is under construction...", ColorPair::new(PURPLE, BLACK));
         draw_batch.submit(40).expect("batch error in drawing UI layer");
 
+        let curr_tick = self.resources.get::<TickCount>().unwrap().clone();
+        if curr_tick.is_long() { println!("tick = {:?}", curr_tick); }
+
+        self.resources.insert(TickCount(curr_tick.0 + 1));
         self.resources.insert(ctx.key);
         self.resources.insert(Point::from_tuple(ctx.mouse_pos()));
 

@@ -31,3 +31,41 @@ pub struct WantsToInteract {
     pub actor: Entity,
     pub victim: Entity,
 }
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct FieldOfView {
+    pub visible_tiles: HashSet<Point>,
+    pub radius: i32,
+    pub is_dirty: bool,
+}
+
+impl FieldOfView {
+    pub fn new(radius: i32) -> Self {
+        Self{ visible_tiles: HashSet::new(), radius, is_dirty: true }
+    }
+
+    pub fn clone_dirty(&self) -> Self {
+        let mut cloned = self.clone();
+        cloned.is_dirty = true;
+        cloned
+    }
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct FieldOfLight {
+    pub lit_tiles: HashSet<Point>,
+    pub radius: i32,
+    pub is_dirty: bool,
+}
+
+impl FieldOfLight {
+    pub fn new(radius: i32) -> Self {
+        Self{ lit_tiles: HashSet::new(), radius, is_dirty: true }
+    }
+
+    pub fn clone_dirty(&self) -> Self {
+        let mut cloned = self.clone();
+        cloned.is_dirty = true;
+        cloned
+    }
+}
