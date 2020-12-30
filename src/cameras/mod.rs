@@ -26,6 +26,15 @@ impl Camera {
     }
 
     pub fn offset(&self) -> Point { Point::constant(self.left, self.top) }
+
+    pub fn extent(&self) -> Point { Point::constant(self.right, self.bottom) }
+
+    pub fn in_view(&self, pt: Point) -> bool {
+        pt.x >= self.left
+            && pt.x < self.right
+            && pt.y >= self.top
+            && pt.y < self.bottom
+    }
 }
 
 #[cfg(test)]

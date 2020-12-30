@@ -31,8 +31,9 @@ pub mod prelude {
 
     // Terminal layers
     pub const FLOOR_LAYER:usize = 0;
-    pub const ENTITY_LAYER:usize = 1;
-    pub const UI_LAYER:usize = 2;
+    pub const ITEM_LAYER:usize = 1;
+    pub const ACTOR_LAYER:usize = 2;
+    pub const UI_LAYER:usize = 3;
 }
 
 use prelude::*;
@@ -45,6 +46,7 @@ fn main() -> BError {
         .with_resource_path("resources/")
         .with_font("unicode_trunc_graph_16x16.png", 16, 16)
         .with_simple_console(DISPLAY_WIDTH, DISPLAY_HEIGHT, "unicode_trunc_graph_16x16.png")
+        .with_simple_console_no_bg(DISPLAY_WIDTH, DISPLAY_HEIGHT, "unicode_trunc_graph_16x16.png")
         .with_simple_console_no_bg(DISPLAY_WIDTH, DISPLAY_HEIGHT, "unicode_trunc_graph_16x16.png")
         .with_simple_console_no_bg(DISPLAY_WIDTH, DISPLAY_HEIGHT, "unicode_trunc_graph_16x16.png")
         .build()?;

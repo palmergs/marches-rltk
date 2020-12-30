@@ -61,10 +61,25 @@ impl Map {
         None
     }
 
+    #[inline]
     pub fn distance(&self, idx1: usize, idx2: usize) -> f32 {
         DistanceAlg::Pythagoras.distance2d(
             self.index_to_point2d(idx1),
             self.index_to_point2d(idx2))
+    }
+
+    #[inline]
+    pub fn font_idx(&self, idx: usize) -> usize {
+        match self.tiles[idx] {
+            TileType::Floor => 128 + 18,
+            TileType::Wall => 128 + 19,
+            TileType::Tree => 21,
+            TileType::Door => 2,
+            TileType::DoorOpen => 3,
+            TileType::Chest => 18,
+            TileType::ChestEmpty => 19,
+            TileType::Bookshelf => 25,
+        }
     }
 }
 
