@@ -36,6 +36,17 @@ impl State {
             spawn_torch(&mut ecs, Point::new(rng.range(1, MAP_WIDTH - 1), rng.range(1, MAP_HEIGHT - 1)));
         }
 
+        for _ in 0..50 {
+            match rng.range(0, 2) {
+                0 => spawn_goblin_with_torch(
+                    &mut ecs,
+                    Point::new(rng.range(1, MAP_WIDTH - 1), rng.range(1, MAP_HEIGHT - 1))),
+                _ => spawn_rat(
+                    &mut ecs,
+                    Point::new(rng.range(1, MAP_WIDTH - 1), rng.range(1, MAP_HEIGHT - 1))),
+            }
+        }
+
         let mut resources = Resources::default();
         resources.insert(TickCount(0));
         resources.insert(Map::new());

@@ -13,12 +13,11 @@ pub struct Item;
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Render {
-    pub color: ColorPair,
     pub tile: usize,
 }
 
 #[derive(Debug, Clone, PartialEq)]
-pub struct Name(String);
+pub struct Name(pub String);
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct WantsToMove {
