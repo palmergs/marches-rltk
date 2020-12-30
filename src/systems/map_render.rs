@@ -26,7 +26,7 @@ pub fn map_render(
             let mut light = 1.0 - (DistanceAlg::Pythagoras.distance2d(*pt, *tile) as f32 / fol.radius as f32);
             if light < 0.1 { light = 0.1; }
             match lighting.get(tile) {
-                Some(val) => if val > &light { lighting.insert(*tile, *val); },
+                Some(val) => if val < &light { lighting.insert(*tile, light); },
                 None => { lighting.insert(*tile, light); },
             }
         }
@@ -34,7 +34,7 @@ pub fn map_render(
 
     let mut draw_batch = DrawBatch::new();
     draw_batch.target(FLOOR_LAYER);
-    // draw_batch.cls();
+    draw_batch.cls();
 
     let offset = camera.offset();
     let mut fg = RGB::from_f32(1.0, 1.0, 1.0);
