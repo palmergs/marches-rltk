@@ -2,13 +2,17 @@ use crate::prelude::*;
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum TurnState {
-    AwaitingInput
+    AwaitingInput,
+    PlayerTurn,
+    ComputerTurn,
 }
 
 pub struct State {
     ecs: World,
     resources: Resources,
     input_schedule: Schedule,
+    player_schedule: Schedule,
+    computer_schedule: Schedule,
 }
 
 impl State {
@@ -27,29 +31,20 @@ impl State {
             ecs,
             resources,
             input_schedule: build_input_schedule(),
+            player_schedule: build_player_schedule(),
+            computer_schedule: build_computer_schedule(),
         }
     }
 }
 
 impl GameState for State {
     fn tick(&mut self, ctx: &mut BTerm) {
-        // ctx.set_active_console(UI_LAYER);
-        // ctx.cls();
-
-        // ctx.set_active_console(ACTOR_LAYER);
-        // ctx.cls();
-
-        // ctx.set_active_console(ITEM_LAYER);
-        // ctx.cls();
-
-        // ctx.set_active_console(FLOOR_LAYER);
-        // ctx.cls();
 
         let mut draw_batch = DrawBatch::new();
         draw_batch.target(UI_LAYER);
         draw_batch.cls();
         draw_batch.print_color_centered(2, "This game is under construction...", ColorPair::new(PURPLE, BLACK));
-        draw_batch.submit(0).expect("batch error in drawing UI layer");
+        draw_batch.submit(40).expect("batch error in drawing UI layer");
 
         self.resources.insert(ctx.key);
         self.resources.insert(Point::from_tuple(ctx.mouse_pos()));
@@ -57,6 +52,8 @@ impl GameState for State {
         let curr_state = self.resources.get::<TurnState>().unwrap().clone();
         match curr_state {
             TurnState::AwaitingInput => self.input_schedule.execute(&mut self.ecs, &mut self.resources),
+            TurnState::PlayerTurn => self.player_schedule.execute(&mut self.ecs, &mut self.resources),
+            TurnState::ComputerTurn => self.computer_schedule.execute(&mut self.ecs, &mut self.resources),
         };
 
         render_draw_buffer(ctx).expect("render error from draw buffer in tick");

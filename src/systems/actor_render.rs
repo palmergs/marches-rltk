@@ -12,7 +12,7 @@ pub fn actor_render(
     let mut renderables = <(&Point, &Render, &Actor)>::query();
 
     let mut draw_batch = DrawBatch::new();
-    draw_batch.target(ACTOR_LAYER);
+    draw_batch.target(ENTITY_LAYER);
     draw_batch.cls();
 
     let offset = camera.offset();
@@ -26,5 +26,5 @@ pub fn actor_render(
     draw_batch.set(Point::new(10, 10), ColorPair::new(WHITE, BLACK), 148);
     draw_batch.set(Point::new(11, 11), ColorPair::new(RED, BLACK), 148);
     draw_batch.set(Point::new(12, 12), ColorPair::new(BLUE, BLACK), 148);
-    draw_batch.submit(0).expect("batch error in actor_render");
+    draw_batch.submit(20).expect("batch error in actor_render");
 }

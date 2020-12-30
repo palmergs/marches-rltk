@@ -22,7 +22,7 @@ pub struct Name(String);
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct WantsToMove {
-    pub entity: Entity,
+    pub actor: Entity,
     pub destination: Point,
 }
 
