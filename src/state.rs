@@ -19,9 +19,14 @@ pub struct State {
 pub struct TickCount(usize);
 
 impl TickCount {
-    pub fn is_short(&self) -> bool { self.0 % 10 == 0 }
-    pub fn is_medium(&self) -> bool { self.0 % 100 == 0 }
-    pub fn is_long(&self) -> bool { self.0 % 1000 == 0 }
+    pub fn msg(&self, n: usize, s: &str) -> bool { 
+        if self.0 % n == 0 { 
+            println!("{}", s); 
+            return true;
+        }
+
+        false
+    }
 }
 
 impl State {
@@ -36,11 +41,14 @@ impl State {
             spawn_torch(&mut ecs, Point::new(rng.range(1, MAP_WIDTH - 1), rng.range(1, MAP_HEIGHT - 1)));
         }
 
-        for _ in 0..50 {
-            match rng.range(0, 2) {
+        for _ in 0..200 {
+            match rng.range(0, 4) {
                 0 => spawn_goblin_with_torch(
                     &mut ecs,
                     Point::new(rng.range(1, MAP_WIDTH - 1), rng.range(1, MAP_HEIGHT - 1))),
+                1 => spawn_animated_tree(
+                    &mut ecs,
+                    Point::new(rng.range(1, MAP_WIDTH - 1), rng.range(1, MAP_HEIGHT - 1))),                    
                 _ => spawn_rat(
                     &mut ecs,
                     Point::new(rng.range(1, MAP_WIDTH - 1), rng.range(1, MAP_HEIGHT - 1))),
@@ -69,11 +77,14 @@ impl GameState for State {
         let mut draw_batch = DrawBatch::new();
         draw_batch.target(UI_LAYER);
         draw_batch.cls();
-        draw_batch.print_color_centered(2, "This game is under construction...", ColorPair::new(PURPLE, BLACK));
-        draw_batch.submit(40).expect("batch error in drawing UI layer");
+        draw_batch.print_color_centered(
+            2,
+            "This game is under construction...", 
+            ColorPair::new(YELLOW, BLACK));
+        draw_batch.submit(5000).expect("batch error in drawing UI layer");
 
         let curr_tick = self.resources.get::<TickCount>().unwrap().clone();
-        if curr_tick.is_long() { println!("tick = {:?}", curr_tick); }
+        curr_tick.msg(1000, "1000 ticks");
 
         self.resources.insert(TickCount(curr_tick.0 + 1));
         self.resources.insert(ctx.key);

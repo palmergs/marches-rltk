@@ -47,6 +47,7 @@ pub fn render(
     draw_batch.target(FLOOR_LAYER);
     draw_batch.cls();
 
+    let bg = RGBA::from_f32(0.0, 0.0, 0.0, 0.0);
     for y in camera.top ..= camera.bottom {
         for x in camera.left ..= camera.right {
             let map_pt = Point::new(x, y);
@@ -59,7 +60,7 @@ pub fn render(
                     Some(fg) => {
                         draw_batch.set(
                             screen_pt,
-                            ColorPair::new(RGB::from_f32(fg, fg, fg), BLACK),
+                            ColorPair::new(RGB::from_f32(fg, fg, fg), bg),
                             map.font_idx(map_idx));
                     },
                     None => ()
@@ -69,8 +70,8 @@ pub fn render(
     }
 
     // Draw Items
-    // draw_batch.target(ITEM_LAYER);
-    // draw_batch.cls();
+    draw_batch.target(ITEM_LAYER);
+    draw_batch.cls();
 
     let mut query = <(&Item, &Point, &Render)>::query();
     query.iter(ecs).for_each(|(_, map_pt, render)| {
@@ -81,7 +82,7 @@ pub fn render(
                 Some(fg) => {
                     draw_batch.set(
                         screen_pt,
-                        ColorPair::new(RGB::from_f32(fg, fg, fg), BLACK),
+                        ColorPair::new(RGBA::from_f32(fg, fg, fg, 1.0), bg),
                         render.tile);
                 },
                 None => ()
@@ -90,8 +91,8 @@ pub fn render(
     });
 
     // Draw Actors
-    // draw_batch.target(ACTOR_LAYER);
-    // draw_batch.cls();
+    draw_batch.target(ACTOR_LAYER);
+    draw_batch.cls();
 
     let mut query = <(&Actor, &Point, &Render)>::query();
     query.iter(ecs).for_each(|(_, map_pt, render)| {
@@ -102,7 +103,7 @@ pub fn render(
                 Some(fg) => {
                     draw_batch.set(
                         screen_pt,
-                        ColorPair::new(RGB::from_f32(fg, fg, fg), BLACK),
+                        ColorPair::new(RGBA::from_f32(fg, fg, fg, 1.0), bg),
                         render.tile);
                 },
                 None => ()

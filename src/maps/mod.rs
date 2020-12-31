@@ -28,7 +28,6 @@ impl Map {
             match rng.range(0, 4) {
                 0 => tiles[rng.range(0, MAP_TILES)] = TileType::Wall,
                 1 => tiles[rng.range(0, MAP_TILES)] = TileType::Door,
-                2 => tiles[rng.range(0, MAP_TILES)] = TileType::Tree,
                 _ => tiles[rng.range(0, MAP_TILES)] = TileType::Wall,
             }
         }
