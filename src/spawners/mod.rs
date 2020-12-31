@@ -33,6 +33,8 @@ pub fn spawn_rat(ecs: &mut World, pt: Point) {
             pt,
             Render{ tile: tile_index(13, 1) },
             FieldOfView::new(6),
+            MightTalk{ chance: 10, phrase: "squeek!".to_string() },
+            RandomMover(2),
         )
     );
 }
@@ -46,6 +48,8 @@ pub fn spawn_animated_tree(ecs: &mut World, pt: Point) {
             Render{ tile: tile_index(1, 22) },
             FieldOfView::new(7),
             FieldOfLight::new(5),
+            MightTalk{ chance: 1, phrase: "Haroom!".to_string() },
+            RandomMover(20),
         )
     );
 }
@@ -59,6 +63,7 @@ pub fn spawn_goblin_with_torch(ecs: &mut World, pt: Point) {
             Render{ tile: tile_index(2, 22) },
             FieldOfView::new(7),
             FieldOfLight::new(5),
+            MightTalk{ chance: 4, phrase: "Meat's back on the menu, boys!".to_string()}
         )
     );
 }

@@ -32,6 +32,23 @@ pub struct WantsToInteract {
 }
 
 #[derive(Debug, Clone, PartialEq)]
+pub struct MightTalk {
+    pub chance: i32, // in 1000
+    pub phrase: String,
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct FadingText {
+    pub pt: Point,
+    pub text: String,
+    pub life: i32,
+    pub remaining: i32,
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct RandomMover(pub usize);
+
+#[derive(Debug, Clone, PartialEq)]
 pub struct FieldOfView {
     pub visible_tiles: HashSet<Point>,
     pub visited_tiles: HashSet<Point>,

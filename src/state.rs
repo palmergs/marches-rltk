@@ -19,6 +19,9 @@ pub struct State {
 pub struct TickCount(usize);
 
 impl TickCount {
+    #[inline]
+    pub fn act(&self, n: usize) -> bool { self.0 % n == 0 }
+
     pub fn msg(&self, n: usize, s: &str) -> bool {
         if self.0 % n == 0 {
             println!("{}", s);
@@ -55,6 +58,12 @@ impl State {
             }
         }
 
+        ecs.push(
+            (
+                FadingText{ text: "Welcome to the Dungeon!".to_string(), life: 100, remaining: 100, pt: player_start },
+            )
+        );
+
         let mut resources = Resources::default();
         resources.insert(TickCount(0));
         resources.insert(Map::new());
@@ -82,11 +91,18 @@ impl GameState for State {
             "This game is under construction...",
             ColorPair::new(YELLOW, BLACK));
 
-        draw_batch.draw_box(Rect::with_size(3, 3, 10, 5), ColorPair::new(WHITE, BLACK));
+
         draw_batch.draw_hollow_box(Rect::with_size(3, 20, 10, 5), ColorPair::new(RGBA::from_f32(1., 1., 1., 0.76), BLACK));
         draw_batch.draw_double_box(Rect::with_size(3, 30, 10, 5), ColorPair::new(WHITE, BLACK));
         draw_batch.draw_hollow_double_box(Rect::with_size(3, 40, 10, 5), ColorPair::new(RGBA::from_f32(1., 1., 1., 0.76), BLACK));
 
+        // Draw status
+        draw_batch.draw_box(Rect::with_size(3, 3, 20, 5), ColorPair::new(WHITE, BLACK));
+        draw_batch.bar_horizontal(Point::new(10, 4), 5, 15, 23, ColorPair::new(RED, BLACK));
+        draw_batch.bar_horizontal(Point::new(15, 4), 5, 8, 29, ColorPair::new(PINK, BLACK));
+        draw_batch.print_right(Point::new(10, 4), "Health");
+        draw_batch.bar_horizontal(Point::new(10, 5), 10, 15, 27, ColorPair::new(BLUE, BLACK));
+        draw_batch.print_right(Point::new(10, 5), "Mana");
         draw_batch.submit(5000).expect("batch error in drawing UI layer");
 
         let curr_tick = self.resources.get::<TickCount>().unwrap().clone();
