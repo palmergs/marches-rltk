@@ -19,9 +19,9 @@ pub struct State {
 pub struct TickCount(usize);
 
 impl TickCount {
-    pub fn msg(&self, n: usize, s: &str) -> bool { 
-        if self.0 % n == 0 { 
-            println!("{}", s); 
+    pub fn msg(&self, n: usize, s: &str) -> bool {
+        if self.0 % n == 0 {
+            println!("{}", s);
             return true;
         }
 
@@ -48,7 +48,7 @@ impl State {
                     Point::new(rng.range(1, MAP_WIDTH - 1), rng.range(1, MAP_HEIGHT - 1))),
                 1 => spawn_animated_tree(
                     &mut ecs,
-                    Point::new(rng.range(1, MAP_WIDTH - 1), rng.range(1, MAP_HEIGHT - 1))),                    
+                    Point::new(rng.range(1, MAP_WIDTH - 1), rng.range(1, MAP_HEIGHT - 1))),
                 _ => spawn_rat(
                     &mut ecs,
                     Point::new(rng.range(1, MAP_WIDTH - 1), rng.range(1, MAP_HEIGHT - 1))),
@@ -79,8 +79,14 @@ impl GameState for State {
         draw_batch.cls();
         draw_batch.print_color_centered(
             2,
-            "This game is under construction...", 
+            "This game is under construction...",
             ColorPair::new(YELLOW, BLACK));
+
+        draw_batch.draw_box(Rect::with_size(3, 3, 10, 5), ColorPair::new(WHITE, BLACK));
+        draw_batch.draw_hollow_box(Rect::with_size(3, 20, 10, 5), ColorPair::new(RGBA::from_f32(1., 1., 1., 0.76), BLACK));
+        draw_batch.draw_double_box(Rect::with_size(3, 30, 10, 5), ColorPair::new(WHITE, BLACK));
+        draw_batch.draw_hollow_double_box(Rect::with_size(3, 40, 10, 5), ColorPair::new(RGBA::from_f32(1., 1., 1., 0.76), BLACK));
+
         draw_batch.submit(5000).expect("batch error in drawing UI layer");
 
         let curr_tick = self.resources.get::<TickCount>().unwrap().clone();
