@@ -46,9 +46,9 @@ fn main() -> BError {
         .with_resource_path("resources/")
         .with_font("unicode_trunc_graph_16x16.png", 16, 16)
         .with_simple_console(DISPLAY_WIDTH, DISPLAY_HEIGHT, "unicode_trunc_graph_16x16.png")
-        .with_simple_console_no_bg(DISPLAY_WIDTH, DISPLAY_HEIGHT, "unicode_trunc_graph_16x16.png")
-        .with_simple_console_no_bg(DISPLAY_WIDTH, DISPLAY_HEIGHT, "unicode_trunc_graph_16x16.png")
-        .with_simple_console_no_bg(DISPLAY_WIDTH, DISPLAY_HEIGHT, "unicode_trunc_graph_16x16.png")
+        .with_sparse_console_no_bg(DISPLAY_WIDTH, DISPLAY_HEIGHT, "unicode_trunc_graph_16x16.png")
+        .with_sparse_console_no_bg(DISPLAY_WIDTH, DISPLAY_HEIGHT, "unicode_trunc_graph_16x16.png")
+        .with_sparse_console_no_bg(DISPLAY_WIDTH, DISPLAY_HEIGHT, "unicode_trunc_graph_16x16.png")
         .build()?;
 
     main_loop(context, State::new())
