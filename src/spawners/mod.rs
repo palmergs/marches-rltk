@@ -1,5 +1,8 @@
 use crate::prelude::*;
 
+mod items;
+mod monsters;
+
 pub fn spawn_player(ecs: &mut World, pt: Point) {
     ecs.push(
         (
@@ -60,10 +63,11 @@ pub fn spawn_goblin_with_torch(ecs: &mut World, pt: Point) {
             Name("Goblin with torch".to_string()),
             Actor,
             pt,
-            Render{ tile: tile_index(2, 22) },
+            Render{ tile: tile_index(12, 13) },
             FieldOfView::new(7),
             FieldOfLight::new(5),
-            MightTalk{ chance: 4, phrase: "Meat's back on the menu, boys!".to_string()}
+            MightTalk{ chance: 4, phrase: "Meat's back on the menu, boys!".to_string()},
+            PatrolMover(Direction::random()),
         )
     );
 }

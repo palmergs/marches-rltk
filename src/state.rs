@@ -27,7 +27,6 @@ impl TickCount {
             println!("{}", s);
             return true;
         }
-
         false
     }
 }
