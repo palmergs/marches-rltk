@@ -17,11 +17,12 @@ pub struct Map {
     pub origin: Point,
     pub extent: Point,
     pub tiles: Vec<TileType>,
-    pub revealed: Vec<bool>
+    pub revealed: Vec<bool>,
+    pub indoors: Vec<bool>,
 }
 
 impl Map {
-    pub fn new() -> Self {
+    pub fn new(depth: i32) -> Self {
         let mut tiles = vec![TileType::Floor; MAP_TILES];
         let mut rng = Rng::new();
         for _ in 0 .. 2000 {
@@ -32,11 +33,12 @@ impl Map {
             }
         }
         Self{
-            depth: 0,
+            depth,
             origin: Point::constant(0, 0),
             extent: Point::constant(MAP_WIDTH as i32, MAP_HEIGHT as i32),
             tiles,
             revealed: vec![false; MAP_TILES],
+            indoors: vec![true; MAP_TILES],
         }
     }
 

@@ -69,7 +69,7 @@ impl State {
 
         let mut resources = Resources::default();
         resources.insert(TickCount(0));
-        resources.insert(Map::new());
+        resources.insert(Map::new(0));
         resources.insert(Camera::new(player_start));
         resources.insert(TurnState::AwaitingInput);
 

@@ -10,28 +10,33 @@ pub struct MightTalk {
 }
 
 #[derive(Debug, Clone, PartialEq)]
-pub struct Attribute {
+pub struct Atts {
     pub curr: i32,
     pub max: i32,
 }
 
-impl Attribute {
+impl Atts {
     pub fn new(n: i32) -> Self { Self{ curr: n, max: n } }
+    pub fn heal(&self, n: i32) -> Self {
+        let mut curr = self.curr + n;
+        if curr > self.max { curr = self.max; }
+        Self { curr, max: self.max }
+    }
 }
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct Attributes {
-    pub brawn: Attribute,
-    pub grace: Attribute,
-    pub charm: Attribute,
-    pub smart: Attribute,
-    pub faith: Attribute,
+    pub brawn: Atts,
+    pub grace: Atts,
+    pub charm: Atts,
+    pub smart: Atts,
+    pub faith: Atts,
 }
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct Points {
-    pub focus: Attribute,
-    pub vigor: Attribute,
-    pub karma: Attribute,
-    pub magic: Attribute,
+    pub focus: Atts,
+    pub vigor: Atts,
+    pub karma: Atts,
+    pub magic: Atts,
 }
