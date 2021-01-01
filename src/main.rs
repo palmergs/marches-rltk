@@ -25,8 +25,8 @@ pub mod prelude {
 
     pub const SCREEN_WIDTH: i32 = 80;
     pub const SCREEN_HEIGHT: i32 = 50;
-    pub const MAP_WIDTH: usize = 200;
-    pub const MAP_HEIGHT: usize = 200;
+    pub const MAP_WIDTH: usize = 160;
+    pub const MAP_HEIGHT: usize = 100;
     pub const MAP_TILES: usize = MAP_WIDTH * MAP_HEIGHT;
     pub const DISPLAY_WIDTH: i32 = SCREEN_WIDTH;
     pub const DISPLAY_HEIGHT: i32 = SCREEN_HEIGHT;
@@ -48,8 +48,8 @@ fn main() -> BError {
         .with_resource_path("resources/")
         .with_font("unicode_trunc_graph_16x16.png", 16, 16)
         .with_simple_console(DISPLAY_WIDTH, DISPLAY_HEIGHT, "unicode_trunc_graph_16x16.png")
-        .with_sparse_console_no_bg(DISPLAY_WIDTH, DISPLAY_HEIGHT, "unicode_trunc_graph_16x16.png")
-        .with_sparse_console_no_bg(DISPLAY_WIDTH, DISPLAY_HEIGHT, "unicode_trunc_graph_16x16.png")
+        .with_simple_console_no_bg(DISPLAY_WIDTH, DISPLAY_HEIGHT, "unicode_trunc_graph_16x16.png")
+        .with_simple_console_no_bg(DISPLAY_WIDTH, DISPLAY_HEIGHT, "unicode_trunc_graph_16x16.png")
         .with_sparse_console_no_bg(DISPLAY_WIDTH, DISPLAY_HEIGHT, "unicode_trunc_graph_16x16.png")
         .build()?;
 

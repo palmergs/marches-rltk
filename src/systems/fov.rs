@@ -24,3 +24,19 @@ pub fn fov(
         map.revealed[idx] = true;
     }
 }
+
+#[cfg(test)]
+mod test {
+    use crate::prelude::*;
+
+    #[test]
+    fn test_edge_appears_in_view() {
+        let map = Map::new(0);
+        let fov = field_of_view(Point::new(2, 2), 10, &map);
+        let pt_left = Point::new(0, 2);
+        let pt_top  = Point::new(2, 0);  
+
+        assert!(fov.contains(&pt_left));
+        assert!(fov.contains(&pt_top));
+    }
+}

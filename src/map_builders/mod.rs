@@ -1,6 +1,7 @@
 use crate::prelude::*;
 
 mod rooms;
+mod empty;
 
 // Number of rooms to attempt to place in a "standard" map
 pub const NUM_ROOMS: usize = (
@@ -77,8 +78,8 @@ impl MapBuilder {
                 self.excavate_horiz_tunnel(prev.x, curr.x, prev.y, floor);
                 self.excavate_vert_tunnel(prev.y, curr.y, curr.x, floor);
             } else {
-                self.excavate_horiz_tunnel(prev.y, curr.y, prev.x, floor);
-                self.excavate_vert_tunnel(prev.x, curr.x, curr.y, floor);
+                self.excavate_vert_tunnel(prev.y, curr.y, prev.x, floor);
+                self.excavate_horiz_tunnel(prev.x, curr.x, curr.y, floor);
             }
         }
     }
