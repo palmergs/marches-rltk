@@ -2,6 +2,7 @@ extern crate bracket_lib;
 
 mod components;
 mod maps;
+mod map_builders;
 mod systems;
 mod spawners;
 mod cameras;
@@ -15,6 +16,7 @@ pub mod prelude {
     pub use legion::systems::CommandBuffer;
 
     pub use crate::maps::*;
+    pub use crate::map_builders::*;
     pub use crate::components::*;
     pub use crate::systems::*;
     pub use crate::spawners::*;

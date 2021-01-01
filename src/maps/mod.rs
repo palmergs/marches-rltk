@@ -62,6 +62,14 @@ impl Map {
         None
     }
 
+    pub fn try_idx(&self, point: Point) -> Option<usize> {
+        if self.in_bounds(point) {
+            Some(self.point2d_to_index(point))
+        } else {
+            None
+        }
+    }
+
     #[inline]
     pub fn distance(&self, idx1: usize, idx2: usize) -> f32 {
         DistanceAlg::Pythagoras.distance2d(
