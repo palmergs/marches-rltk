@@ -34,52 +34,38 @@ impl TickCount {
 impl State {
     pub fn new() -> Self {
         let mut ecs = World::default();
-
-        let player_start = Point::new(MAP_WIDTH / 2, MAP_HEIGHT / 2);
-        spawn_player(&mut ecs, player_start);
-
-        let mut rng = Rng::new();
-        for _ in 0..200 {
-            spawn_torch(&mut ecs, Point::new(rng.range(1, MAP_WIDTH - 1), rng.range(1, MAP_HEIGHT - 1)));
-        }
-
-        for _ in 0..200 {
-            match rng.range(0, 4) {
-                0 => spawn_goblin_with_torch(
-                    &mut ecs,
-                    Point::new(rng.range(1, MAP_WIDTH - 1), rng.range(1, MAP_HEIGHT - 1))),
-                1 => spawn_animated_tree(
-                    &mut ecs,
-                    Point::new(rng.range(1, MAP_WIDTH - 1), rng.range(1, MAP_HEIGHT - 1))),
-                _ => spawn_rat(
-                    &mut ecs,
-                    Point::new(rng.range(1, MAP_WIDTH - 1), rng.range(1, MAP_HEIGHT - 1))),
-            }
-        }
-
-        ecs.push(
-            (
-                FadingText{
-                    text: "Welcome to the Dungeon!".to_string(), 
-                    life: 100, 
-                    remaining: 100, 
-                    pt: player_start },
-            )
-        );
-
         let mut resources = Resources::default();
-        resources.insert(TickCount(0));
-        resources.insert(Map::new(0));
-        resources.insert(Camera::new(player_start));
-        resources.insert(TurnState::AwaitingInput);
-
-        Self{
+        let mut state = Self{
             ecs,
             resources,
             input_schedule: build_input_schedule(),
             player_schedule: build_player_schedule(),
             computer_schedule: build_computer_schedule(),
-        }
+         };
+
+        state.load_level(0);
+        state
+    }
+
+    fn load_level(&mut self, depth: i32) {
+        let mut rng = Rng::new();
+        let mb = MapBuilder::build(&mut rng, depth);
+
+        spawn_player(&mut self.ecs, mb.player_start);
+        mb.monster_spawns.iter().for_each(|pt| spawn_monster(&mut self.ecs, &mut rng, *pt, depth));
+        mb.rooms.iter().for_each(|rect| spawn_items(&mut self.ecs, &mut rng, *rect, depth));
+
+        self.resources.insert(TickCount(0));
+        self.resources.insert(mb.map);
+        self.resources.insert(Camera::new(mb.player_start));
+        self.resources.insert(TurnState::AwaitingInput);
+
+        self.ecs.push(( FadingText{
+            text: format!("Entering level {}", depth).to_string(),
+            life: 100,
+            remaining: 100,
+            pt: mb.player_start },
+        ));
     }
 }
 
