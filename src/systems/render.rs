@@ -13,22 +13,21 @@ pub fn render(
     ecs: &SubWorld,
     #[resource] camera: &Camera,
     #[resource] map: &Map,
-    #[resource] tick: &TickCount
 ) {
     // Initialize drawing batch
     let mut draw_batch = DrawBatch::new();
 
     // Camera and Player Info
     let camera_offset = camera.offset();
-    let mut query = <(&Player, &Point, &FieldOfView)>::query();
-    let (_, player_pt, player_fov) = query.iter(ecs).next().unwrap();
+    let mut query = <&FieldOfView>::query().filter(component::<Player>());
+    let player_fov = query.iter(ecs).next().unwrap();
     let visible_tiles = &player_fov.visible_tiles;
 
     // Lighting Info
     let mut tile_light: HashMap<Point, f32> = HashMap::new();
     let mut query = <(&Point, &FieldOfLight)>::query();
     query.iter(ecs)
-        .filter(|(pt, fol)| camera.in_view(**pt) )
+        .filter(|(pt, _)| camera.in_view(**pt) )
         .for_each(|(pt, fol)| {
             for tile in fol.lit_tiles.iter() {
                 let light = light_at_tile(*pt, fol.radius, *tile);
@@ -45,7 +44,7 @@ pub fn render(
 
     // Draw Map
     draw_batch.target(FLOOR_LAYER);
-    draw_batch.cls();
+    // draw_batch.cls();
 
     let bg = RGBA::from_f32(0.0, 0.0, 0.0, 0.0);
     for y in camera.top ..= camera.bottom {
@@ -71,7 +70,7 @@ pub fn render(
 
     // Draw Items
     draw_batch.target(ITEM_LAYER);
-    draw_batch.cls();
+    // draw_batch.cls();
 
     let mut query = <(&Item, &Point, &Render)>::query();
     query.iter(ecs).for_each(|(_, map_pt, render)| {
@@ -92,7 +91,7 @@ pub fn render(
 
     // Draw Actors
     draw_batch.target(ACTOR_LAYER);
-    draw_batch.cls();
+    // draw_batch.cls();
 
     let mut query = <(&Actor, &Point, &Render)>::query();
     query.iter(ecs).for_each(|(_, map_pt, render)| {

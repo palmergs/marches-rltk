@@ -8,7 +8,6 @@ use std::collections::HashMap;
 pub fn random_movers(
     ecs: &mut SubWorld,
     commands: &mut CommandBuffer,
-    #[resource] map: &Map,
     #[resource] tick: &TickCount,
 ) {
     let mut npcs: HashMap<Point, Entity> = HashMap::new();

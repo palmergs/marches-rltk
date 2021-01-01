@@ -30,10 +30,15 @@ impl Camera {
     pub fn extent(&self) -> Point { Point::constant(self.right, self.bottom) }
 
     pub fn in_view(&self, pt: Point) -> bool {
-        pt.x >= self.left
-            && pt.x < self.right
-            && pt.y >= self.top
-            && pt.y < self.bottom
+        pt.x >= self.left && pt.x < self.right
+            && pt.y >= self.top && pt.y < self.bottom
+    }
+
+    pub fn in_central_view(&self, pt: Point) -> bool {
+        let w = DISPLAY_WIDTH / 6;
+        let h = DISPLAY_HEIGHT / 6;
+        pt.x >= self.left + w && pt.x < self.right - w
+            && pt.y >= self.top + h && pt.y < self.bottom - h
     }
 }
 

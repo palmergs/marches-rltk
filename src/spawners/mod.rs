@@ -33,7 +33,7 @@ pub fn spawn_rat(ecs: &mut World, pt: Point) {
             pt,
             Render{ tile: tile_index(13, 1) },
             FieldOfView::new(6),
-            MightTalk{ chance: 10, phrase: "squeek!".to_string() },
+            MightTalk{ chance: 20, phrase: "squeek!".to_string() },
             RandomMover(2),
         )
     );

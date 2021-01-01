@@ -7,7 +7,6 @@ use crate::prelude::*;
 pub fn fov(
     ecs: &mut SubWorld,
     #[resource] map: &mut Map,
-    #[resource] tick: &TickCount,
 ) {
     let mut views = <(&Point, &mut FieldOfView)>::query();
     views.iter_mut(ecs)

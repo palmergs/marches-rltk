@@ -60,7 +60,11 @@ impl State {
 
         ecs.push(
             (
-                FadingText{ text: "Welcome to the Dungeon!".to_string(), life: 100, remaining: 100, pt: player_start },
+                FadingText{
+                    text: "Welcome to the Dungeon!".to_string(), 
+                    life: 100, 
+                    remaining: 100, 
+                    pt: player_start },
             )
         );
 
@@ -83,9 +87,17 @@ impl State {
 impl GameState for State {
     fn tick(&mut self, ctx: &mut BTerm) {
 
+        ctx.set_active_console(UI_LAYER);
+        ctx.cls();
+        ctx.set_active_console(ACTOR_LAYER);
+        ctx.cls();
+        ctx.set_active_console(ITEM_LAYER);
+        ctx.cls();
+        ctx.set_active_console(FLOOR_LAYER);
+        ctx.cls();
+
         let mut draw_batch = DrawBatch::new();
         draw_batch.target(UI_LAYER);
-        draw_batch.cls();
         draw_batch.print_color_centered(
             2,
             "This game is under construction...",
