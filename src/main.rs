@@ -22,6 +22,7 @@ pub mod prelude {
     pub use crate::spawners::*;
     pub use crate::cameras::*;
     pub use crate::state::*;
+    pub use crate::tile_index;
 
     pub const SCREEN_WIDTH: i32 = 80;
     pub const SCREEN_HEIGHT: i32 = 50;
@@ -39,6 +40,11 @@ pub mod prelude {
 }
 
 use prelude::*;
+
+/// tile_index is a utility method to reference tiles using 1-based indexing
+pub fn tile_index(row: usize, col: usize) -> usize {
+    ((row - 1) * 128) + (col - 1)
+}
 
 fn main() -> BError {
     let context = BTermBuilder::new()

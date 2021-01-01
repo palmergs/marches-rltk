@@ -67,14 +67,14 @@ impl Map {
     #[inline]
     pub fn font_idx(&self, idx: usize) -> usize {
         match self.tiles[idx] {
-            TileType::Floor => 128 + 18,
-            TileType::Wall => 128 + 19,
-            TileType::Tree => 21,
-            TileType::Door => 2,
-            TileType::DoorOpen => 3,
-            TileType::Chest => 18,
-            TileType::ChestEmpty => 19,
-            TileType::Bookshelf => 25,
+            TileType::Floor =>  tile_index(1, 2),
+            TileType::Wall =>   tile_index(2, 3),
+            TileType::Tree =>   tile_index(1, 22),
+            TileType::Door =>   tile_index(1, 3),
+            TileType::DoorOpen => tile_index(1, 4),
+            TileType::Chest =>  tile_index(1, 19),
+            TileType::ChestEmpty => tile_index(1, 20),
+            TileType::Bookshelf => tile_index(1, 26),
         }
     }
 }

@@ -22,6 +22,7 @@ pub fn spawn_items(ecs: &mut World, rng: &mut Rng, rect: Rect, depth: i32) {
         1 => spawn_torch(ecs, Point::new(rect.x1, rect.y2)),
         2 => spawn_torch(ecs, Point::new(rect.x2, rect.y1)),
         3 => spawn_torch(ecs, Point::new(rect.x2, rect.y2)),
+        4 => spawn_chest(ecs, Point::new(rng.range(rect.x1, rect.x2+1), rng.range(rect.y1, rect.y2+1))),
         _ => ()
     }
 }
@@ -34,6 +35,17 @@ pub fn spawn_torch(ecs: &mut World, pt: Point) {
             pt,
             Render{ tile: tile_index(1, 11) },
             FieldOfLight::new(5),
+        )
+    );
+}
+
+pub fn spawn_chest(ecs: &mut World, pt: Point) {
+    ecs.push(
+        (
+            Name("Chest".to_string()),
+            Item,
+            pt,
+            Render{ tile: tile_index(1, 6)},
         )
     );
 }
@@ -145,8 +157,4 @@ pub fn spawn_skeleton(ecs: &mut World, pt: Point) {
             PatrolMover(Direction::random()),
         )
     );
-}
-
-fn tile_index(row: usize, col: usize) -> usize {
-    ((row - 1) * 128) + (col - 1)
 }
