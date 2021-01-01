@@ -8,16 +8,15 @@ pub fn might_talk(
     commands: &mut CommandBuffer
 ) {
     let mut rng = Rng::new();
+    let life = 100;
+    let remaining = 100;
     <(&Point, &MightTalk)>::query()
         .iter(ecs)
         .for_each(|(pt, talk)| {
             if rng.range(0, 1000) <= talk.chance {
-                println!("want to talk");
-                commands.push(((), FadingText{ 
-                    pt: *pt, 
-                    text: talk.phrase.clone(), 
-                    life: 100, 
-                    remaining: 100 }));
+                let pt = *pt + Point::new(0, -1);
+                let text = talk.phrase.clone();
+                commands.push(((), FadingText{ pt, text, life, remaining }));
             }
         });
 }

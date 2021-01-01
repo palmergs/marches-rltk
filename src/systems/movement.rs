@@ -11,7 +11,7 @@ pub fn movement(
     commands: &mut CommandBuffer,
     #[resource] map: &Map,
     #[resource] camera: &mut Camera,
-    #[resource] tick: &TickCount,
+    #[resource] _tick: &TickCount,
 ) {
     if map.can_enter(cmd.destination) {
 

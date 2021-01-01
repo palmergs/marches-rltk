@@ -9,7 +9,6 @@ pub fn state_change(
         TurnState::AwaitingInput => return,
         TurnState::PlayerTurn => TurnState::ComputerTurn,
         TurnState::ComputerTurn => TurnState::AwaitingInput,
-        _ => curr_state,
     };
     *turn_state = new_state;
 }
