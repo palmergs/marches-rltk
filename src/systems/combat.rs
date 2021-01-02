@@ -4,6 +4,7 @@ use crate::prelude::*;
 #[read_component(Player)]
 #[read_component(Actor)]
 #[read_component(Point)]
+#[write_component(Points)]
 pub fn combat(
     entity: &Entity,
     cmd: &WantsToAttack,
@@ -15,9 +16,14 @@ pub fn combat(
 ) {
     let mut rng = Rng::new();
     let dmg = rng.range(1, 5);
-    if let Ok(mut pt) = ecs.entry_mut(cmd.victim).unwrap().get_component::<Point>() {
+
+    let mut msg:Vec<String> = vec![];
+
+    if let Ok((pt)) = ecs.entry_ref(cmd.victim).unwrap().get_component::<(Point)>() {
         let text = format!("{}", dmg).to_string();
         commands.push(((), FadingUpText{ pt: *pt, text, life: 100, remaining: 100 }));
     }
+
+
     commands.remove(*entity);
 }

@@ -7,12 +7,14 @@ pub struct MightTalk {
     pub phrase: String,
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Atts(pub i32, pub i32);
 
 impl Atts {
     pub fn new(n: i32) -> Self { Self(n, n) }
     pub fn heal(&mut self, n: i32)  {  self.1 = std::cmp::min(self.0, self.1 + n); }
+    pub fn wound(&mut self, n: i32) { self.1 = std::cmp::max(self.1 - n, 0); }
+    pub fn zero(&self) -> bool { self.1 <= 0 }
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -36,7 +38,7 @@ impl Attributes {
     }
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Points {
     pub focus: Atts,
     pub vigor: Atts,

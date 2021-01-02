@@ -14,13 +14,13 @@ impl MapArchitect for SewersArchitect {
     fn build(&mut self, rng: &mut Rng, depth: i32) -> MapBuilder {
         let mut mb = MapBuilder::new(depth);
         mb.fill(TileType::Wall);
-        
+
         let grid = 9;
         let gridh = MAP_HEIGHT / grid;
         let gridw = MAP_WIDTH / grid;
         for r in 0..grid {
             for c in 0..grid {
-                let w = rng.range(gridw / 2, gridw + 1);
+                let w = rng.range(gridw / 2, gridw);
                 let h = rng.range(gridh / 3, gridh - 2);
                 let x = (c * gridw) + (gridw - w) / 2;
                 let y = (r * gridh) + (gridh - h) / 2;
