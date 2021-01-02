@@ -47,7 +47,7 @@ fn handle_move(
         .for_each(|(entity, _)| {
             if *entity != actor {
                 hit_something = true;
-                commands.push(((), WantsToInteract{ actor, victim: *entity }));
+                commands.push(((), WantsToAttack{ actor, victim: *entity }));
             }
         });
 

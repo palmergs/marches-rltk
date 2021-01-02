@@ -27,7 +27,7 @@ pub fn patrol_movers(
         };
 
         if let Some(npc_entity) = npcs.get(&destination) {
-            commands.push(((), WantsToInteract{ actor: *entity, victim: *npc_entity }));
+            commands.push(((), WantsToAttack{ actor: *entity, victim: *npc_entity }));
         } else {
             if map.can_enter(destination) {
                 commands.push(((), WantsToMove{ actor: *entity, destination }));

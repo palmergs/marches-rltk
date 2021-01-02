@@ -7,6 +7,7 @@ mod random_movers;
 mod patrol_movers;
 mod movement;
 mod might_talk;
+mod combat;
 mod fov;
 mod fol;
 mod fading_text;
@@ -26,6 +27,7 @@ pub fn build_input_schedule() -> Schedule {
 pub fn build_player_schedule() -> Schedule {
     Schedule::builder()
         .add_system(movement::movement_system())
+        .add_system(combat::combat_system())
         .flush()
         .add_system(fov::fov_system())
         .add_system(fol::fol_system())
@@ -44,6 +46,7 @@ pub fn build_computer_schedule() -> Schedule {
         .flush()
         .add_system(might_talk::might_talk_system())
         .add_system(movement::movement_system())
+        .add_system(combat::combat_system())
         .flush()
         .add_system(fov::fov_system())
         .add_system(fol::fol_system())

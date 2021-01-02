@@ -7,7 +7,7 @@ pub struct WantsToMove {
 }
 
 #[derive(Debug, Clone, PartialEq)]
-pub struct WantsToInteract {
+pub struct WantsToAttack {
     pub actor: Entity,
     pub victim: Entity,
 }
