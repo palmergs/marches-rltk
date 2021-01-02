@@ -19,8 +19,8 @@ pub fn render(
 
     // Camera and Player Info
     let camera_offset = camera.offset();
-    let mut query = <(&Player, &Point, &FieldOfView)>::query();
-    let (_, player_pt, player_fov) = query.iter(ecs).next().unwrap();
+    let mut query = <(&Player, &FieldOfView)>::query();
+    let (_, player_fov) = query.iter(ecs).next().unwrap();
     let visible_tiles = &player_fov.visible_tiles;
 
     // Lighting Info

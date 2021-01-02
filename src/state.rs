@@ -33,11 +33,9 @@ impl TickCount {
 
 impl State {
     pub fn new() -> Self {
-        let mut ecs = World::default();
-        let mut resources = Resources::default();
         let mut state = Self{
-            ecs,
-            resources,
+            ecs: World::default(),
+            resources: Resources::default(),
             input_schedule: build_input_schedule(),
             player_schedule: build_player_schedule(),
             computer_schedule: build_computer_schedule(),

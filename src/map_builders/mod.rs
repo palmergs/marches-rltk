@@ -1,6 +1,7 @@
 use crate::prelude::*;
 
 mod rooms;
+mod sewers;
 mod empty;
 
 // Number of rooms to attempt to place in a "standard" map
@@ -32,7 +33,7 @@ impl MapBuilder {
     pub fn build(rng: &mut Rng, depth: i32) -> MapBuilder {
         let mut architect: Box<dyn MapArchitect> = match depth {
             // 0     => Box::new(town::TownArchitect::new()),
-            // 1     => Box::new(sewers::SewerArchitect::new()),
+            0     => Box::new(sewers::SewersArchitect::new()),
             _     => match rng.range(0, 10) {
                 // 1 => Box::new(maze::MazeArchitect::new()),
                 // 2 => Box::new(drunkard::DrunkardsWalkArchitect::new()),
@@ -40,6 +41,7 @@ impl MapBuilder {
                 // 4 => Box::new(automota::CellularAutomotaArchitect::new()),
                 // 5 => Box::new(voronoi::VoronoiHiveArchitect::new()),
                 // 6 => Box::new(wave::WaveFunctionArchitect::new()),
+                7 => Box::new(empty::EmptyArchitect::new()),
                 _ => Box::new(rooms::RoomsArchitect::new()),
             }
         };
@@ -68,19 +70,28 @@ impl MapBuilder {
         }
     }
 
+    fn excavate_room(&mut self, rb: &RoomBuilder, floor: TileType) {
+        rb.excavate(&mut self.map, floor);
+        self.rooms.push(rb.extent);
+    }
+
     fn excavate_tunnels(&mut self, rng: &mut Rng, floor: TileType) {
         let mut rooms = self.rooms.clone();
         rooms.sort_by(|a, b| a.center().x.cmp(&b.center().x));
         for (i, room) in rooms.iter().enumerate().skip(1) {
             let prev = rooms[i-1].center();
             let curr = room.center();
-            if rng.range(0,2) == 1 {
-                self.excavate_horiz_tunnel(prev.x, curr.x, prev.y, floor);
-                self.excavate_vert_tunnel(prev.y, curr.y, curr.x, floor);
-            } else {
-                self.excavate_vert_tunnel(prev.y, curr.y, prev.x, floor);
-                self.excavate_horiz_tunnel(prev.x, curr.x, curr.y, floor);
-            }
+            self.excavate_tunnel(rng, prev, curr, floor);
+        }
+    }
+
+    fn excavate_tunnel(&mut self, rng: &mut Rng, prev: Point, curr: Point, floor: TileType) {
+        if rng.range(0,2) == 1 {
+            self.excavate_horiz_tunnel(prev.x, curr.x, prev.y, floor);
+            self.excavate_vert_tunnel(prev.y, curr.y, curr.x, floor);
+        } else {
+            self.excavate_vert_tunnel(prev.y, curr.y, prev.x, floor);
+            self.excavate_horiz_tunnel(prev.x, curr.x, curr.y, floor);
         }
     }
 
@@ -137,8 +148,12 @@ impl RoomBuilder {
     }
 
     pub fn rect(rng: &mut Rng, min: i32, max: i32) -> RoomBuilder {
-        let w = rng.range(min, max + 1);
-        let h = rng.range(min, max + 1);
+        let (w, h) = if max <= min {
+            (min, min)
+        } else { 
+            (rng.range(min, max + 1), rng.range(min, max + 1))
+        };
+
         let extent = Rect::with_size(    
             rng.range(1, MAP_WIDTH as i32 - w - 1),
             rng.range(1, MAP_HEIGHT as i32 - h - 1),

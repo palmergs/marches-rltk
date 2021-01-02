@@ -67,7 +67,7 @@ impl Map {
     #[inline]
     pub fn font_idx(&self, idx: usize) -> usize {
         match self.tiles[idx] {
-            TileType::Floor =>  tile_index(1, 2),
+            TileType::Floor =>  tile_index(2, 19),
             TileType::Wall =>   tile_index(2, 3),
             TileType::Tree =>   tile_index(1, 22),
             TileType::Door =>   tile_index(1, 3),
