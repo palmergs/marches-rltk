@@ -15,6 +15,7 @@ pub fn spawn_player(ecs: &mut World, pt: Point) {
             Render{ tile: tile_index(2, 21) },
             FieldOfView::new(10),
             FieldOfLight::new(5),
+            Points::new(10, 10, 0, 0),
         )
     );
 }

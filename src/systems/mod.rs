@@ -11,6 +11,7 @@ mod combat;
 mod fov;
 mod fol;
 mod fading_text;
+mod fading_up_text;
 
 pub fn build_input_schedule() -> Schedule {
     Schedule::builder()
@@ -21,6 +22,7 @@ pub fn build_input_schedule() -> Schedule {
         .flush()
         .add_system(render::render_system())
         .add_system(fading_text::fading_text_system())
+        .add_system(fading_up_text::fading_up_text_system())
         .build()
 }
 
@@ -34,6 +36,7 @@ pub fn build_player_schedule() -> Schedule {
         .flush()
         .add_system(render::render_system())
         .add_system(fading_text::fading_text_system())
+        .add_system(fading_up_text::fading_up_text_system())
         .flush()
         .add_system(state_change::state_change_system())
         .build()
@@ -53,6 +56,7 @@ pub fn build_computer_schedule() -> Schedule {
         .flush()
         .add_system(render::render_system())
         .add_system(fading_text::fading_text_system())
+        .add_system(fading_up_text::fading_up_text_system())
         .flush()
         .add_system(state_change::state_change_system())
         .build()

@@ -9,6 +9,14 @@ pub struct FadingText {
 }
 
 #[derive(Debug, Clone, PartialEq)]
+pub struct FadingUpText {
+    pub pt: Point,
+    pub text: String,
+    pub life: i32,
+    pub remaining: i32,
+}
+
+#[derive(Debug, Clone, PartialEq)]
 pub struct RandomMover(pub usize);
 
 #[derive(Debug, Clone, PartialEq)]
