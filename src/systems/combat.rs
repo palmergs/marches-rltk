@@ -20,9 +20,13 @@ pub fn combat(
         let vigor = stats.vigor.curr - vigor_dmg;
         stats.focus.curr = focus;
         stats.vigor.curr = vigor;
-        let killed = stats.vigor.curr <= 0;
+        let is_killed = stats.vigor.curr <= 0;
+        let is_player = ecs.entry_ref(cmd.victim)
+            .unwrap()
+            .get_component::<Player>()
+            .is_ok();
         if let Ok(render) = ecs.entry_ref(cmd.victim).unwrap().get_component::<Render>() {
-            if killed {
+            if is_killed {
                 let text = format!("KILLED!").to_string();
                 commands.push(((), Text{
                     display: TextDisplay::AnimateUp(render.pt),
@@ -35,7 +39,9 @@ pub fn combat(
                 // TODO: for ease of access to pt, removing the entity here, but this
                 // might cause problems in the future if an entity with Stats but not Render
                 // is killed.
-                commands.remove(cmd.victim);
+                if !is_player {
+                    commands.remove(cmd.victim);
+                }
                 map.actors.remove(&render.pt);
             } else {
                 println!("remaining: focus={:?} vigor={:?}", focus, vigor);

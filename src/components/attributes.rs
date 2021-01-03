@@ -107,7 +107,7 @@ pub trait ValueWithMax {
 
     fn curr(&self) -> i32;
 
-    fn is_zero(&self) -> bool { self.curr() == 0 }
+    fn is_zero(&self) -> bool { self.curr() <= 0 }
 
     fn is_max(&self) -> bool { self.max() == self.curr() }
 

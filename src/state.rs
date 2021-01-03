@@ -5,6 +5,7 @@ pub enum TurnState {
     InitializeMap,
     AwaitingInput,
     ComputerTurn,
+    GameOver,
 }
 
 pub struct State {
@@ -45,6 +46,12 @@ impl State {
         state
     }
 
+    fn reset_game_state(&mut self) {
+        self.ecs = World::default();
+        self.resources = Resources::default();
+        self.load_level(0);
+    }
+
     fn load_level(&mut self, depth: i32) {
         let mut rng = Rng::new();
         let mb = MapBuilder::build(&mut rng, depth);
@@ -56,7 +63,21 @@ impl State {
         self.resources.insert(TickCount(0));
         self.resources.insert(mb.map);
         self.resources.insert(Camera::new(mb.player_start));
-        self.resources.insert(TurnState::AwaitingInput);
+        self.resources.insert(TurnState::InitializeMap);
+    }
+
+    fn game_over(&mut self, ctx: &mut BTerm) {
+        ctx.set_active_console(UI_LAYER);
+        ctx.cls();
+        ctx.print_color_centered(3, RED, BLACK, "Your quest has ended.");
+        ctx.print_color_centered(4, WHITE, BLACK, "Slain by a monster, you hero's journey has come to an end.");
+        ctx.print_color_centered(8, WHITE, BLACK, "Don't worry, you can always try again with a new hero.");
+        ctx.print_color_centered(9, GREEN, BLACK, "Press 1 to play again.");
+
+        if let Some(VirtualKeyCode::Key1) = ctx.key {
+            ctx.cls();
+            self.reset_game_state();
+        }
     }
 }
 
@@ -72,26 +93,26 @@ impl GameState for State {
         ctx.set_active_console(FLOOR_LAYER);
         ctx.cls();
 
-        let mut draw_batch = DrawBatch::new();
-        draw_batch.target(UI_LAYER);
-        draw_batch.print_color_centered(
-            2,
-            "This game is under construction...",
-            ColorPair::new(YELLOW, BLACK));
+        // let mut draw_batch = DrawBatch::new();
+        // draw_batch.target(UI_LAYER);
+        // draw_batch.print_color_centered(
+        //     2,
+        //     "This game is under construction...",
+        //     ColorPair::new(YELLOW, BLACK));
 
 
-        draw_batch.draw_hollow_box(Rect::with_size(3, 20, 10, 5), ColorPair::new(RGBA::from_f32(1., 1., 1., 0.76), BLACK));
-        draw_batch.draw_double_box(Rect::with_size(3, 30, 10, 5), ColorPair::new(WHITE, BLACK));
-        draw_batch.draw_hollow_double_box(Rect::with_size(3, 40, 10, 5), ColorPair::new(RGBA::from_f32(1., 1., 1., 0.76), BLACK));
+        // draw_batch.draw_hollow_box(Rect::with_size(3, 20, 10, 5), ColorPair::new(RGBA::from_f32(1., 1., 1., 0.76), BLACK));
+        // draw_batch.draw_double_box(Rect::with_size(3, 30, 10, 5), ColorPair::new(WHITE, BLACK));
+        // draw_batch.draw_hollow_double_box(Rect::with_size(3, 40, 10, 5), ColorPair::new(RGBA::from_f32(1., 1., 1., 0.76), BLACK));
 
-        // Draw status
-        draw_batch.draw_box(Rect::with_size(3, 3, 20, 5), ColorPair::new(WHITE, BLACK));
-        draw_batch.bar_horizontal(Point::new(10, 4), 5, 15, 23, ColorPair::new(RED, BLACK));
-        draw_batch.bar_horizontal(Point::new(15, 4), 5, 8, 29, ColorPair::new(PINK, BLACK));
-        draw_batch.print_right(Point::new(10, 4), "Health");
-        draw_batch.bar_horizontal(Point::new(10, 5), 10, 15, 27, ColorPair::new(BLUE, BLACK));
-        draw_batch.print_right(Point::new(10, 5), "Mana");
-        draw_batch.submit(5000).expect("batch error in drawing UI layer");
+        // // Draw status
+        // draw_batch.draw_box(Rect::with_size(3, 3, 20, 5), ColorPair::new(WHITE, BLACK));
+        // draw_batch.bar_horizontal(Point::new(10, 4), 5, 15, 23, ColorPair::new(RED, BLACK));
+        // draw_batch.bar_horizontal(Point::new(15, 4), 5, 8, 29, ColorPair::new(PINK, BLACK));
+        // draw_batch.print_right(Point::new(10, 4), "Health");
+        // draw_batch.bar_horizontal(Point::new(10, 5), 10, 15, 27, ColorPair::new(BLUE, BLACK));
+        // draw_batch.print_right(Point::new(10, 5), "Mana");
+        // draw_batch.submit(5000).expect("batch error in drawing UI layer");
 
         let curr_tick = self.resources.get::<TickCount>().unwrap().clone();
         curr_tick.msg(1000, "1000 ticks");
@@ -105,8 +126,10 @@ impl GameState for State {
             TurnState::InitializeMap => self.initialize_schedule.execute(&mut self.ecs, &mut self.resources),
             TurnState::AwaitingInput => self.input_schedule.execute(&mut self.ecs, &mut self.resources),
             TurnState::ComputerTurn => self.computer_schedule.execute(&mut self.ecs, &mut self.resources),
+            TurnState::GameOver => self.game_over(ctx),
         };
 
         render_draw_buffer(ctx).expect("render error from draw buffer in tick");
     }
 }
+
