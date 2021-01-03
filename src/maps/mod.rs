@@ -1,15 +1,11 @@
 use crate::prelude::*;
 
+use std::collections::HashSet;
+
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum TileType {
     Floor,
     Wall,
-    Tree,
-    Door,
-    DoorOpen,
-    Bookshelf,
-    Chest,
-    ChestEmpty,
 }
 
 pub struct Map {
@@ -19,6 +15,9 @@ pub struct Map {
     pub tiles: Vec<TileType>,
     pub revealed: Vec<bool>,
     pub indoors: Vec<bool>,
+    pub actors: HashSet<Point>,
+    pub opaque: HashSet<Point>,
+    pub blocked: HashSet<Point>,
 }
 
 impl Map {
@@ -30,15 +29,18 @@ impl Map {
             tiles: vec![TileType::Floor; MAP_TILES],
             revealed: vec![false; MAP_TILES],
             indoors: vec![true; MAP_TILES],
+            actors: HashSet::new(),
+            opaque: HashSet::new(),
+            blocked: HashSet::new(),
         }
     }
 
     pub fn can_enter(&self, pt: Point) -> bool {
         if !self.in_bounds(pt) { return false; }
+        if self.blocked.contains(&pt) { return false; }
 
         let idx = self.point2d_to_index(pt);
-        let tile = self.tiles[idx];
-        tile == TileType::Floor || tile == TileType::DoorOpen
+        self.tiles[idx] == TileType::Floor
     }
 
     pub fn valid_exit(&self, pt: Point, delta: Point) -> Option<usize> {
@@ -69,12 +71,6 @@ impl Map {
         match self.tiles[idx] {
             TileType::Floor =>  tile_index(2, 19),
             TileType::Wall =>   tile_index(2, 3),
-            TileType::Tree =>   tile_index(1, 22),
-            TileType::Door =>   tile_index(1, 3),
-            TileType::DoorOpen => tile_index(1, 4),
-            TileType::Chest =>  tile_index(1, 19),
-            TileType::ChestEmpty => tile_index(1, 20),
-            TileType::Bookshelf => tile_index(1, 26),
         }
     }
 }
@@ -86,7 +82,7 @@ impl Algorithm2D for Map {
 
     fn in_bounds(&self, pt: Point) -> bool {
         pt.x >= self.origin.x && pt.x < self.extent.x && pt.y >= self.origin.y && pt.y < self.extent.y
-    }    
+    }
 }
 
 impl BaseMap for Map {
@@ -105,10 +101,9 @@ impl BaseMap for Map {
     }
 
     fn is_opaque(&self, idx: usize) -> bool {
-        let tile = self.tiles[idx];
-        tile == TileType::Wall
-            || tile == TileType::Tree
-            || tile == TileType::Door
-            || tile == TileType::Bookshelf
+        if self.tiles[idx] == TileType::Wall { return true; }
+
+        let pt = self.index_to_point2d(idx);
+        self.opaque.contains(&pt)
     }
 }

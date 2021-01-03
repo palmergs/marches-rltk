@@ -4,7 +4,7 @@ pub fn spawn_torch(ecs: &mut World, pt: Point) {
     ecs.push(
         (
             Item,
-            Render{ 
+            Render{
                 name: "Torch".to_string(),
                 tile: tile_index(1, 11),
                 pt
@@ -18,11 +18,26 @@ pub fn spawn_chest(ecs: &mut World, pt: Point) {
     ecs.push(
         (
             Item,
-            Render{ 
+            Render{
                 name: "Closed Chest".to_string(),
                 tile: tile_index(2, 7),
                 pt,
             },
         )
     );
+}
+
+pub fn spawn_closed_door(ecs: &mut World, pt: Point) {
+    ecs.push(
+        (
+            Item,
+            Render{
+                name: "Door".to_string(),
+                tile: tile_index(1, 3),
+                pt,
+            },
+            Opaque,
+            Blocking,
+        )
+    )
 }

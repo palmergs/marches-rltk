@@ -9,6 +9,7 @@ pub enum TurnState {
 pub struct State {
     ecs: World,
     resources: Resources,
+    initialize_schedule: Schedule,
     input_schedule: Schedule,
     computer_schedule: Schedule,
 }
@@ -34,6 +35,7 @@ impl State {
         let mut state = Self{
             ecs: World::default(),
             resources: Resources::default(),
+            initialize_schedule: build_initialize_schedule(),
             input_schedule: build_input_schedule(),
             computer_schedule: build_computer_schedule(),
          };

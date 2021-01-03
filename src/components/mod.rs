@@ -17,6 +17,12 @@ pub struct Item;
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Actor;
 
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct Opaque;
+
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct Blocking;
+
 #[derive(Debug, Clone, PartialEq)]
 pub struct Render {
     pub name: String,
