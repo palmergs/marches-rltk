@@ -26,9 +26,9 @@ pub fn move_strategy(
     // location and entity for player
     let mut query = <(Entity, &Player, &Render)>::query();
     let (player_entity, _, player_render) = query.iter(ecs).next().unwrap();
-    
-    let player_pos = player_render.pt;
-    let player_idx = map.point2d_to_index(player_pos);
+
+    let player_pt = player_render.pt;
+    let player_idx = map.point2d_to_index(player_pt);
     let search_targets = vec![player_idx];
     let dijkstra_map = DijkstraMap::new(
         MAP_WIDTH,
@@ -43,18 +43,18 @@ pub fn move_strategy(
         match strategy {
             MoveStrategy::Patrol(n, dir) => {
                 if tick.act(*n) {
-                    if fov.visible_tiles.contains(&player_pos) {
+                    if fov.visible_tiles.contains(&player_pt) {
                         match outlook {
                             Outlook::Aggressive => {
                                 commands.add_component(*entity, MoveStrategy::Chase(*n));
-                                chase(entity, commands, player_entity, &render.pt, map, &npcs);
+                                chase(entity, commands, player_entity, &render.pt, &player_pt, &dijkstra_map, map, &npcs);
                             },
                             Outlook::Neutral => {
                                 patrol(entity, commands, player_entity, &render.pt, *n, dir, map, &npcs);
                             },
                             Outlook::Fearful => {
                                 commands.add_component(*entity, MoveStrategy::Flee(*n));
-                                flee(entity, commands, player_entity, &render.pt, map, &npcs);
+                                flee(entity, commands, player_entity, &render.pt, &player_pt, &dijkstra_map, map, &npcs);
                             }
                         }
                     } else {
@@ -68,29 +68,29 @@ pub fn move_strategy(
                         match outlook {
                             Outlook::Aggressive => {
                                 commands.add_component(*entity, MoveStrategy::Chase(*n));
-                                chase(entity, commands, player_entity, &render.pt, map, &npcs);
+                                chase(entity, commands, player_entity, &render.pt, &player_pt, &dijkstra_map, map, &npcs);
                             },
                             Outlook::Neutral => {
                                 random(entity, commands, player_entity, &render.pt, map, &npcs, &mut rng);
                             },
                             Outlook::Fearful => {
                                 commands.add_component(*entity, MoveStrategy::Flee(*n));
-                                flee(entity, commands, player_entity, &render.pt, map, &npcs);
+                                flee(entity, commands, player_entity, &render.pt, &player_pt, &dijkstra_map, map, &npcs);
                             }
                         }
                     } else {
                         random(entity, commands, player_entity, &render.pt, map, &npcs, &mut rng);
-                    }         
-                }       
+                    }
+                }
             },
             MoveStrategy::Chase(n) => {
                 if tick.act(*n) {
                     match outlook {
                         Outlook::Fearful => {
                             commands.add_component(*entity, MoveStrategy::Flee(*n));
-                            flee(entity, commands, player_entity, &render.pt, map, &npcs);
+                            flee(entity, commands, player_entity, &render.pt, &player_pt, &dijkstra_map, map, &npcs);
                         },
-                        _ => chase(entity, commands, player_entity, &render.pt, map, &npcs)
+                        _ => chase(entity, commands, player_entity, &render.pt, &player_pt, &dijkstra_map, map, &npcs)
                     }
                 }
             },
@@ -99,44 +99,70 @@ pub fn move_strategy(
                     match outlook {
                         Outlook::Aggressive => {
                             commands.add_component(*entity, MoveStrategy::Chase(*n));
-                            chase(entity, commands, player_entity, &render.pt, map, &npcs);
+                            chase(entity, commands, player_entity, &render.pt, &player_pt, &dijkstra_map, map, &npcs);
                         },
-                        _ => flee(entity, commands, player_entity, &render.pt, map, &npcs)
+                        _ => flee(entity, commands, player_entity, &render.pt, &player_pt, &dijkstra_map, map, &npcs)
                     }
-                }                
+                }
             }
         }
     });
 }
 
 fn chase(
-    entity: &Entity, 
-    commands: &mut CommandBuffer, 
-    player_entity: &Entity, 
-    pt: &Point, 
+    entity: &Entity,
+    commands: &mut CommandBuffer,
+    player_entity: &Entity,
+    pt: &Point,
+    player_pt: &Point,
+    dijkstra: &DijkstraMap,
     map: &Map,
-    npcs: &HashMap<Point, Entity>
+    npcs: &HashMap<Point, Entity>,
 ) {
-
+    let entity_idx = map.point2d_to_index(*pt);
+    if let Some(destination) = DijkstraMap::find_lowest_exit(&dijkstra, entity_idx, map) {
+        let distance = DistanceAlg::Pythagoras.distance2d(*pt, *player_pt);
+        if distance > 1.2 {
+            let destination = map.index_to_point2d(destination);
+            if npcs.get(&destination).is_none() {
+                commands.push(((), WantsToMove{ actor: *entity, destination }));
+            }
+        } else {
+            commands.push(((), WantsToAttack{ actor: *entity, victim: *player_entity }));
+        };
+    }
 }
 
 fn flee(
-    entity: &Entity, 
-    commands: &mut CommandBuffer, 
-    player_entity: &Entity, 
-    pt: &Point, 
+    entity: &Entity,
+    commands: &mut CommandBuffer,
+    player_entity: &Entity,
+    pt: &Point,
+    player_pt: &Point,
+    dijkstra: &DijkstraMap,
     map: &Map,
-    npcs: &HashMap<Point, Entity>
+    npcs: &HashMap<Point, Entity>,
 ) {
-
+    let entity_idx = map.point2d_to_index(*pt);
+    if let Some(destination) = DijkstraMap::find_highest_exit(&dijkstra, entity_idx, map) {
+        let distance = DistanceAlg::Pythagoras.distance2d(*pt, *player_pt);
+        if distance > 1.2 {
+            let destination = map.index_to_point2d(destination);
+            if npcs.get(&destination).is_none() {
+                commands.push(((), WantsToMove{ actor: *entity, destination }));
+            }
+        } else {
+            commands.push(((), WantsToAttack{ actor: *entity, victim: *player_entity }));
+        };
+    }
 }
 
 fn random(
-    entity: &Entity, 
-    commands: &mut CommandBuffer, 
-    player_entity: &Entity, 
-    pt: &Point, 
-    map: &Map, 
+    entity: &Entity,
+    commands: &mut CommandBuffer,
+    player_entity: &Entity,
+    pt: &Point,
+    map: &Map,
     npcs: &HashMap<Point, Entity>,
     rng: &mut Rng
 ) {
@@ -158,26 +184,27 @@ fn random(
                 commands.push(((), WantsToAttack{ actor: *entity, victim: *npc_entity }));
             }
         } else {
+            println!("inserting a random move to {:?}", destination);
             commands.push(((), WantsToMove{ actor: *entity, destination }));
         }
     }
 }
 
 fn patrol(
-    entity: &Entity, 
+    entity: &Entity,
     commands: &mut CommandBuffer,
-    player_entity: &Entity, 
-    pt: &Point, 
-    tick: usize, 
-    dir: &Direction, 
-    map: &Map, 
+    player_entity: &Entity,
+    pt: &Point,
+    tick: usize,
+    dir: &Direction,
+    map: &Map,
     npcs: &HashMap<Point, Entity>,
 ) {
     let destination = match dir {
         Direction::North => Point::new( 0, -1) + *pt,
         Direction::East  => Point::new( 1,  0) + *pt,
         Direction::South => Point::new( 0,  1) + *pt,
-        Direction::West  => Point::new(-1,  0) + *pt, 
+        Direction::West  => Point::new(-1,  0) + *pt,
     };
 
     if let Some(npc_entity) = npcs.get(&destination) {

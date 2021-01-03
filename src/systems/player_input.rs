@@ -11,7 +11,6 @@ pub fn player_input(
     #[resource] state: &mut TurnState,
 ) {
     if let Some(key) = key {
-        println!("key pressed {:?}", key);
         let mut players = <(Entity, &Render)>::query().filter(component::<Player>());
         let (player, location) = players
             .iter(ecs)

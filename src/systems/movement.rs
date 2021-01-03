@@ -38,7 +38,6 @@ pub fn movement(
 
                 // Move the camera if this is a Player
                 if ecs.entry_ref(cmd.actor).unwrap().get_component::<Player>().is_ok() {
-                    println!("player at {:?}", cmd.destination);
                     camera.on_player_move(cmd.destination);
                 }
             }
