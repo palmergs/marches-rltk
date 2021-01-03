@@ -10,4 +10,6 @@ pub struct WantsToMove {
 pub struct WantsToAttack {
     pub actor: Entity,
     pub victim: Entity,
+    // pub power: i32,
+    // pub dmg: i32,
 }

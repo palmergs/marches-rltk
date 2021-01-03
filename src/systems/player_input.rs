@@ -1,7 +1,7 @@
 use crate::prelude::*;
 
 #[system]
-#[read_component(Point)]
+#[read_component(Render)]
 #[read_component(Player)]
 #[read_component(Actor)]
 pub fn player_input(
@@ -12,10 +12,10 @@ pub fn player_input(
 ) {
     if let Some(key) = key {
         println!("key pressed {:?}", key);
-        let mut players = <(Entity, &Point)>::query().filter(component::<Player>());
+        let mut players = <(Entity, &Render)>::query().filter(component::<Player>());
         let (player, location) = players
             .iter(ecs)
-            .find_map(|(entity, pos)| Some((*entity, *pos))).unwrap();
+            .find_map(|(entity, render)| Some((*entity, render.pt))).unwrap();
 
         match key {
             VirtualKeyCode::Left  | VirtualKeyCode::Numpad4 =>  handle_move(ecs, commands, player, location, Point::new(-1, 0)),
@@ -28,7 +28,7 @@ pub fn player_input(
             VirtualKeyCode::Numpad3 =>  handle_move(ecs, commands, player, location, Point::new(1, 1)),
             _ => (),
         };
-        *state = TurnState::PlayerTurn;
+        *state = TurnState::ComputerTurn;
     }
 }
 
@@ -41,9 +41,9 @@ fn handle_move(
 ) {
     let destination = from + delta;
     let mut hit_something = false;
-    let mut npcs = <(Entity, &Point)>::query().filter(component::<Actor>());
+    let mut npcs = <(Entity, &Render)>::query().filter(component::<Actor>());
     npcs.iter(ecs)
-        .filter(|(_, pos)| { **pos == destination })
+        .filter(|(_, render)| { render.pt == destination })
         .for_each(|(entity, _)| {
             if *entity != actor {
                 hit_something = true;

@@ -3,8 +3,7 @@ use crate::prelude::*;
 #[system(for_each)]
 #[read_component(Player)]
 #[read_component(Actor)]
-#[read_component(Point)]
-#[write_component(Points)]
+#[read_component(Render)]
 pub fn combat(
     entity: &Entity,
     cmd: &WantsToAttack,
@@ -17,11 +16,15 @@ pub fn combat(
     let mut rng = Rng::new();
     let dmg = rng.range(1, 5);
 
-    let mut msg:Vec<String> = vec![];
-
-    if let Ok((pt)) = ecs.entry_ref(cmd.victim).unwrap().get_component::<(Point)>() {
+    if let Ok(render) = ecs.entry_ref(cmd.victim).unwrap().get_component::<Render>() {
         let text = format!("{}", dmg).to_string();
-        commands.push(((), FadingUpText{ pt: *pt, text, life: 100, remaining: 100 }));
+        commands.push(((), Text{ 
+            display: TextDisplay::AnimateUp(render.pt),
+            text,
+            color: RGBA::from_f32(1., 0., 0., 1.),
+            ticks: 100,
+            count: 0,
+        }));
     }
 
 

@@ -35,8 +35,8 @@ impl Camera {
     }
 
     pub fn in_central_view(&self, pt: Point) -> bool {
-        let w = DISPLAY_WIDTH / 6;
-        let h = DISPLAY_HEIGHT / 6;
+        let w = DISPLAY_WIDTH / 4;
+        let h = DISPLAY_HEIGHT / 4;
         pt.x >= self.left + w && pt.x < self.right - w
             && pt.y >= self.top + h && pt.y < self.bottom - h
     }

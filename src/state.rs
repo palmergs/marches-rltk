@@ -3,7 +3,6 @@ use crate::prelude::*;
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum TurnState {
     AwaitingInput,
-    PlayerTurn,
     ComputerTurn,
 }
 
@@ -11,7 +10,6 @@ pub struct State {
     ecs: World,
     resources: Resources,
     input_schedule: Schedule,
-    player_schedule: Schedule,
     computer_schedule: Schedule,
 }
 
@@ -37,7 +35,6 @@ impl State {
             ecs: World::default(),
             resources: Resources::default(),
             input_schedule: build_input_schedule(),
-            player_schedule: build_player_schedule(),
             computer_schedule: build_computer_schedule(),
          };
 
@@ -57,13 +54,6 @@ impl State {
         self.resources.insert(mb.map);
         self.resources.insert(Camera::new(mb.player_start));
         self.resources.insert(TurnState::AwaitingInput);
-
-        self.ecs.push(( FadingText{
-            text: format!("Entering level {}", depth).to_string(),
-            life: 100,
-            remaining: 100,
-            pt: mb.player_start },
-        ));
     }
 }
 
@@ -110,7 +100,6 @@ impl GameState for State {
         let curr_state = self.resources.get::<TurnState>().unwrap().clone();
         match curr_state {
             TurnState::AwaitingInput => self.input_schedule.execute(&mut self.ecs, &mut self.resources),
-            TurnState::PlayerTurn => self.player_schedule.execute(&mut self.ecs, &mut self.resources),
             TurnState::ComputerTurn => self.computer_schedule.execute(&mut self.ecs, &mut self.resources),
         };
 
