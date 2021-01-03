@@ -18,7 +18,7 @@ pub fn display_text(
                     let dy = (fade * 4.0) as i32;
                     let pt = pt - camera.offset() - Point::new(0, dy);
                     let rgba = cmd.color - RGBA::from_f32(0., 0., 0., fade);
-                    draw_batch.print_color(pt, cmd.text.clone(), ColorPair::new(rgba, BLACK));
+                    draw_batch.print_color(pt * 2, cmd.text.clone(), ColorPair::new(rgba, BLACK));
                     draw_batch.submit(4000).expect("error rendering fading text");
                 }
             },
@@ -28,7 +28,7 @@ pub fn display_text(
                     draw_batch.target(UI_LAYER);
                     let pt = pt - camera.offset();
                     let rgba = cmd.color - RGBA::from_f32(0., 0., 0., fade);
-                    draw_batch.print_color(pt, cmd.text.clone(), ColorPair::new(rgba, BLACK));
+                    draw_batch.print_color(pt * 2, cmd.text.clone(), ColorPair::new(rgba, BLACK));
                     draw_batch.submit(4000).expect("error rendering fading text");
                 }
             },

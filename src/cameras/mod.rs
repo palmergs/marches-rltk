@@ -11,18 +11,18 @@ pub struct Camera {
 impl Camera {
     pub fn new(pt: Point) -> Self {
         Self{
-            left: pt.x - DISPLAY_WIDTH / 2,
-            right: pt.x + DISPLAY_WIDTH / 2,
-            top: pt.y - DISPLAY_HEIGHT / 2,
-            bottom: pt.y + DISPLAY_HEIGHT / 2,
+            left: pt.x - SCREEN_WIDTH / 2,
+            right: pt.x + SCREEN_WIDTH / 2,
+            top: pt.y - SCREEN_HEIGHT / 2,
+            bottom: pt.y + SCREEN_HEIGHT / 2,
         }
     }
 
     pub fn on_player_move(&mut self, pt: Point) {
-        self.left = pt.x - DISPLAY_WIDTH / 2;
-        self.right = pt.x + DISPLAY_WIDTH / 2;
-        self.top = pt.y - DISPLAY_HEIGHT / 2;
-        self.bottom = pt.y + DISPLAY_HEIGHT / 2;
+        self.left = pt.x - SCREEN_WIDTH / 2;
+        self.right = pt.x + SCREEN_WIDTH / 2;
+        self.top = pt.y - SCREEN_HEIGHT / 2;
+        self.bottom = pt.y + SCREEN_HEIGHT / 2;
     }
 
     pub fn offset(&self) -> Point { Point::constant(self.left, self.top) }
@@ -35,8 +35,8 @@ impl Camera {
     }
 
     pub fn in_central_view(&self, pt: Point) -> bool {
-        let w = DISPLAY_WIDTH / 4;
-        let h = DISPLAY_HEIGHT / 4;
+        let w = SCREEN_WIDTH / 4;
+        let h = SCREEN_HEIGHT / 4;
         pt.x >= self.left + w && pt.x < self.right - w
             && pt.y >= self.top + h && pt.y < self.bottom - h
     }
@@ -58,8 +58,8 @@ mod test {
     #[test]
     fn test_camera_move() {
         let mut camera = Camera::new(Point::zero());
-        camera.on_player_move(Point::new(DISPLAY_WIDTH, DISPLAY_HEIGHT));
-        assert_eq!(camera.left, DISPLAY_WIDTH / 2);
-        assert_eq!(camera.top, DISPLAY_HEIGHT / 2);
+        camera.on_player_move(Point::new(SCREEN_WIDTH, SCREEN_HEIGHT));
+        assert_eq!(camera.left, SCREEN_WIDTH / 2);
+        assert_eq!(camera.top, SCREEN_HEIGHT / 2);
     }
 }

@@ -29,8 +29,8 @@ pub mod prelude {
     pub const MAP_WIDTH: usize = 160;
     pub const MAP_HEIGHT: usize = 100;
     pub const MAP_TILES: usize = MAP_WIDTH * MAP_HEIGHT;
-    pub const DISPLAY_WIDTH: i32 = SCREEN_WIDTH;
-    pub const DISPLAY_HEIGHT: i32 = SCREEN_HEIGHT;
+    pub const DISPLAY_WIDTH: i32 = SCREEN_WIDTH * 2;
+    pub const DISPLAY_HEIGHT: i32 = SCREEN_HEIGHT * 2;
 
     // Terminal layers
     pub const FLOOR_LAYER:usize = 0;
@@ -49,14 +49,15 @@ pub fn tile_index(row: usize, col: usize) -> usize {
 fn main() -> BError {
     let context = BTermBuilder::new()
         .with_title("The Western Marches")
-        .with_dimensions(DISPLAY_WIDTH, DISPLAY_HEIGHT)
+        .with_dimensions(SCREEN_WIDTH, SCREEN_HEIGHT)
         .with_tile_dimensions(16, 16)
         .with_resource_path("resources/")
         .with_font("unicode_trunc_graph_16x16.png", 16, 16)
-        .with_simple_console(DISPLAY_WIDTH, DISPLAY_HEIGHT, "unicode_trunc_graph_16x16.png")
-        .with_simple_console_no_bg(DISPLAY_WIDTH, DISPLAY_HEIGHT, "unicode_trunc_graph_16x16.png")
-        .with_simple_console_no_bg(DISPLAY_WIDTH, DISPLAY_HEIGHT, "unicode_trunc_graph_16x16.png")
-        .with_simple_console_no_bg(DISPLAY_WIDTH, DISPLAY_HEIGHT, "unicode_trunc_graph_16x16.png")
+        .with_font("terminal8x8.png", 8, 8)
+        .with_simple_console(SCREEN_WIDTH, SCREEN_HEIGHT, "unicode_trunc_graph_16x16.png")
+        .with_simple_console_no_bg(SCREEN_WIDTH, SCREEN_HEIGHT, "unicode_trunc_graph_16x16.png")
+        .with_simple_console_no_bg(SCREEN_WIDTH, SCREEN_HEIGHT, "unicode_trunc_graph_16x16.png")
+        .with_simple_console_no_bg(DISPLAY_WIDTH, DISPLAY_HEIGHT, "terminal8x8.png")
         .build()?;
 
     main_loop(context, State::new())
