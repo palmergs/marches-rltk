@@ -9,7 +9,6 @@ use std::collections::HashMap;
 #[read_component(MoveStrategy)]
 #[read_component(Outlook)]
 #[read_component(FieldOfView)]
-// #[write_component(WantsToMove)]
 pub fn move_strategy(
     ecs: &SubWorld,
     commands: &mut CommandBuffer,
@@ -184,7 +183,6 @@ fn random(
                 commands.push(((), WantsToAttack{ actor: *entity, victim: *npc_entity }));
             }
         } else {
-            println!("inserting a random move to {:?}", destination);
             commands.push(((), WantsToMove{ actor: *entity, destination }));
         }
     }

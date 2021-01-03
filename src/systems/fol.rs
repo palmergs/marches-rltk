@@ -16,11 +16,11 @@ pub fn fol(
             fol.is_dirty = false;
         });
 
-    let mut player_fol = <&FieldOfLight>::query().filter(component::<&Player>());
+    let mut player_fol = <&FieldOfLight>::query().filter(component::<Player>());
     if let Some(fov) = player_fol.iter(ecs).next() {
         for pt in fov.lit_tiles.iter() {
             let idx = map.point2d_to_index(*pt);
             map.revealed[idx] = true;
-        }        
+        }
     }
 }
