@@ -2,6 +2,7 @@ use crate::prelude::*;
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum TurnState {
+    InitializeMap,
     AwaitingInput,
     ComputerTurn,
 }
@@ -101,6 +102,7 @@ impl GameState for State {
 
         let curr_state = self.resources.get::<TurnState>().unwrap().clone();
         match curr_state {
+            TurnState::InitializeMap => self.initialize_schedule.execute(&mut self.ecs, &mut self.resources),
             TurnState::AwaitingInput => self.input_schedule.execute(&mut self.ecs, &mut self.resources),
             TurnState::ComputerTurn => self.computer_schedule.execute(&mut self.ecs, &mut self.resources),
         };

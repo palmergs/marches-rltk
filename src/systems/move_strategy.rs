@@ -183,7 +183,9 @@ fn random(
                 commands.push(((), WantsToAttack{ actor: *entity, victim: *npc_entity }));
             }
         } else {
-            commands.push(((), WantsToMove{ actor: *entity, destination }));
+            if map.can_enter(destination) {
+                commands.push(((), WantsToMove{ actor: *entity, destination }));
+            }
         }
     }
 }

@@ -39,5 +39,5 @@ pub fn spawn_closed_door(ecs: &mut World, pt: Point) {
             Opaque,
             Blocking,
         )
-    )
+    );
 }

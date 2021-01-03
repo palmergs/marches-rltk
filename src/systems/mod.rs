@@ -1,5 +1,6 @@
 use crate::prelude::*;
 
+mod map_initialize;
 mod player_input;
 mod render;
 mod state_change;
