@@ -5,6 +5,7 @@ mod render;
 mod state_change;
 mod move_strategy;
 mod movement;
+mod position_resolution;
 mod might_talk;
 mod combat;
 mod fov;
@@ -25,7 +26,8 @@ pub fn build_input_schedule() -> Schedule {
 
 pub fn build_computer_schedule() -> Schedule {
     Schedule::builder()
-        .add_system(movement::movement_system())
+        // .add_system(movement::movement_system())
+        .add_system(position_resolution::position_resolution_system())
         .flush()
         .add_system(combat::combat_system())
         .flush()
