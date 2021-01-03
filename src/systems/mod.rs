@@ -8,9 +8,11 @@ mod move_strategy;
 mod movement;
 mod might_talk;
 mod combat;
+mod heal;
 mod fov;
 mod fol;
 mod display_text;
+mod hud;
 
 // Initializing the map before the first render and player input
 pub fn build_initialize_schedule() -> Schedule {
@@ -34,6 +36,7 @@ pub fn build_input_schedule() -> Schedule {
         .add_system(fol::fol_system())
         .flush()
         .add_system(render::render_system())
+        .add_system(hud::character_system())
         .add_system(display_text::display_text_system())
         .build()
 }
@@ -45,6 +48,8 @@ pub fn build_computer_schedule() -> Schedule {
         .flush()
         .add_system(combat::combat_system())
         .flush()
+        .add_system(heal::heal_system())
+        .flush()
         .add_system(fov::fov_system())
         .add_system(fol::fol_system())
         .flush()
@@ -52,6 +57,7 @@ pub fn build_computer_schedule() -> Schedule {
         .add_system(might_talk::might_talk_system())
         .flush()
         .add_system(render::render_system())
+        .add_system(hud::character_system())
         .add_system(display_text::display_text_system())
         .add_system(state_change::state_change_system())
         .build()

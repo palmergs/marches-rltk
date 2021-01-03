@@ -111,6 +111,8 @@ pub trait ValueWithMax {
 
     fn is_max(&self) -> bool { self.max() == self.curr() }
 
+    fn is_wounded(&self) -> bool { self.curr() < self.max() }
+
     fn is_bonus(&self) -> bool { self.curr() > 0 }
 
     fn is_penalty(&self) -> bool { self.curr() < 0 }

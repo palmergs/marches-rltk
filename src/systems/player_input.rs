@@ -10,6 +10,7 @@ pub fn player_input(
     commands: &mut CommandBuffer,
     #[resource] key: &Option<VirtualKeyCode>,
     #[resource] state: &mut TurnState,
+    #[resource] turn: &mut TurnCount,
     #[resource] tick: &TickCount,
 ) {
     if let Some(key) = key {
@@ -29,6 +30,8 @@ pub fn player_input(
             VirtualKeyCode::Numpad3 =>  handle_move(ecs, commands, player, location, Point::new(1, 1)),
             _ => (),
         };
+
+        turn.increment();
         *state = TurnState::ComputerTurn;
     }
 }
