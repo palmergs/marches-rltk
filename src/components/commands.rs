@@ -10,6 +10,16 @@ pub struct WantsToMove {
 pub struct WantsToAttack {
     pub actor: Entity,
     pub victim: Entity,
-    // pub power: i32,
-    // pub dmg: i32,
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct WantsToChangeStrategy {
+    pub actor: Entity,
+    pub strategy: MoveStrategy,
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct WantsToChangeOutlook {
+    pub actor: Entity,
+    pub outlook: Outlook,
 }

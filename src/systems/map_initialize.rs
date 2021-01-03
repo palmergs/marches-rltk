@@ -4,8 +4,6 @@ use crate::prelude::*;
 #[read_component(Actor)]
 #[read_component(Item)]
 #[read_component(Render)]
-#[read_component(Opaque)]
-#[read_component(Blocking)]
 pub fn map_initialize(
     ecs: &SubWorld,
     #[resource] map: &mut Map,
@@ -18,11 +16,10 @@ pub fn map_initialize(
     query.iter(ecs)
         .for_each(|(_, render)| { map.actors.insert(render.pt); });
 
-    let mut query = <(&Item, &Render)>::query().filter(component::<Opaque>());
+    let mut query = <(&Item, &Render)>::query();
     query.iter(ecs)
-        .for_each(|(_, render)| { map.opaque.insert(render.pt); });
-
-    let mut query = <(&Item, &Render)>::query().filter(component::<Blocking>());
-    query.iter(ecs)
-        .for_each(|(_, render)| { map.blocked.insert(render.pt); });
+        .for_each(|(item, render)| {
+            if item.opaque { map.opaque.insert(render.pt); }
+            if item.blocking { map.blocked.insert(render.pt); }
+        });
 }

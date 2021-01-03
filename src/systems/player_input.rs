@@ -3,12 +3,14 @@ use crate::prelude::*;
 #[system]
 #[read_component(Render)]
 #[read_component(Player)]
+#[read_component(Stats)]
 #[read_component(Actor)]
 pub fn player_input(
     ecs: &mut SubWorld,
     commands: &mut CommandBuffer,
     #[resource] key: &Option<VirtualKeyCode>,
     #[resource] state: &mut TurnState,
+    #[resource] tick: &TickCount,
 ) {
     if let Some(key) = key {
         let mut players = <(Entity, &Render)>::query().filter(component::<Player>());

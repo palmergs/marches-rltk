@@ -3,13 +3,19 @@ use crate::prelude::*;
 pub fn spawn_torch(ecs: &mut World, pt: Point) {
     ecs.push(
         (
-            Item,
+            Item::new(false, false),
             Render{
                 name: "Torch".to_string(),
                 tile: tile_index(1, 11),
                 pt
             },
             FieldOfLight::new(5),
+            Stats{
+                armor: 0,
+                speed: 0,
+                vigor: Vigor::new(3),
+                focus: Focus::new(0),
+            },
         )
     );
 }
@@ -17,11 +23,17 @@ pub fn spawn_torch(ecs: &mut World, pt: Point) {
 pub fn spawn_chest(ecs: &mut World, pt: Point) {
     ecs.push(
         (
-            Item,
+            Item::new(false, false),
             Render{
                 name: "Closed Chest".to_string(),
                 tile: tile_index(2, 7),
                 pt,
+            },
+            Stats{
+                armor: 5,
+                speed: 0,
+                vigor: Vigor::new(30),
+                focus: Focus::new(0),
             },
         )
     );
@@ -30,14 +42,18 @@ pub fn spawn_chest(ecs: &mut World, pt: Point) {
 pub fn spawn_closed_door(ecs: &mut World, pt: Point) {
     ecs.push(
         (
-            Item,
+            Item::new(true, true),
             Render{
                 name: "Door".to_string(),
                 tile: tile_index(1, 3),
                 pt,
             },
-            Opaque,
-            Blocking,
+            Stats{
+                armor: 3,
+                speed: 0,
+                vigor: Vigor::new(30),
+                focus: Focus::new(0),
+            },
         )
     );
 }

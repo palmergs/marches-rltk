@@ -11,13 +11,29 @@ pub fn spawn_player(ecs: &mut World, pt: Point) {
         (
             Player,
             Actor,
-            Render{ 
+            Render{
                 name: "Borimir".to_string(),
                 tile: tile_index(2, 21),
                 pt,
             },
             FieldOfView::new(10),
             FieldOfLight::new(5),
+            Stats {
+                armor: 0,
+                speed: 2,
+                vigor: Vigor::new(15),
+                focus: Focus::new(15),
+            },
+            Physical{
+                brawn: Brawn::new(0),
+                grace: Grace::new(0),
+            },
+            Mental{
+                outlook: Outlook::Player,
+                strategy: MoveStrategy::Player,
+                smart: Smart::new(0),
+                charm: Charm::new(0),
+            }
         )
     );
 }
@@ -42,7 +58,6 @@ pub fn spawn_monster(ecs: &mut World, rng: &mut Rng, pt: Point, depth: i32) {
         10..=12 => spawn_skeleton(ecs, pt),
         13      => spawn_animated_tree(ecs, pt),
         _       => spawn_bat(ecs, pt)
-
     }
 }
 

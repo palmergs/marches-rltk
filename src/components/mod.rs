@@ -12,16 +12,17 @@ pub use commands::*;
 pub struct Player;
 
 #[derive(Debug, Clone, Copy, PartialEq)]
-pub struct Item;
+pub struct Item {
+    pub blocking: bool,
+    pub opaque: bool,
+}
+
+impl Item {
+    pub fn new(blocking: bool, opaque: bool) -> Self { Self{ blocking, opaque } }
+}
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Actor;
-
-#[derive(Debug, Clone, Copy, PartialEq)]
-pub struct Opaque;
-
-#[derive(Debug, Clone, Copy, PartialEq)]
-pub struct Blocking;
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct Render {
@@ -93,7 +94,7 @@ pub struct Text {
     pub count: i32,
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub enum Direction {
     North,
     South,
@@ -122,16 +123,18 @@ impl Direction {
     }
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub enum MoveStrategy {
-    Random(usize),
-    Patrol(usize, Direction),
-    Chase(usize),
-    Flee(usize),
+    Player,
+    Random,
+    Patrol(Direction),
+    Chase,
+    Flee,
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub enum Outlook {
+    Player,
     Aggressive,
     Neutral,
     Fearful,
