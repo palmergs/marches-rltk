@@ -8,6 +8,7 @@ mod move_strategy;
 mod movement;
 mod might_talk;
 mod combat;
+mod strategy;
 mod heal;
 mod fov;
 mod fol;
@@ -46,10 +47,10 @@ pub fn build_computer_schedule() -> Schedule {
     Schedule::builder()
         .add_system(movement::movement_system())
         .flush()
+        .add_system(strategy::strategy_system())
         .add_system(combat::combat_system())
         .flush()
         .add_system(heal::heal_system())
-        .flush()
         .add_system(fov::fov_system())
         .add_system(fol::fol_system())
         .flush()

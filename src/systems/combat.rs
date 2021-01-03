@@ -44,7 +44,6 @@ pub fn combat(
                 }
                 map.actors.remove(&render.pt);
             } else {
-                println!("remaining: focus={:?} vigor={:?}", focus, vigor);
                 let text = format!("{}", dmg).to_string();
                 commands.push(((), Text{
                     display: TextDisplay::AnimateUp(render.pt),
