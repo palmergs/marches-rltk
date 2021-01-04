@@ -94,6 +94,21 @@ pub struct Text {
     pub count: i32,
 }
 
+impl Text {
+    pub fn is_fade(&self) -> bool {
+        match self.display {
+            TextDisplay::Fade(_) => true,
+            _ => false,
+        }
+    }
+    pub fn pt(&self) -> Point {
+        match self.display {
+            TextDisplay::Fade(pt) => pt,
+            TextDisplay::AnimateUp(pt) => pt,
+        }
+    }
+}
+
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum Direction {
     North,

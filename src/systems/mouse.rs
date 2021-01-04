@@ -1,10 +1,13 @@
 use crate::prelude::*;
 
+use std::collections::HashSet;
+
 #[system]
 #[read_component(Render)]
 #[read_component(Stats)]
 #[read_component(Player)]
 #[read_component(FieldOfView)]
+#[read_component(Text)]
 pub fn mouse(
     ecs: &SubWorld,
     commands: &mut CommandBuffer,
@@ -14,6 +17,14 @@ pub fn mouse(
     let mut query = <&FieldOfView>::query().filter(component::<Player>());
     let fov = query.iter(ecs).next().unwrap();
 
+    let mut query = <&Text>::query();
+    let mut fades: HashSet<Point> = HashSet::new();
+    query.iter(ecs)
+        .filter(|text| text.is_fade())
+        .for_each(|text| {
+            fades.insert(text.pt());
+        });
+
     let pointer = *mouse + camera.offset();
 
     let mut query = <(Entity, &Render, &Stats)>::query().filter(!component::<Player>());
@@ -21,17 +32,19 @@ pub fn mouse(
         .filter(|(_, render, _)| render.pt == pointer )
         .filter(|(_, render, _)| fov.visible_tiles.contains(&render.pt))
         .for_each(|(entity, render, stats)| {
-            let (text, color) = if stats.vigor.is_wounded() {
-                (format!("{} (wounded)", render.name), RGBA::named(PINK))
-            } else {
-                (format!("{}", render.name), RGBA::named(WHITE))
-            };
-            commands.push(((), Text{
-                display: TextDisplay::Fade(render.pt),
-                text,
-                color,
-                ticks: 40,
-                count: 0,
-            }));
+            if !fades.contains(&render.pt) {
+                let (text, color) = if stats.vigor.is_wounded() {
+                    (format!("{} (wounded)", render.name), RGBA::named(PINK))
+                } else {
+                    (format!("{}", render.name), RGBA::named(WHITE))
+                };
+                commands.push(((), Text{
+                    display: TextDisplay::Fade(render.pt),
+                    text,
+                    color,
+                    ticks: 40,
+                    count: 0,
+                }));
+            }
         });
 }
