@@ -14,6 +14,7 @@ mod fov;
 mod fol;
 mod display_text;
 mod hud;
+mod mouse;
 
 // Initializing the map before the first render and player input
 pub fn build_initialize_schedule() -> Schedule {
@@ -38,6 +39,8 @@ pub fn build_input_schedule() -> Schedule {
         .flush()
         .add_system(render::render_system())
         .add_system(hud::character_system())
+        .add_system(mouse::mouse_system())
+        .flush()
         .add_system(display_text::display_text_system())
         .build()
 }
