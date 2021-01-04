@@ -22,3 +22,6 @@ Probably something like this:
 * No save or load game
 * No win condition
 * Also seems a bit sluggish
+
+### Known Bugs
+* The Image file used for the actor and item layers renders many greens as transparent
