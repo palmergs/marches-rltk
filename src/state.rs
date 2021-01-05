@@ -34,6 +34,14 @@ impl TurnCount {
     pub fn increment(&mut self) { self.0 += 1; }
 }
 
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct PlayerInput {
+    pub key: Option<VirtualKeyCode>,
+    pub shift: bool,
+    pub mouse: Point,
+    pub click: bool,
+}
+
 impl State {
     pub fn new() -> Self {
         let mut state = Self{
@@ -97,8 +105,12 @@ impl GameState for State {
         ctx.cls();
 
         self.resources.get_mut::<TickCount>().unwrap().increment();
-        self.resources.insert(ctx.key);
-        self.resources.insert(Point::from_tuple(ctx.mouse_pos()));
+        self.resources.insert(PlayerInput{
+            key: ctx.key, 
+            shift: ctx.shift,
+            mouse: Point::from_tuple(ctx.mouse_pos()),
+            click: ctx.left_click,
+        });
 
         let curr_state = self.resources.get::<TurnState>().unwrap().clone();
         match curr_state {

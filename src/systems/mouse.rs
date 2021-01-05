@@ -12,7 +12,7 @@ pub fn mouse(
     ecs: &SubWorld,
     commands: &mut CommandBuffer,
     #[resource] camera: &Camera,
-    #[resource] mouse: &Point,
+    #[resource] input: &PlayerInput,
 ) {
     let mut query = <&FieldOfView>::query().filter(component::<Player>());
     let fov = query.iter(ecs).next().unwrap();
@@ -25,7 +25,7 @@ pub fn mouse(
             fades.insert(text.pt());
         });
 
-    let pointer = *mouse + camera.offset();
+    let pointer = input.mouse + camera.offset();
 
     let mut query = <(Entity, &Render, &Stats)>::query().filter(!component::<Player>());
     query.iter(ecs)
