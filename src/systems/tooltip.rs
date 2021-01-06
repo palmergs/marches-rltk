@@ -8,7 +8,7 @@ use std::collections::HashSet;
 #[read_component(Player)]
 #[read_component(FieldOfView)]
 #[read_component(Text)]
-pub fn mouse(
+pub fn tooltip(
     ecs: &SubWorld,
     commands: &mut CommandBuffer,
     #[resource] camera: &Camera,
@@ -27,11 +27,11 @@ pub fn mouse(
 
     let pointer = *mouse + camera.offset();
 
-    let mut query = <(Entity, &Render, &Stats)>::query().filter(!component::<Player>());
+    let mut query = <(&Render, &Stats)>::query().filter(!component::<Player>());
     query.iter(ecs)
-        .filter(|(_, render, _)| render.pt == pointer )
-        .filter(|(_, render, _)| fov.visible_tiles.contains(&render.pt))
-        .for_each(|(entity, render, stats)| {
+        .filter(|(render, _)| render.pt == pointer )
+        .filter(|(render, _)| fov.visible_tiles.contains(&render.pt))
+        .for_each(|(render, stats)| {
             if !fades.contains(&render.pt) {
                 let (text, color) = if stats.vigor.is_wounded() {
                     (format!("{} (wounded)", render.name), RGBA::named(PINK))

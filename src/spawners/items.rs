@@ -23,7 +23,7 @@ pub fn spawn_torch(ecs: &mut World, pt: Point) {
 pub fn spawn_dagger(ecs: &mut World, pt: Point) {
     ecs.push(
         (
-            Item::new(true, false),
+            Item::new(false, false),
             Render{
                 name: "Dagger".to_string(),
                 tile: tile_index(13, 116),
@@ -126,12 +126,7 @@ pub fn spawn_closed_room_doors(ecs: &mut World, map: &Map, rect: &Rect) {
 pub fn spawn_room_doors(ecs: &mut World, rng: &mut Rng, map: &Map, rect: &Rect) {
     find_door_locations(map, rect)
         .iter()
-        .for_each(|pt| {
-            match rng.range(0, 2) {
-                0 => spawn_closed_door(ecs, *pt),
-                _ => spawn_open_door(ecs, *pt),
-            }
-        });
+        .for_each(|pt| spawn_random_door(ecs, rng, *pt));
 }
 
 fn find_door_locations(map: &Map, rect: &Rect) -> Vec<Point> {
@@ -163,9 +158,9 @@ fn find_door_locations(map: &Map, rect: &Rect) -> Vec<Point> {
 }
 
 pub fn spawn_random_door(ecs: &mut World, rng: &mut Rng, pt: Point) {
-    match rng.range(0, 3) {
-        0 | 1 => spawn_open_door(ecs, pt),
-        _ => spawn_closed_door(ecs, pt),
+    match rng.range(0, 2) {
+        0 => spawn_closed_door(ecs, pt),
+        _ => spawn_open_door(ecs, pt),
     }
 }
 

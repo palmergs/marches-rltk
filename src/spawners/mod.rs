@@ -82,9 +82,11 @@ pub fn spawn_monster(ecs: &mut World, rng: &mut Rng, pt: Point, depth: i32) {
         3..=5   => spawn_bat(ecs, pt),
         6..=8   => spawn_goblin_with_torch(ecs, pt),
         9..=10  => spawn_goblin(ecs, pt),
-        11      => spawn_skeleton_with_torch(ecs, pt),
-        12..=14 => spawn_skeleton(ecs, pt),
-        15      => spawn_animated_tree(ecs, pt),
+        11      => spawn_giant_rat(ecs, pt),
+        12      => spawn_skeleton_with_torch(ecs, pt),
+        13..=14 => spawn_skeleton(ecs, pt),
+        15      => spawn_skeleton_warrior(ecs, pt),
+        16      => spawn_animated_tree(ecs, pt),
         _       => spawn_bat(ecs, pt)
     }
 }

@@ -7,7 +7,6 @@ pub fn strategy(
     cmd: &WantsToChangeStrategy,
     ecs: &mut SubWorld,
     commands: &mut CommandBuffer,
-    #[resource] map: &mut Map,
  ) {
     if let Ok(mut mental) = ecs.entry_mut(cmd.actor).unwrap().get_component_mut::<Mental>() {
         mental.strategy = cmd.strategy;

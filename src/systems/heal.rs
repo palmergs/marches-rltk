@@ -11,9 +11,9 @@ pub fn heal(
     #[resource] turn: &TurnCount,
 ) {
     let mut rng = Rng::new();
-    let mut query = <(&Render, &Physical, &Mental, &mut Stats)>::query();
+    let mut query = <(&Render, &Physical, &mut Stats)>::query().filter(component::<Mental>());
     query.iter_mut(ecs)
-        .for_each(|(render, physical, mental, stats)| {
+        .for_each(|(render, physical, stats)| {
             if stats.vigor.is_wounded() {
                 let act_on = 100 - (physical.brawn.curr * 10) + rng.range(1, 10);
                 if turn.act(act_on as usize) {

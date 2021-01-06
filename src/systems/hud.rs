@@ -10,8 +10,8 @@ use crate::prelude::*;
 #[read_component(FieldOfView)]
 pub fn character(
     ecs: &SubWorld,
-    #[resource] map: &Map,
-    #[resource] tick: &TickCount,
+    // #[resource] map: &Map,
+    // #[resource] tick: &TickCount,
 ) {
     let mut query = <(&Render, &Physical, &Mental, &Stats)>::query().filter(component::<Player>());
     let (render, physical, mental, stats) = query.iter(ecs).next().unwrap();

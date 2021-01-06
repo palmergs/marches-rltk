@@ -11,10 +11,8 @@ pub fn player_input(
     #[resource] key: &Option<VirtualKeyCode>,
     #[resource] state: &mut TurnState,
     #[resource] turn: &mut TurnCount,
-    #[resource] tick: &TickCount,
 ) {
     if let Some(key) = key {
-        println!("key = {:?}", key);
         let mut query = <(Entity, &Render)>::query().filter(component::<Player>());
         let (player, location) = query.iter(ecs)
             .find_map(|(entity, render)| Some((*entity, render.pt))).unwrap();
@@ -45,8 +43,8 @@ fn handle_move(
 ) {
     let destination = from + delta;
     let mut hit_something = false;
-    let mut npcs = <(Entity, &Render)>::query().filter(component::<Stats>());
-    npcs.iter(ecs)
+    let mut query = <(Entity, &Render)>::query().filter(component::<Stats>());
+    query.iter(ecs)
         .filter(|(_, render)| { render.pt == destination })
         .for_each(|(entity, _)| {
             if *entity != player {

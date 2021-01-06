@@ -34,6 +34,40 @@ pub fn spawn_rat(ecs: &mut World, pt: Point) {
     );
 }
 
+pub fn spawn_giant_rat(ecs: &mut World, pt: Point) {
+    ecs.push(
+        (
+            Actor,
+            Render{
+                name: "Giant Rat".to_string(),
+                tile: tile_index(13, 2),
+                pt
+            },
+            FieldOfView::new(4),
+            MightTalk{
+                chance: 20,
+                phrases: vec!["squeek!".to_string()]
+            },
+            Stats {
+                armor: 0,
+                speed: 2,
+                vigor: Vigor::new(8),
+                focus: Focus::new(5),
+            },
+            Physical{
+                brawn: Brawn::new(-1),
+                grace: Grace::new(2),
+            },
+            Mental{
+                outlook: Outlook::Aggressive,
+                strategy: MoveStrategy::Random,
+                smart: Smart::new(-2),
+                charm: Charm::new(-1),
+            }
+        )
+    );
+}
+
 pub fn spawn_bat(ecs: &mut World, pt: Point) {
     ecs.push(
         (
@@ -116,6 +150,7 @@ pub fn spawn_goblin_with_torch(ecs: &mut World, pt: Point) {
                     "Over there! Get it!".to_string(),
                     "I hate this job".to_string(),
                     "This is our territory!".to_string(),
+                    "I got the torch, I'm in charge".to_string(),
                 ],
             },
             Stats {
@@ -144,7 +179,7 @@ pub fn spawn_goblin(ecs: &mut World, pt: Point) {
             Actor,
             Render{
                 name: "Goblin".to_string(),
-                tile: tile_index(12, 9),
+                tile: tile_index(12, 10),
                 pt,
             },
             FieldOfView::new(7),
@@ -153,6 +188,7 @@ pub fn spawn_goblin(ecs: &mut World, pt: Point) {
                 phrases: vec![
                     "Meat's back on the menu!".to_string(),
                     "Wonder if it will squeal?".to_string(),
+                    "I heard something!".to_string(),
                 ],
             },
             Stats {
@@ -181,7 +217,7 @@ pub fn spawn_skeleton_with_torch(ecs: &mut World, pt: Point) {
             Actor,
             Render{
                 name: "Skeleton with torch".to_string(),
-                tile: tile_index(12, 23),
+                tile: tile_index(12, 24),
                 pt,
             },
             FieldOfView::new(5),
@@ -213,6 +249,36 @@ pub fn spawn_skeleton(ecs: &mut World, pt: Point) {
             Render{
                 name: "Skeleton".to_string(),
                 tile: tile_index(12, 23),
+                pt,
+            },
+            FieldOfView::new(5),
+            Stats {
+                armor: 1,
+                speed: 2,
+                vigor: Vigor::new(15),
+                focus: Focus::new(0),
+            },
+            Physical{
+                brawn: Brawn::new(0),
+                grace: Grace::new(-1),
+            },
+            Mental{
+                outlook: Outlook::Aggressive,
+                strategy: MoveStrategy::Random,
+                smart: Smart::new(-3),
+                charm: Charm::new(-3),
+            }
+        )
+    );
+}
+
+pub fn spawn_skeleton_warrior(ecs: &mut World, pt: Point) {
+    ecs.push(
+        (
+            Actor,
+            Render{
+                name: "Skeleton Warrior".to_string(),
+                tile: tile_index(12, 26),
                 pt,
             },
             FieldOfView::new(5),
