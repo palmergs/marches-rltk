@@ -26,3 +26,7 @@ Probably something like this:
 ### Known Bugs
 * The Image file used for the actor and item layers renders many greens as transparent
 * Tooltip on locaton generates multiple messages causing flickering
+
+### Credit
+* This is built on the [brackets-lib](https://github.com/thebracket/bracket-lib)
+* Most of the tiles are from [@JoeCreates](https://joecreates.co.uk/) and found on OpenGameArt.org
