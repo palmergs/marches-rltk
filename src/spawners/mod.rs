@@ -39,59 +39,52 @@ pub fn spawn_player(ecs: &mut World, pt: Point) {
 }
 
 pub fn spawn_room_items(ecs: &mut World, rng: &mut Rng, map: &Map, rect: Rect, depth: i32) {
-    match rng.range(0, 8) {
+    match rng.range(0, 10 + depth) {
         0 => spawn_torch(ecs, Point::new(rect.x1, rect.y1)),
         1 => spawn_torch(ecs, Point::new(rect.x1, rect.y2)),
         2 => spawn_torch(ecs, Point::new(rect.x2, rect.y1)),
         3 => spawn_torch(ecs, Point::new(rect.x2, rect.y2)),
         4 => spawn_chest(ecs, Point::new(rng.range(rect.x1, rect.x2+1), rng.range(rect.y1, rect.y2+1))),
-        5 => find_door_locations(map, rect).iter().for_each(|pt| spawn_random_door(ecs, rng, *pt)),
-        6 => find_door_locations(map, rect).iter().for_each(|pt| spawn_closed_door(ecs, *pt)),
-        7 => find_door_locations(map, rect).iter().for_each(|pt| spawn_open_door(ecs, *pt)),
+        5 => spawn_open_room_doors(ecs, map, &rect),
+        6 => spawn_room_doors(ecs, rng, map, &rect),
+        7 => spawn_closed_room_doors(ecs, map, &rect),
+        8 => spawn_mushroom_patch(ecs, rng, map, &rect),
         _ => ()
     }
 }
 
-fn find_door_locations(map: &Map, rect: Rect) -> Vec<Point> {
-    let mut vec = Vec::new();
-    for x in rect.x1 ..= rect.x2 {
-        if rect.y1 > 0 {
-            let pt = Point::new(x, rect.y1 - 1);
-            if map.is_passage(pt) { vec.push(pt); }
+pub fn spawn_dropped_item(ecs: &mut World, rng: &mut Rng, map: &Map, depth: i32) {
+    let mut tries = 10;
+    loop {
+        tries -= 1;
+        if tries <= 0 {
+            return;
         }
 
-        if rect.y2 < MAP_HEIGHT as i32 - 1 {
-            let pt = Point::new(x, rect.y2 + 1);
-            if map.is_passage(pt) { vec.push(pt); }
-        }
-    } 
-
-    for y in rect.y1 ..= rect.y2 {
-        if rect.x1 > 0 {
-            let pt = Point::new(rect.x1 - 1, y);
-            if map.is_passage(pt) { vec.push(pt); }
+        let idx = rng.range(0, MAP_TILES);
+        let pt = map.index_to_point2d(idx);
+        if !map.can_enter(pt) {
+            continue;
         }
 
-        if rect.x2 < MAP_WIDTH as i32 - 1 {
-            let pt = Point::new(rect.x2 + 1, y);
-            if map.is_passage(pt) { vec.push(pt); }
+        match rng.range(0 + depth, 14 + depth) {
+            0..=3  => spawn_dagger(ecs, pt),
+            10     => spawn_mushroom1(ecs, pt),
+            11     => spawn_mushroom2(ecs, pt),
+            _      => ()
         }
     }
-    vec
-}
-
-pub fn spawn_dropped_item(ecs: &mut World, rng: &mut Rng, map: &Map, depth: i32) {
-
 }
 
 pub fn spawn_monster(ecs: &mut World, rng: &mut Rng, pt: Point, depth: i32) {
-    match rng.range(0 + depth, 14 + depth) {
-        0..=3   => spawn_rat(ecs, pt),
-        4..=5   => spawn_goblin_with_torch(ecs, pt),
-        6..=8   => spawn_goblin(ecs, pt),
-        9       => spawn_skeleton_with_torch(ecs, pt),
-        10..=12 => spawn_skeleton(ecs, pt),
-        13      => spawn_animated_tree(ecs, pt),
+    match rng.range(0 + depth, 15 + depth) {
+        0..=2   => spawn_rat(ecs, pt),
+        3..=5   => spawn_bat(ecs, pt),
+        6..=8   => spawn_goblin_with_torch(ecs, pt),
+        9..=10  => spawn_goblin(ecs, pt),
+        11      => spawn_skeleton_with_torch(ecs, pt),
+        12..=14 => spawn_skeleton(ecs, pt),
+        15      => spawn_animated_tree(ecs, pt),
         _       => spawn_bat(ecs, pt)
     }
 }

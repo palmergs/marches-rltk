@@ -73,11 +73,6 @@ impl MapBuilder {
         }
     }
 
-    fn excavate_room(&mut self, rb: &RoomBuilder, floor: TileType) {
-        rb.excavate(&mut self.map, floor);
-        self.rooms.push(rb.extent);
-    }
-
     fn excavate_tunnels(&mut self, rng: &mut Rng, floor: TileType) {
         let mut rooms = self.rooms.clone();
         rooms.sort_by(|a, b| a.center().x.cmp(&b.center().x));

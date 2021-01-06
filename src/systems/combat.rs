@@ -17,21 +17,18 @@ pub fn combat(
 
     if let Ok(mut stats) = ecs.entry_mut(cmd.victim).unwrap().get_component_mut::<Stats>() {
         let (focus_dmg, vigor_dmg) = stats.focus.hit(dmg);
-        let focus = stats.focus.curr - focus_dmg;
-        let vigor = stats.vigor.curr - vigor_dmg;
-        stats.focus.curr = focus;
-        stats.vigor.curr = vigor;
-        let is_killed = stats.vigor.curr <= 0;
+        stats.focus.curr -= focus_dmg;
+        stats.vigor.curr -= vigor_dmg;
+        let is_killed = stats.vigor.is_zero();
         let is_player = ecs.entry_ref(cmd.victim)
             .unwrap()
             .get_component::<Player>()
             .is_ok();
         if let Ok(render) = ecs.entry_ref(cmd.victim).unwrap().get_component::<Render>() {
             if is_killed {
-                let text = format!("KILLED!").to_string();
                 commands.push(((), Text{
                     display: TextDisplay::AnimateUp(render.pt),
-                    text,
+                    text: format!("KILLED!").to_string(),
                     color: RGBA::from_f32(1., 0., 0., 1.),
                     ticks: 200,
                     count: 0,
@@ -41,6 +38,9 @@ pub fn combat(
                 // might cause problems in the future if an entity with Stats but not Render
                 // is killed.
                 if !is_player {
+
+                    // TODO: this feels ugly by tightly linking the removal of a specific type 
+                    // of entity to the map. 
                     if ecs.entry_ref(cmd.victim).unwrap().get_component::<Item>().is_ok() {
                         map.blocked.remove(&render.pt);
                         map.opaque.remove(&render.pt);
@@ -50,10 +50,9 @@ pub fn combat(
                 }
                 map.actors.remove(&render.pt);
             } else {
-                let text = format!("{}", dmg).to_string();
                 commands.push(((), Text{
                     display: TextDisplay::AnimateUp(render.pt),
-                    text,
+                    text: format!("{}", dmg).to_string(),
                     color: RGBA::from_f32(1., 0., 0., 1.),
                     ticks: 50,
                     count: 0,

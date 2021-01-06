@@ -14,7 +14,7 @@ pub fn movement(
     #[resource] map: &mut Map,
     #[resource] camera: &mut Camera,
 ) {
-    if map.in_bounds(cmd.destination) {
+    if map.can_enter(cmd.destination) {
 
         // See if this entity has a light and view field
         if let Ok(mut entry) = ecs.entry_mut(cmd.actor) {
