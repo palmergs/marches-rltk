@@ -73,6 +73,14 @@ impl Map {
             TileType::Wall =>   tile_index(2, 3),
         }
     }
+
+    pub fn is_passage(&self, pt: Point) -> bool {
+        let n = self.can_enter(pt + Point::new(  0, -1));
+        let s = self.can_enter(pt + Point::new(  0,  1));
+        let e = self.can_enter(pt + Point::new(  1,  0));
+        let w = self.can_enter(pt + Point::new( -1,  0));
+        (n && s && !e && !w) || (e && w && !n && !s)
+    }
 }
 
 impl Algorithm2D for Map {

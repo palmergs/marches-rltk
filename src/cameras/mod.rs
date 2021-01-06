@@ -29,6 +29,8 @@ impl Camera {
 
     pub fn extent(&self) -> Point { Point::constant(self.right, self.bottom) }
 
+    pub fn center(&self) -> Point { Point::constant(self.left + SCREEN_WIDTH / 2, self.top + SCREEN_HEIGHT + 2) }
+
     pub fn in_view(&self, pt: Point) -> bool {
         pt.x >= self.left && pt.x < self.right
             && pt.y >= self.top && pt.y < self.bottom

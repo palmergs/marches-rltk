@@ -39,6 +39,32 @@ pub fn spawn_chest(ecs: &mut World, pt: Point) {
     );
 }
 
+pub fn spawn_random_door(ecs: &mut World, rng: &mut Rng, pt: Point) {
+    match rng.range(0, 2) {
+        0 => spawn_open_door(ecs, pt),
+        _ => spawn_closed_door(ecs, pt),
+    }
+}
+
+pub fn spawn_open_door(ecs: &mut World, pt: Point) {
+    ecs.push(
+        (
+            Item::new(false, false),
+            Render{
+                name: "Door".to_string(),
+                tile: tile_index(1, 4),
+                pt,
+            },
+            Stats{
+                armor: 3,
+                speed: 0,
+                vigor: Vigor::new(30),
+                focus: Focus::new(0),
+            },
+        )
+    );
+}
+
 pub fn spawn_closed_door(ecs: &mut World, pt: Point) {
     ecs.push(
         (

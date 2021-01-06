@@ -17,6 +17,7 @@ pub struct MapBuilder {
     pub map: Map,
     pub rooms: Vec<Rect>,
     pub monster_spawns: Vec<Point>,
+    pub item_spawns: Vec<Point>,
     pub player_start: Point,
 }
 
@@ -26,6 +27,7 @@ impl MapBuilder {
             map: Map::new(depth),
             rooms: Vec::new(),
             monster_spawns: Vec::new(),
+            item_spawns: Vec::new(),
             player_start: Point::zero(),
         }
     }
@@ -41,7 +43,8 @@ impl MapBuilder {
                 // 4 => Box::new(automota::CellularAutomotaArchitect::new()),
                 // 5 => Box::new(voronoi::VoronoiHiveArchitect::new()),
                 // 6 => Box::new(wave::WaveFunctionArchitect::new()),
-                7 => Box::new(empty::EmptyArchitect::new()),
+                7 => Box::new(sewers::SewersArchitect::new()),
+                8 => Box::new(empty::EmptyArchitect::new()),
                 _ => Box::new(rooms::RoomsArchitect::new()),
             }
         };
