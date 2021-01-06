@@ -75,11 +75,12 @@ impl Map {
     }
 
     pub fn is_passage(&self, pt: Point) -> bool {
+        let c = self.can_enter(pt);
         let n = self.can_enter(pt + Point::new(  0, -1));
         let s = self.can_enter(pt + Point::new(  0,  1));
         let e = self.can_enter(pt + Point::new(  1,  0));
         let w = self.can_enter(pt + Point::new( -1,  0));
-        (n && s && !e && !w) || (e && w && !n && !s)
+        (c && n && s && !e && !w) || (c && e && w && !n && !s)
     }
 }
 
