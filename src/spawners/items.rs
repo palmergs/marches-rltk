@@ -40,8 +40,8 @@ pub fn spawn_chest(ecs: &mut World, pt: Point) {
 }
 
 pub fn spawn_random_door(ecs: &mut World, rng: &mut Rng, pt: Point) {
-    match rng.range(0, 2) {
-        0 => spawn_open_door(ecs, pt),
+    match rng.range(0, 3) {
+        0 | 1 => spawn_open_door(ecs, pt),
         _ => spawn_closed_door(ecs, pt),
     }
 }

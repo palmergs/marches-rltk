@@ -24,7 +24,7 @@ Probably something like this:
 * Also seems a bit sluggish
 
 ### Known Bugs
-* The Image file used for the actor and item layers renders many greens as transparent
+* The Image file used for the actor and item layers renders many ~~greens~~ dark colors as transparent
 * Tooltip on locaton generates multiple messages causing flickering
 
 ### Credit

@@ -4,6 +4,7 @@ use crate::prelude::*;
 #[read_component(FieldOfView)]
 #[read_component(FieldOfLight)]
 #[read_component(Player)]
+#[read_component(Item)]
 #[write_component(Render)]
 pub fn movement(
     entity: &Entity,
@@ -13,7 +14,7 @@ pub fn movement(
     #[resource] map: &mut Map,
     #[resource] camera: &mut Camera,
 ) {
-    if map.can_enter(cmd.destination) {
+    if map.in_bounds(cmd.destination) {
 
         // See if this entity has a light and view field
         if let Ok(mut entry) = ecs.entry_mut(cmd.actor) {

@@ -3,6 +3,7 @@ use crate::prelude::*;
 #[system(for_each)]
 #[read_component(Player)]
 #[read_component(Render)]
+#[read_component(Item)]
 #[write_component(Stats)]
 pub fn combat(
     entity: &Entity,
@@ -40,7 +41,12 @@ pub fn combat(
                 // might cause problems in the future if an entity with Stats but not Render
                 // is killed.
                 if !is_player {
+                    if ecs.entry_ref(cmd.victim).unwrap().get_component::<Item>().is_ok() {
+                        map.blocked.remove(&render.pt);
+                        map.opaque.remove(&render.pt);
+                    }
                     commands.remove(cmd.victim);
+                    
                 }
                 map.actors.remove(&render.pt);
             } else {
