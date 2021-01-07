@@ -61,6 +61,11 @@ pub struct Spawns {
 }
 
 #[derive(Debug, Clone, PartialEq)]
+pub struct Stairs {
+    pub to_depth: i32,
+}
+
+#[derive(Debug, Clone, PartialEq)]
 pub struct FieldOfView {
     pub visible_tiles: HashSet<Point>,
     pub radius: i32,

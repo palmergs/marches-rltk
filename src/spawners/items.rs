@@ -92,6 +92,31 @@ pub fn chest_tuple(pt: Point) -> (Item, Render, Stats, Spawns) {
     )
 }
 
+pub fn stairs_down_tuple(pt: Point, to_depth: i32) -> (Item, Render, Stairs) {
+    (
+        Item::new(false, false),
+        Render{
+            name: "Stairs Down".to_string(),
+            tile: tile_index(2, 5),
+            pt,
+        },
+        Stairs{ to_depth },
+    )
+}
+
+
+pub fn stairs_up_tuple(pt: Point, to_depth: i32) -> (Item, Render, Stairs) {
+    (
+        Item::new(false, false),
+        Render{
+            name: "Stairs Up".to_string(),
+            tile: tile_index(1, 5),
+            pt,
+        },
+        Stairs{ to_depth },
+    )
+}
+
 pub fn open_door_tuple(pt: Point) -> (Item, Render, Stats) {
     (
         Item::new(false, false),

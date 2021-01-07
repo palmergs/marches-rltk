@@ -44,6 +44,8 @@ impl State {
             computer_schedule: build_computer_schedule(),
          };
 
+        state.resources.insert(TickCount(0));
+        state.resources.insert(TurnCount(0));
         state.load_level(0);
         state
     }
@@ -51,6 +53,8 @@ impl State {
     fn reset_game_state(&mut self) {
         self.ecs = World::default();
         self.resources = Resources::default();
+        self.resources.insert(TickCount(0));
+        self.resources.insert(TurnCount(0));
         self.load_level(0);
     }
 
@@ -67,8 +71,6 @@ impl State {
         });
         spawn_map_items(&mut self.ecs, &mut rng, &mb.map, 20, depth);
         
-        self.resources.insert(TickCount(0));
-        self.resources.insert(TurnCount(0));
         self.resources.insert(mb.map);
         self.resources.insert(Camera::new(mb.player_start));
         self.resources.insert(TurnState::InitializeMap);
