@@ -51,16 +51,16 @@ fn handle_move(
                 if let Ok(item) = ecs.entry_ref(*entity).unwrap().get_component::<Item>() {
                     if item.blocking {
                         hit_something = true;
-                        commands.push(((), WantsToAttack{ actor: player, victim: *entity }));
+                        commands.push((WantsToAttack{ actor: player, victim: *entity }, ));
                     }
                 } else {
                     hit_something = true;
-                    commands.push(((), WantsToAttack{ actor: player, victim: *entity }));
+                    commands.push((WantsToAttack{ actor: player, victim: *entity }, ));
                 }
             }
         });
 
     if !hit_something {
-        commands.push(((), WantsToMove{ actor: player, destination }));
+        commands.push((WantsToMove{ actor: player, destination }, ));
     }
 }

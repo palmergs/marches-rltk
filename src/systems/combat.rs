@@ -55,14 +55,12 @@ pub fn combat(
                             .for_each(|se| {
                                 match &se.id[..] {
                                     "doormouse" => { 
-                                        let tup = doormouse_tuple(render.pt);
-                                        let ent = commands.push(tup); 
-                                        println!("apparently created entity {:?}", ent);
+                                        commands.push(doormouse_tuple(render.pt)); 
                                     },
                                     "skeleton" => { 
                                         commands.push(skeleton_tuple(render.pt)); 
                                     },
-                                    _ => { println!("no entity spawned..."); },
+                                    _ => { println!("no entity spawned for {}", se.id); },
                                 };
                             });
                     }

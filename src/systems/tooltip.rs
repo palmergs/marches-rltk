@@ -38,13 +38,13 @@ pub fn tooltip(
                 } else {
                     (format!("{}", render.name), RGBA::named(WHITE))
                 };
-                commands.push(((), Text{
+                commands.push((Text{
                     display: TextDisplay::Fade(render.pt),
                     text,
                     color,
                     ticks: 40,
                     count: 0,
-                }));
+                }, ));
             }
         });
 }

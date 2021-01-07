@@ -18,13 +18,13 @@ pub fn heal(
                 let act_on = 100 - (physical.brawn.curr * 10) + rng.range(1, 10);
                 if turn.act(act_on as usize) {
                     stats.vigor.curr += 1;
-                    commands.push(((), Text{
+                    commands.push((Text{
                         display: TextDisplay::AnimateUp(render.pt),
                         text: format!("{}", 1),
                         color: RGBA::named(PINK),
                         ticks: 50,
                         count: 0,
-                    }));
+                    }, ));
                 }
             }
 
@@ -32,13 +32,13 @@ pub fn heal(
                 let act_on = 10 - (physical.brawn.curr) + rng.range(1, 10);
                 if turn.act(act_on as usize) {
                     stats.focus.curr += 1;
-                    commands.push(((), Text{
+                    commands.push((Text{
                         display: TextDisplay::AnimateUp(render.pt),
                         text: format!("{}", 1),
                         color: RGBA::named(CYAN),
                         ticks: 50,
                         count: 0,
-                    }));
+                    }, ));
                 }
             }
         });

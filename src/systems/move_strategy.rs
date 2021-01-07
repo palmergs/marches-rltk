@@ -45,7 +45,7 @@ pub fn move_strategy(
             let can_see = fov.visible_tiles.contains(&player_pt);
             let strategy = match mental.new_strategy(can_see) {
                 Some(new_strat) => {
-                    commands.push(((), WantsToChangeStrategy{ actor: *entity, strategy: new_strat }));
+                    commands.push((WantsToChangeStrategy{ actor: *entity, strategy: new_strat }, ));
                     new_strat
                 },
                 None => mental.strategy
@@ -62,15 +62,15 @@ pub fn move_strategy(
 
                     if let Some(npc_entity) = npcs.get(&destination) {
                         if npc_entity == player_entity {
-                            commands.push(((), WantsToAttack{ actor: *entity, victim: *npc_entity }));
+                            commands.push((WantsToAttack{ actor: *entity, victim: *npc_entity }, ));
                         } else {
-                            commands.push(((), WantsToChangeStrategy{ actor: *entity, strategy: MoveStrategy::Patrol(dir.next())}));
+                            commands.push((WantsToChangeStrategy{ actor: *entity, strategy: MoveStrategy::Patrol(dir.next())}, ));
                         }
                     } else {
                         if map.can_enter(destination) {
-                            commands.push(((), WantsToMove{ actor: *entity, destination }));
+                            commands.push((WantsToMove{ actor: *entity, destination }, ));
                         } else {
-                            commands.push(((), WantsToChangeStrategy{ actor: *entity, strategy: MoveStrategy::Patrol(dir.next())}));
+                            commands.push((WantsToChangeStrategy{ actor: *entity, strategy: MoveStrategy::Patrol(dir.next())}, ));
                         }
                     }
                 },
@@ -90,11 +90,11 @@ pub fn move_strategy(
 
                     if let Some(npc_entity) = npcs.get(&destination) {
                         if npc_entity == player_entity {
-                            commands.push(((), WantsToAttack{ actor: *entity, victim: *npc_entity }));
+                            commands.push((WantsToAttack{ actor: *entity, victim: *npc_entity }, ));
                         }
                     } else {
                         if map.can_enter(destination) {
-                            commands.push(((), WantsToMove{ actor: *entity, destination }));
+                            commands.push((WantsToMove{ actor: *entity, destination }, ));
                         }
                     }
                 },
@@ -106,10 +106,10 @@ pub fn move_strategy(
                         if distance > 1.2 {
                             let destination = map.index_to_point2d(destination);
                             if npcs.get(&destination).is_none() {
-                                commands.push(((), WantsToMove{ actor: *entity, destination }));
+                                commands.push((WantsToMove{ actor: *entity, destination }, ));
                             }
                         } else {
-                            commands.push(((), WantsToAttack{ actor: *entity, victim: *player_entity }));
+                            commands.push((WantsToAttack{ actor: *entity, victim: *player_entity }, ));
                         };
                     }
                 },
@@ -121,10 +121,10 @@ pub fn move_strategy(
                         if distance > 1.2 {
                             let destination = map.index_to_point2d(destination);
                             if npcs.get(&destination).is_none() {
-                                commands.push(((), WantsToMove{ actor: *entity, destination }));
+                                commands.push((WantsToMove{ actor: *entity, destination }, ));
                             }
                         } else {
-                            commands.push(((), WantsToAttack{ actor: *entity, victim: *player_entity }));
+                            commands.push((WantsToAttack{ actor: *entity, victim: *player_entity }, ));
                         };
                     }
                 },

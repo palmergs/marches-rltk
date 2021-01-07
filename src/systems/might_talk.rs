@@ -15,13 +15,13 @@ pub fn might_talk(
         .iter(ecs)
         .for_each(|(render, talk)| {
             if talk.phrases.len() > 0 && rng.range(0, 1000) <= talk.chance {
-                commands.push(((), Text{ 
+                commands.push((Text{ 
                     display: TextDisplay::Fade(render.pt + Point::new(0, -1)),
                     color,
                     text: talk.phrases[rng.range(0, talk.phrases.len())].clone(),
                     ticks,
                     count,
-                }));
+                }, ));
             }
         });
 }
