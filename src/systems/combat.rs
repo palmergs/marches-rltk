@@ -49,19 +49,23 @@ pub fn combat(
 
                     // Check to see if this entity spawns something when it is killed
                     if let Ok(spawns) = ecs.entry_ref(cmd.victim).unwrap().get_component::<Spawns>() {
+
+                        // TODO: don't like this either, I shouldn't have to have match against 
+                        // string ids here but I haven't figured out if there's a shared interface
+                        // for both command buffer and world
                         spawns.entities.iter()
-                            .filter(|se| se.trigger == SpawnTrigger::Killed )
-                            .filter(|se| rng.range(0, 1000) < se.chance)
                             .for_each(|se| {
-                                match &se.id[..] {
-                                    "doormouse" => { 
-                                        commands.push(doormouse_tuple(render.pt)); 
-                                    },
-                                    "skeleton" => { 
-                                        commands.push(skeleton_tuple(render.pt)); 
-                                    },
-                                    _ => { println!("no entity spawned for {}", se.id); },
-                                };
+                                if se.trigger == SpawnTrigger::Killed && se.should_spawn(&mut rng) {
+                                    match &se.id[..] {
+                                        "doormouse" => { 
+                                            commands.push(doormouse_tuple(render.pt)); 
+                                        },
+                                        "skeleton" => { 
+                                            commands.push(skeleton_tuple(render.pt)); 
+                                        },
+                                        _ => { println!("no entity spawned for {}", se.id); },
+                                    };
+                                }
                             });
                     }
 

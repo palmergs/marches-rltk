@@ -48,6 +48,11 @@ impl SpawnEntity {
     pub fn new(id: &str, chance: i32, trigger: SpawnTrigger) -> SpawnEntity {
         SpawnEntity{ id: id.to_string(), chance, trigger }
     }
+
+    pub fn should_spawn(&self, rng: &mut Rng) -> bool {
+        let rolled = rng.range(0, 1000);
+        rolled < self.chance
+    }
 }
 
 #[derive(Debug, Clone, PartialEq)]
