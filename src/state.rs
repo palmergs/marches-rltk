@@ -59,9 +59,13 @@ impl State {
         let mb = MapBuilder::build(&mut rng, depth);
 
         spawn_player(&mut self.ecs, mb.player_start);
-        mb.monster_spawns.iter().for_each(|pt| spawn_monster(&mut self.ecs, &mut rng, *pt, depth));
-        mb.rooms.iter().for_each(|rect| spawn_room_items(&mut self.ecs, &mut rng, &mb.map, *rect, depth));
-        for _ in 0..20 { spawn_dropped_item(&mut self.ecs, &mut rng, &mb.map, depth); }
+        mb.monster_spawns.iter().for_each(|pt| {
+            spawn_monster(&mut self.ecs, &mut rng, *pt, depth); 
+        });
+        mb.rooms.iter().for_each(|rect| {
+            spawn_room_items(&mut self.ecs, &mut rng, &mb.map, *rect, depth); 
+        });
+        spawn_map_items(&mut self.ecs, &mut rng, &mb.map, 20, depth);
         
         self.resources.insert(TickCount(0));
         self.resources.insert(TurnCount(0));

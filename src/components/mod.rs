@@ -32,6 +32,30 @@ pub struct Render {
 }
 
 #[derive(Debug, Clone, PartialEq)]
+pub enum SpawnTrigger {
+    Killed,
+    Opened,
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct SpawnEntity {
+    pub id: String,
+    pub chance: i32, // out of 1000
+    pub trigger: SpawnTrigger,
+}
+
+impl SpawnEntity {
+    pub fn new(id: &str, chance: i32, trigger: SpawnTrigger) -> SpawnEntity {
+        SpawnEntity{ id: id.to_string(), chance, trigger }
+    }
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct Spawns {
+    pub entities: Vec<SpawnEntity>,
+}
+
+#[derive(Debug, Clone, PartialEq)]
 pub struct FieldOfView {
     pub visible_tiles: HashSet<Point>,
     pub radius: i32,

@@ -23,3 +23,9 @@ pub struct WantsToChangeOutlook {
     pub actor: Entity,
     pub outlook: Outlook,
 }
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct WantsToSpawn {
+    pub pt: Point,
+    pub id: String,
+}

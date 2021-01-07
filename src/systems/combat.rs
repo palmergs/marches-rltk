@@ -4,6 +4,7 @@ use crate::prelude::*;
 #[read_component(Player)]
 #[read_component(Render)]
 #[read_component(Item)]
+#[read_component(Spawns)]
 #[write_component(Stats)]
 pub fn combat(
     entity: &Entity,
@@ -45,6 +46,17 @@ pub fn combat(
                         map.blocked.remove(&render.pt);
                         map.opaque.remove(&render.pt);
                     }
+
+                    // Check to see if this entity spawns something when it is killed
+                    if let Ok(spawns) = ecs.entry_ref(cmd.victim).unwrap().get_component::<Spawns>() {
+                        // spawns.entities.iter()
+                        //     .filter(|se| se.trigger == SpawnTrigger::Killed )
+                        //     .filter(|se| rng.range(0, 1000) < se.chance)
+                        //     .for_each(|se| {
+                        //         spawn(&se.id, ecs, render.pt);
+                        //     });
+                    }
+
                     commands.remove(cmd.victim);
                     
                 }
