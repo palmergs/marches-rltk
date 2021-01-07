@@ -27,13 +27,13 @@ pub fn combat(
             .is_ok();
         if let Ok(render) = ecs.entry_ref(cmd.victim).unwrap().get_component::<Render>() {
             if is_killed {
-                commands.push(((), Text{
+                commands.push((Text{
                     display: TextDisplay::AnimateUp(render.pt),
                     text: format!("KILLED!").to_string(),
                     color: RGBA::from_f32(1., 0., 0., 1.),
                     ticks: 200,
                     count: 0,
-                }));
+                },));
 
                 // TODO: for ease of access to pt, removing the entity here, but this
                 // might cause problems in the future if an entity with Stats but not Render
@@ -49,12 +49,22 @@ pub fn combat(
 
                     // Check to see if this entity spawns something when it is killed
                     if let Ok(spawns) = ecs.entry_ref(cmd.victim).unwrap().get_component::<Spawns>() {
-                        // spawns.entities.iter()
-                        //     .filter(|se| se.trigger == SpawnTrigger::Killed )
-                        //     .filter(|se| rng.range(0, 1000) < se.chance)
-                        //     .for_each(|se| {
-                        //         spawn(&se.id, ecs, render.pt);
-                        //     });
+                        spawns.entities.iter()
+                            .filter(|se| se.trigger == SpawnTrigger::Killed )
+                            .filter(|se| rng.range(0, 1000) < se.chance)
+                            .for_each(|se| {
+                                match &se.id[..] {
+                                    "doormouse" => { 
+                                        let tup = doormouse_tuple(render.pt);
+                                        let ent = commands.push(tup); 
+                                        println!("apparently created entity {:?}", ent);
+                                    },
+                                    "skeleton" => { 
+                                        commands.push(skeleton_tuple(render.pt)); 
+                                    },
+                                    _ => { println!("no entity spawned..."); },
+                                };
+                            });
                     }
 
                     commands.remove(cmd.victim);
@@ -62,13 +72,13 @@ pub fn combat(
                 }
                 map.actors.remove(&render.pt);
             } else {
-                commands.push(((), Text{
+                commands.push((Text{
                     display: TextDisplay::AnimateUp(render.pt),
                     text: format!("{}", dmg).to_string(),
                     color: RGBA::from_f32(1., 0., 0., 1.),
                     ticks: 50,
                     count: 0,
-                }));
+                },));
             }
         }
     }

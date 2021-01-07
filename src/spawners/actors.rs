@@ -17,7 +17,7 @@ pub fn rat_tuple(pt: Point) -> (Actor, Render, FieldOfView, MightTalk, Stats, Ph
             armor: 0,
             speed: 2,
             vigor: Vigor::new(5),
-            focus: Focus::new(5),
+            focus: Focus::new(4),
         },
         Physical{
             brawn: Brawn::new(-2),
@@ -68,14 +68,14 @@ pub fn doormouse_tuple(pt: Point) -> (Actor, Render, FieldOfView, MightTalk, Sta
     (
         Actor,
         Render{
-            name: "Doormouse".to_string(),
-            tile: tile_index(13, 2),
+            name: "Dire Dormouse".to_string(),
+            tile: tile_index(13, 6),
             pt
         },
         FieldOfView::new(4),
         MightTalk{
             chance: 20,
-            phrases: vec!["squeek!".to_string()]
+            phrases: vec!["Squeek!!".to_string()]
         },
         Stats {
             armor: 0,
@@ -109,7 +109,7 @@ pub fn bat_tuple(pt: Point) -> (Actor, Render, FieldOfView, Stats, Physical, Men
             armor: 0,
             speed: 1,
             vigor: Vigor::new(5),
-            focus: Focus::new(5),
+            focus: Focus::new(4),
         },
         Physical{
             brawn: Brawn::new(-2),

@@ -32,6 +32,7 @@ pub fn spawn_room_items(ecs: &mut World, rng: &mut Rng, map: &Map, rect: Rect, d
     }
 }
 
+// There's a 25% chance that a torch will be placed in each corner of the room
 pub fn spawn_room_torches(ecs: &mut World, rng: &mut Rng, rect: Rect) -> Vec<Entity> {
     let mut vec = Vec::new();
     if rng.range(0, 4) == 0 {

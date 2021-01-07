@@ -124,7 +124,7 @@ pub fn closed_door_tuple(pt: Point) -> (Item, Render, Stats, Spawns) {
             focus: Focus::new(0),
         },
         Spawns{
-            entities: vec![ SpawnEntity::new("doormouse", 100, SpawnTrigger::Killed) ],
+            entities: vec![ SpawnEntity::new("doormouse", 1000, SpawnTrigger::Killed) ],
         },
     )
 }

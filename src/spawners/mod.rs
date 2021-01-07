@@ -1,10 +1,10 @@
 use crate::prelude::*;
 
 mod items;
-use items::*;
+pub use items::*;
 
 mod actors;
-use actors::*;
+pub use actors::*;
 
 mod areas;
 pub use areas::*;
