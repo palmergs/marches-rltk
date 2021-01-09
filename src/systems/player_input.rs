@@ -1,7 +1,7 @@
 use crate::prelude::*;
 
 #[system]
-#[read_component(Render)]
+#[read_component(Point)]
 #[read_component(Player)]
 #[read_component(Stats)]
 #[read_component(Item)]
@@ -14,9 +14,9 @@ pub fn player_input(
     #[resource] turn: &mut TurnCount,
 ) {
     if let Some(key) = key {
-        let mut query = <(Entity, &Render)>::query().filter(component::<Player>());
+        let mut query = <(Entity, &Point)>::query().filter(component::<Player>());
         let (player, location) = query.iter(ecs)
-            .find_map(|(entity, render)| Some((*entity, render.pt))).unwrap();
+            .find_map(|(entity, pt)| Some((*entity, *pt))).unwrap();
             
         let new_state = match key {
             VirtualKeyCode::Left  | VirtualKeyCode::Numpad4 | VirtualKeyCode::Key4 => handle_move(ecs, commands, player, location, Point::new(-1, 0)),
@@ -42,8 +42,8 @@ fn handle_stairs(
     ecs: &mut SubWorld,
     location: Point,
 ) -> TurnState {
-    let mut query = <(&Render, &Stairs)>::query();
-    match query.iter(ecs).filter(|(render, _)| render.pt == location ).next() {
+    let mut query = <(&Point, &Stairs)>::query();
+    match query.iter(ecs).filter(|(pt, _)| **pt == location ).next() {
         Some((_, stairs)) => return TurnState::NewLevel(stairs.to_depth),
         None => TurnState::ComputerTurn,
     }
@@ -58,9 +58,9 @@ fn handle_move(
 ) -> TurnState {
     let destination = from + delta;
     let mut hit_something = false;
-    let mut query = <(Entity, &Render)>::query().filter(component::<Stats>());
+    let mut query = <(Entity, &Point)>::query().filter(component::<Stats>());
     query.iter(ecs)
-        .filter(|(_, render)| { render.pt == destination })
+        .filter(|(_, pt)| { **pt == destination })
         .for_each(|(entity, _)| {
             if *entity != player {
                 if let Ok(item) = ecs.entry_ref(*entity).unwrap().get_component::<Item>() {

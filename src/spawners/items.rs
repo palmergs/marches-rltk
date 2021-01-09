@@ -1,12 +1,12 @@
 use crate::prelude::*;
 
-pub fn torch_tuple(pt: Point) -> (Item, Render, FieldOfLight, Stats) {
+pub fn torch_tuple(pt: Point) -> (Item, Point, Render, FieldOfLight, Stats) {
     (
         Item::new(false, false),
+        pt,
         Render{
             name: "Torch".to_string(),
             tile: tile_index(1, 11),
-            pt
         },
         FieldOfLight::new(5),
         Stats{
@@ -18,13 +18,13 @@ pub fn torch_tuple(pt: Point) -> (Item, Render, FieldOfLight, Stats) {
     )
 }
 
-pub fn dagger_tuple(pt: Point) -> (Item, Render, Stats) {
+pub fn dagger_tuple(pt: Point) -> (Item, Point, Render, Stats) {
     (
         Item::new(false, false),
+        pt,
         Render{
             name: "Dagger".to_string(),
             tile: tile_index(13, 116),
-            pt,
         },
         Stats{
             armor: 0,
@@ -35,13 +35,13 @@ pub fn dagger_tuple(pt: Point) -> (Item, Render, Stats) {
     )
 }
 
-pub fn mushroom1_tuple(pt: Point) -> (Item, Render, Stats) {
+pub fn mushroom1_tuple(pt: Point) -> (Item, Point, Render, Stats) {
         (
             Item::new(false, false),
+            pt,
             Render{
                 name: "Mushroom".to_string(),
                 tile: tile_index(12, 35),
-                pt,
             },
             Stats{
                 armor: 0,
@@ -52,13 +52,13 @@ pub fn mushroom1_tuple(pt: Point) -> (Item, Render, Stats) {
         )
 }
 
-pub fn mushroom2_tuple(pt: Point) -> (Item, Render, Stats) {
+pub fn mushroom2_tuple(pt: Point) -> (Item, Point, Render, Stats) {
     (
         Item::new(false, false),
+        pt,
         Render{
             name: "Mushroom".to_string(),
             tile: tile_index(13, 35),
-            pt,
         },
         Stats{
             armor: 0,
@@ -69,13 +69,13 @@ pub fn mushroom2_tuple(pt: Point) -> (Item, Render, Stats) {
     )
 }
 
-pub fn chest_tuple(pt: Point) -> (Item, Render, Stats, Spawns) {
+pub fn chest_tuple(pt: Point) -> (Item, Point, Render, Stats, Spawns) {
     (
         Item::new(true, false),
+        pt,
         Render{
             name: "Closed Chest".to_string(),
             tile: tile_index(2, 7),
-            pt,
         },
         Stats{
             armor: 5,
@@ -92,13 +92,13 @@ pub fn chest_tuple(pt: Point) -> (Item, Render, Stats, Spawns) {
     )
 }
 
-pub fn stairs_down_tuple(pt: Point, to_depth: i32) -> (Item, Render, Stats, Stairs) {
+pub fn stairs_down_tuple(pt: Point, to_depth: i32) -> (Item, Point, Render, Stats, Stairs) {
     (
         Item::new(false, false),
+        pt,
         Render{
             name: "Stairs Down".to_string(),
             tile: tile_index(2, 5),
-            pt,
         },
         Stats{
             armor: 5,
@@ -111,13 +111,13 @@ pub fn stairs_down_tuple(pt: Point, to_depth: i32) -> (Item, Render, Stats, Stai
 }
 
 
-pub fn stairs_up_tuple(pt: Point, to_depth: i32) -> (Item, Render, Stats, Stairs) {
+pub fn stairs_up_tuple(pt: Point, to_depth: i32) -> (Item, Point, Render, Stats, Stairs) {
     (
         Item::new(false, false),
+        pt,
         Render{
             name: "Stairs Up".to_string(),
             tile: tile_index(1, 5),
-            pt,
         },
         Stats{
             armor: 5,
@@ -129,13 +129,13 @@ pub fn stairs_up_tuple(pt: Point, to_depth: i32) -> (Item, Render, Stats, Stairs
     )
 }
 
-pub fn open_door_tuple(pt: Point) -> (Item, Render, Stats) {
+pub fn open_door_tuple(pt: Point) -> (Item, Point, Render, Stats) {
     (
         Item::new(false, false),
+        pt,
         Render{
             name: "Door".to_string(),
             tile: tile_index(1, 4),
-            pt,
         },
         Stats{
             armor: 3,
@@ -146,13 +146,13 @@ pub fn open_door_tuple(pt: Point) -> (Item, Render, Stats) {
     )
 }
 
-pub fn closed_door_tuple(pt: Point) -> (Item, Render, Stats, Spawns) {
+pub fn closed_door_tuple(pt: Point) -> (Item, Point, Render, Stats, Spawns) {
     (
         Item::new(true, true),
+        pt,
         Render{
             name: "Door".to_string(),
             tile: tile_index(1, 3),
-            pt,
         },
         Stats{
             armor: 3,

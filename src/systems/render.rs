@@ -2,6 +2,7 @@ use crate::prelude::*;
 use std::collections::HashMap;
 
 #[system]
+#[read_component(Point)]
 #[read_component(Render)]
 #[read_component(Actor)]
 #[read_component(Item)]
@@ -24,12 +25,12 @@ pub fn render(
 
     // Lighting Info
     let mut tile_light: HashMap<Point, f32> = HashMap::new();
-    let mut query = <(&Render, &FieldOfLight)>::query();
+    let mut query = <(&Point, &FieldOfLight)>::query();
     query.iter(ecs)
-        .filter(|(render, _)| camera.in_view(render.pt) )
-        .for_each(|(render, fol)| {
+        .filter(|(pt, _)| camera.in_view(**pt) )
+        .for_each(|(pt, fol)| {
             for tile in fol.lit_tiles.iter() {
-                let light = light_at_tile(render.pt, fol.radius, *tile);
+                let light = light_at_tile(*pt, fol.radius, *tile);
                 match tile_light.get(tile) {
                     Some(val) => {
                         let mut light = light + *val;
@@ -69,12 +70,13 @@ pub fn render(
     // Draw Items
     draw_batch.target(ITEM_LAYER);
 
-    let mut query = <(&Item, &Render)>::query();
-    query.iter(ecs).for_each(|(_, render)| {
-        if map.in_bounds(render.pt) {
-            let screen_pt = render.pt - camera_offset;
-            let is_visible = visible_tiles.contains(&render.pt);
-            match lighting_at(render.pt, is_visible, false, &tile_light) {
+    let mut query = <(&Item, &Point, &Render)>::query();
+    query.iter(ecs)
+        .for_each(|(_, pt, render)| {
+        if map.in_bounds(*pt) {
+            let screen_pt = *pt - camera_offset;
+            let is_visible = visible_tiles.contains(pt);
+            match lighting_at(*pt, is_visible, false, &tile_light) {
                 Some(fg) => {
                     draw_batch.set(
                         screen_pt,
@@ -89,12 +91,12 @@ pub fn render(
     // Draw Actors
     draw_batch.target(ACTOR_LAYER);
 
-    let mut query = <(&Actor, &Render)>::query();
-    query.iter(ecs).for_each(|(_, render)| {
-        if map.in_bounds(render.pt) {
-            let screen_pt = render.pt - camera_offset;
-            let is_visible = visible_tiles.contains(&render.pt);
-            match lighting_at(render.pt, is_visible, false, &tile_light) {
+    let mut query = <(&Actor, &Point, &Render)>::query();
+    query.iter(ecs).for_each(|(_, pt, render)| {
+        if map.in_bounds(*pt) {
+            let screen_pt = *pt - camera_offset;
+            let is_visible = visible_tiles.contains(pt);
+            match lighting_at(*pt, is_visible, false, &tile_light) {
                 Some(fg) => {
                     draw_batch.set(
                         screen_pt,

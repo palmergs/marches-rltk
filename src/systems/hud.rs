@@ -2,6 +2,7 @@ use crate::prelude::*;
 
 #[system]
 #[read_component(Player)]
+#[read_component(Point)]
 #[read_component(Render)]
 #[read_component(Physical)]
 #[read_component(Mental)]
@@ -58,10 +59,10 @@ pub fn character(
     let mut actor_count = 0;
     draw_batch.draw_double_box(Rect::with_size(1, 22, 20, 22), border_color);
     draw_batch.print_color(Point::new(2, 23), "Visible".to_string(), label_color);
-    let mut query = <(&Render, &Stats)>::query().filter(!component::<Player>());
+    let mut query = <(&Point, &Render, &Stats)>::query().filter(!component::<Player>());
     query.iter(ecs)
-        .filter(|(render, _)| fov.visible_tiles.contains(&render.pt) )
-        .for_each(|(render, stats)| {
+        .filter(|(pt, _, _)| fov.visible_tiles.contains(pt) )
+        .for_each(|(_, render, stats)| {
             if actor_count < 18 {
                 actor_count += 1;
                 if stats.vigor.is_wounded() {

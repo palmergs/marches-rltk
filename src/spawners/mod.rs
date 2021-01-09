@@ -16,10 +16,10 @@ pub fn spawn_player(ecs: &mut World, pt: Point) {
                 depth: 0,
             },
             Actor,
+            pt,
             Render{
                 name: "Borimir".to_string(),
                 tile: tile_index(2, 21),
-                pt,
             },
             FieldOfView::new(10),
             FieldOfLight::new(5),

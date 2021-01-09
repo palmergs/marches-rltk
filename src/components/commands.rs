@@ -29,3 +29,8 @@ pub struct WantsToSpawn {
     pub pt: Point,
     pub id: String,
 }
+
+pub struct WantsToGet {
+    pub actor: Entity,
+    pub item: Entity,
+}

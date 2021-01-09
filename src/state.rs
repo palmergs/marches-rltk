@@ -109,11 +109,11 @@ impl State {
             }
         }
 
-        <(&mut Player, &mut Render, &mut FieldOfView, &mut FieldOfLight)>::query()
+        <(&mut Player, &mut Point, &mut FieldOfView, &mut FieldOfLight)>::query()
             .iter_mut(&mut self.ecs)
-            .for_each(|(player, render, fov, fol)| {
+            .for_each(|(player, pt, fov, fol)| {
                 player.depth = depth;
-                render.pt = mb.player_start;
+                *pt = mb.player_start;
                 fov.is_dirty = true;
                 fol.is_dirty = true;
             });

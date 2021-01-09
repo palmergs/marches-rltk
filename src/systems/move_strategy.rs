@@ -5,7 +5,7 @@ use std::collections::HashMap;
 #[system]
 #[read_component(Player)]
 #[read_component(Actor)]
-#[read_component(Render)]
+#[read_component(Point)]
 #[read_component(FieldOfView)]
 #[read_component(Stats)]
 #[read_component(Mental)]
@@ -17,18 +17,17 @@ pub fn move_strategy(
 ) {
     // points containing actors
     let mut npcs: HashMap<Point, Entity> = HashMap::new();
-    <(Entity, &Render)>::query()
+    <(Entity, &Point)>::query()
         .filter(component::<Actor>())
         .iter(ecs)
-        .for_each(|(entity, render)| { npcs.insert(render.pt, *entity); });
+        .for_each(|(entity, pt)| { npcs.insert(*pt, *entity); });
 
     // location and entity for player
-    let mut query = <(Entity, &Player, &Render)>::query();
-    let (player_entity, _, player_render) = query.iter(ecs).next().unwrap();
+    let mut query = <(Entity, &Player, &Point)>::query();
+    let (player_entity, _, player_pt) = query.iter(ecs).next().unwrap();
 
     // map path to player from nearby locations
-    let player_pt = player_render.pt;
-    let player_idx = map.point2d_to_index(player_pt);
+    let player_idx = map.point2d_to_index(*player_pt);
     let search_targets = vec![player_idx];
     let dijkstra_map = DijkstraMap::new(
         MAP_WIDTH,
@@ -38,10 +37,9 @@ pub fn move_strategy(
         1024.0);
 
     let mut rng = Rng::new();
-    let mut query = <(Entity, &Render, &FieldOfView, &Mental, &Stats)>::query();
-    query.iter(ecs).for_each(|(entity, render, fov, mental, stats)| {
+    let mut query = <(Entity, &Point, &FieldOfView, &Mental, &Stats)>::query();
+    query.iter(ecs).for_each(|(entity, pt, fov, mental, stats)| {
         if tick.act(stats.speed) {
-            let pt = render.pt;
             let can_see = fov.visible_tiles.contains(&player_pt);
             let strategy = match mental.new_strategy(can_see) {
                 Some(new_strat) => {
@@ -54,10 +52,10 @@ pub fn move_strategy(
             match strategy {
                 MoveStrategy::Patrol(dir) => {
                     let destination = match dir {
-                        Direction::North => Point::new( 0, -1) + pt,
-                        Direction::East  => Point::new( 1,  0) + pt,
-                        Direction::South => Point::new( 0,  1) + pt,
-                        Direction::West  => Point::new(-1,  0) + pt,
+                        Direction::North => Point::new( 0, -1) + *pt,
+                        Direction::East  => Point::new( 1,  0) + *pt,
+                        Direction::South => Point::new( 0,  1) + *pt,
+                        Direction::West  => Point::new(-1,  0) + *pt,
                     };
 
                     if let Some(npc_entity) = npcs.get(&destination) {
@@ -77,15 +75,15 @@ pub fn move_strategy(
 
                 MoveStrategy::Random => {
                     let destination = match rng.range(0, 12) {
-                        0 | 1 => Point::new(-1,  0) + pt,
-                        2 | 3 => Point::new( 1,  0) + pt,
-                        4 | 5 => Point::new( 0, -1) + pt,
-                        6 | 7 => Point::new( 0,  1) + pt,
-                        8     => Point::new(-1, -1) + pt,
-                        9     => Point::new( 1, -1) + pt,
-                        10    => Point::new(-1,  1) + pt,
-                        11    => Point::new( 1,  1) + pt,
-                        _     => pt,
+                        0 | 1 => Point::new(-1,  0) + *pt,
+                        2 | 3 => Point::new( 1,  0) + *pt,
+                        4 | 5 => Point::new( 0, -1) + *pt,
+                        6 | 7 => Point::new( 0,  1) + *pt,
+                        8     => Point::new(-1, -1) + *pt,
+                        9     => Point::new( 1, -1) + *pt,
+                        10    => Point::new(-1,  1) + *pt,
+                        11    => Point::new( 1,  1) + *pt,
+                        _     => *pt,
                     };
 
                     if let Some(npc_entity) = npcs.get(&destination) {
@@ -100,9 +98,9 @@ pub fn move_strategy(
                 },
 
                 MoveStrategy::Chase => {
-                    let entity_idx = map.point2d_to_index(pt);
+                    let entity_idx = map.point2d_to_index(*pt);
                     if let Some(destination) = DijkstraMap::find_lowest_exit(&dijkstra_map, entity_idx, map) {
-                        let distance = DistanceAlg::Pythagoras.distance2d(pt, player_pt);
+                        let distance = DistanceAlg::Pythagoras.distance2d(*pt, *player_pt);
                         if distance > 1.2 {
                             let destination = map.index_to_point2d(destination);
                             if npcs.get(&destination).is_none() {
@@ -115,9 +113,9 @@ pub fn move_strategy(
                 },
 
                 MoveStrategy::Flee => {
-                    let entity_idx = map.point2d_to_index(pt);
+                    let entity_idx = map.point2d_to_index(*pt);
                     if let Some(destination) = DijkstraMap::find_highest_exit(&dijkstra_map, entity_idx, map) {
-                        let distance = DistanceAlg::Pythagoras.distance2d(pt, player_pt);
+                        let distance = DistanceAlg::Pythagoras.distance2d(*pt, *player_pt);
                         if distance > 1.2 {
                             let destination = map.index_to_point2d(destination);
                             if npcs.get(&destination).is_none() {

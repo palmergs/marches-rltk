@@ -1,12 +1,12 @@
 use crate::prelude::*;
 
-pub fn rat_tuple(pt: Point) -> (Actor, Render, FieldOfView, MightTalk, Stats, Physical, Mental) {
+pub fn rat_tuple(pt: Point) -> (Actor, Point, Render, FieldOfView, MightTalk, Stats, Physical, Mental) {
     (
         Actor,
+        pt,
         Render{
             name: "Dungeon Rat".to_string(),
             tile: tile_index(13, 1),
-            pt
         },
         FieldOfView::new(4),
         MightTalk{
@@ -32,13 +32,13 @@ pub fn rat_tuple(pt: Point) -> (Actor, Render, FieldOfView, MightTalk, Stats, Ph
     )
 }
 
-pub fn giant_rat_tuple(pt: Point) -> (Actor, Render, FieldOfView, MightTalk, Stats, Physical, Mental) {
+pub fn giant_rat_tuple(pt: Point) -> (Actor, Point, Render, FieldOfView, MightTalk, Stats, Physical, Mental) {
     (
         Actor,
+        pt,
         Render{
             name: "Giant Rat".to_string(),
             tile: tile_index(13, 2),
-            pt
         },
         FieldOfView::new(4),
         MightTalk{
@@ -64,13 +64,13 @@ pub fn giant_rat_tuple(pt: Point) -> (Actor, Render, FieldOfView, MightTalk, Sta
     )
 }
 
-pub fn doormouse_tuple(pt: Point) -> (Actor, Render, FieldOfView, MightTalk, Stats, Physical, Mental) {
+pub fn doormouse_tuple(pt: Point) -> (Actor, Point, Render, FieldOfView, MightTalk, Stats, Physical, Mental) {
     (
         Actor,
+        pt,
         Render{
             name: "Dire Dormouse".to_string(),
             tile: tile_index(13, 6),
-            pt
         },
         FieldOfView::new(4),
         MightTalk{
@@ -96,13 +96,13 @@ pub fn doormouse_tuple(pt: Point) -> (Actor, Render, FieldOfView, MightTalk, Sta
     )
 }
 
-pub fn bat_tuple(pt: Point) -> (Actor, Render, FieldOfView, Stats, Physical, Mental) {
+pub fn bat_tuple(pt: Point) -> (Actor, Point, Render, FieldOfView, Stats, Physical, Mental) {
     (
         Actor,
+        pt, 
         Render{
             name: "Cave Bat".to_string(),
             tile: tile_index(12, 19),
-            pt
         },
         FieldOfView::new(4),
         Stats {
@@ -124,13 +124,13 @@ pub fn bat_tuple(pt: Point) -> (Actor, Render, FieldOfView, Stats, Physical, Men
     )
 }
 
-pub fn animated_tree_tuple(pt: Point) -> (Actor, Render, FieldOfView, MightTalk, Stats, Physical, Mental) {
+pub fn animated_tree_tuple(pt: Point) -> (Actor, Point, Render, FieldOfView, MightTalk, Stats, Physical, Mental) {
     (
         Actor,
+        pt, 
         Render{
             name: "Animated Tree".to_string(),
             tile: tile_index(1, 22),
-            pt,
         },
         FieldOfView::new(4),
         MightTalk{
@@ -156,13 +156,13 @@ pub fn animated_tree_tuple(pt: Point) -> (Actor, Render, FieldOfView, MightTalk,
     )
 }
 
-pub fn goblin_with_torch_tuple(pt: Point) -> (Actor, Render, FieldOfView, FieldOfLight, MightTalk, Stats, Physical, Mental) {
+pub fn goblin_with_torch_tuple(pt: Point) -> (Actor, Point, Render, FieldOfView, FieldOfLight, MightTalk, Stats, Physical, Mental) {
     (
         Actor,
+        pt,
         Render{
             name: "Goblin with torch".to_string(),
             tile: tile_index(12, 9),
-            pt,
         },
         FieldOfView::new(7),
         FieldOfLight::new(5),
@@ -195,13 +195,13 @@ pub fn goblin_with_torch_tuple(pt: Point) -> (Actor, Render, FieldOfView, FieldO
     )
 }
 
-pub fn goblin_tuple(pt: Point) -> (Actor, Render, FieldOfView, MightTalk, Stats, Physical, Mental) {
+pub fn goblin_tuple(pt: Point) -> (Actor, Point, Render, FieldOfView, MightTalk, Stats, Physical, Mental) {
     (
         Actor,
+        pt, 
         Render{
             name: "Goblin".to_string(),
             tile: tile_index(12, 10),
-            pt,
         },
         FieldOfView::new(7),
         MightTalk{
@@ -231,13 +231,13 @@ pub fn goblin_tuple(pt: Point) -> (Actor, Render, FieldOfView, MightTalk, Stats,
     )
 }
 
-pub fn skeleton_with_torch_tuple(pt: Point) -> (Actor, Render, FieldOfView, FieldOfLight, Stats, Physical, Mental) {
+pub fn skeleton_with_torch_tuple(pt: Point) -> (Actor, Point, Render, FieldOfView, FieldOfLight, Stats, Physical, Mental) {
     (
         Actor,
+        pt, 
         Render{
             name: "Skeleton with torch".to_string(),
             tile: tile_index(12, 24),
-            pt,
         },
         FieldOfView::new(5),
         FieldOfLight::new(5),
@@ -260,13 +260,13 @@ pub fn skeleton_with_torch_tuple(pt: Point) -> (Actor, Render, FieldOfView, Fiel
     )
 }
 
-pub fn skeleton_tuple(pt: Point) -> (Actor, Render, FieldOfView, Stats, Physical, Mental) {
+pub fn skeleton_tuple(pt: Point) -> (Actor, Point, Render, FieldOfView, Stats, Physical, Mental) {
     (
         Actor,
+        pt,
         Render{
             name: "Skeleton".to_string(),
             tile: tile_index(12, 23),
-            pt,
         },
         FieldOfView::new(5),
         Stats {
@@ -288,13 +288,13 @@ pub fn skeleton_tuple(pt: Point) -> (Actor, Render, FieldOfView, Stats, Physical
     )
 }
 
-pub fn skeleton_warrior_tuple(pt: Point) -> (Actor, Render, FieldOfView, Stats, Physical, Mental) {
+pub fn skeleton_warrior_tuple(pt: Point) -> (Actor, Point, Render, FieldOfView, Stats, Physical, Mental) {
     (
         Actor,
+        pt, 
         Render{
             name: "Skeleton Warrior".to_string(),
             tile: tile_index(12, 26),
-            pt,
         },
         FieldOfView::new(5),
         Stats {

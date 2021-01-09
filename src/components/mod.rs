@@ -30,7 +30,16 @@ pub struct Actor;
 pub struct Render {
     pub name: String,
     pub tile: usize,
-    pub pt: Point,
+}
+
+pub struct Carried {
+    pub actor: Entity,
+    pub item: Entity,
+}
+
+pub struct Equipped {
+    pub actor: Entity,
+    pub item: Entity,
 }
 
 #[derive(Debug, Clone, PartialEq)]

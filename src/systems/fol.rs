@@ -1,18 +1,18 @@
 use crate::prelude::*;
 
 #[system]
-#[read_component(Render)]
+#[read_component(Point)]
 #[read_component(Player)]
 #[write_component(FieldOfLight)]
 pub fn fol(
     ecs: &mut SubWorld,
     #[resource] map: &mut Map,
 ) {
-    let mut lights = <(&Render, &mut FieldOfLight)>::query();
+    let mut lights = <(&Point, &mut FieldOfLight)>::query();
     lights.iter_mut(ecs)
         .filter(|(_, fol)| fol.is_dirty )
-        .for_each(|(render, fol)| {
-            fol.lit_tiles = field_of_view_set(render.pt, fol.radius, map);
+        .for_each(|(pt, fol)| {
+            fol.lit_tiles = field_of_view_set(*pt, fol.radius, map);
             fol.is_dirty = false;
         });
 

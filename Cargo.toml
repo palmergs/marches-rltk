@@ -8,4 +8,4 @@ edition = "2018"
 
 [dependencies]
 bracket-lib = "*"
-legion = "*"
+legion = { version = "0.3.1", features = ["extended-tuple-impls"] }

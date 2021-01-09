@@ -2,7 +2,7 @@ use crate::prelude::*;
 
 #[system(for_each)]
 #[read_component(Player)]
-#[read_component(Render)]
+#[read_component(Point)]
 #[read_component(Item)]
 #[read_component(Spawns)]
 #[write_component(Stats)]
@@ -25,10 +25,10 @@ pub fn combat(
             .unwrap()
             .get_component::<Player>()
             .is_ok();
-        if let Ok(render) = ecs.entry_ref(cmd.victim).unwrap().get_component::<Render>() {
+        if let Ok(pt) = ecs.entry_ref(cmd.victim).unwrap().get_component::<Point>() {
             if is_killed {
                 commands.push((Text{
-                    display: TextDisplay::AnimateUp(render.pt),
+                    display: TextDisplay::AnimateUp(*pt),
                     text: format!("KILLED!").to_string(),
                     color: RGBA::from_f32(1., 0., 0., 1.),
                     ticks: 200,
@@ -36,15 +36,15 @@ pub fn combat(
                 },));
 
                 // TODO: for ease of access to pt, removing the entity here, but this
-                // might cause problems in the future if an entity with Stats but not Render
+                // might cause problems in the future if an entity with Stats but not Point
                 // is killed.
                 if !is_player {
 
                     // TODO: this feels ugly by tightly linking the removal of a specific type 
                     // of entity to the map. 
                     if ecs.entry_ref(cmd.victim).unwrap().get_component::<Item>().is_ok() {
-                        map.blocked.remove(&render.pt);
-                        map.opaque.remove(&render.pt);
+                        map.blocked.remove(pt);
+                        map.opaque.remove(pt);
                     }
 
                     // Check to see if this entity spawns something when it is killed
@@ -58,10 +58,10 @@ pub fn combat(
                                 if se.trigger == SpawnTrigger::Killed && se.should_spawn(&mut rng) {
                                     match &se.id[..] {
                                         "doormouse" => { 
-                                            commands.push(doormouse_tuple(render.pt)); 
+                                            commands.push(doormouse_tuple(*pt)); 
                                         },
                                         "skeleton" => { 
-                                            commands.push(skeleton_tuple(render.pt)); 
+                                            commands.push(skeleton_tuple(*pt)); 
                                         },
                                         _ => { println!("no entity spawned for {}", se.id); },
                                     };
@@ -72,10 +72,10 @@ pub fn combat(
                     commands.remove(cmd.victim);
                     
                 }
-                map.actors.remove(&render.pt);
+                map.actors.remove(pt);
             } else {
                 commands.push((Text{
-                    display: TextDisplay::AnimateUp(render.pt),
+                    display: TextDisplay::AnimateUp(*pt),
                     text: format!("{}", dmg).to_string(),
                     color: RGBA::from_f32(1., 0., 0., 1.),
                     ticks: 50,

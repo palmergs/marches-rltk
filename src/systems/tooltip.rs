@@ -3,6 +3,7 @@ use crate::prelude::*;
 use std::collections::HashSet;
 
 #[system]
+#[read_component(Point)]
 #[read_component(Render)]
 #[read_component(Stats)]
 #[read_component(Player)]
@@ -27,19 +28,19 @@ pub fn tooltip(
 
     let pointer = *mouse + camera.offset();
 
-    let mut query = <(&Render, &Stats)>::query().filter(!component::<Player>());
+    let mut query = <(&Point, &Render, &Stats)>::query().filter(!component::<Player>());
     query.iter(ecs)
-        .filter(|(render, _)| render.pt == pointer )
-        .filter(|(render, _)| fov.visible_tiles.contains(&render.pt))
-        .for_each(|(render, stats)| {
-            if !fades.contains(&render.pt) {
+        .filter(|(pt, _, _)| **pt == pointer )
+        .filter(|(pt, _, _)| fov.visible_tiles.contains(pt))
+        .for_each(|(pt, render, stats)| {
+            if !fades.contains(pt) {
                 let (text, color) = if stats.vigor.is_wounded() {
                     (format!("{} (wounded)", render.name), RGBA::named(PINK))
                 } else {
                     (format!("{}", render.name), RGBA::named(WHITE))
                 };
                 commands.push((Text{
-                    display: TextDisplay::Fade(render.pt),
+                    display: TextDisplay::Fade(*pt),
                     text,
                     color,
                     ticks: 40,

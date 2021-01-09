@@ -5,7 +5,7 @@ use crate::prelude::*;
 #[read_component(FieldOfLight)]
 #[read_component(Player)]
 #[read_component(Item)]
-#[write_component(Render)]
+#[write_component(Point)]
 pub fn movement(
     entity: &Entity,
     cmd: &WantsToMove,
@@ -21,14 +21,14 @@ pub fn movement(
 
             // Update the render position
             let mut position_updated = false;
-            if let Ok(render) = entry.get_component_mut::<Render>() {
+            if let Ok(pt) = entry.get_component_mut::<Point>() {
 
                 // this block is the final arbiter to determine if
                 // a position is taking up a square
                 if !map.actors.contains(&cmd.destination) && !map.blocked.contains(&cmd.destination) {
-                    map.actors.remove(&render.pt);
-                    render.pt = cmd.destination;
-                    map.actors.insert(render.pt);
+                    map.actors.remove(pt);
+                    *pt = cmd.destination;
+                    map.actors.insert(*pt);
                     position_updated = true;
                 }
             }
