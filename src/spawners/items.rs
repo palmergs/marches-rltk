@@ -2,7 +2,11 @@ use crate::prelude::*;
 
 pub fn torch_tuple(pt: Point) -> (Item, Point, Render, FieldOfLight, Stats) {
     (
-        Item::new(false, false),
+        Item{
+            blocking: false, 
+            opaque: false,
+            can_get: true,
+        },
         pt,
         Render{
             name: "Torch".to_string(),
@@ -20,7 +24,11 @@ pub fn torch_tuple(pt: Point) -> (Item, Point, Render, FieldOfLight, Stats) {
 
 pub fn dagger_tuple(pt: Point) -> (Item, Point, Render, Stats) {
     (
-        Item::new(false, false),
+        Item{
+            blocking: false, 
+            opaque: false,
+            can_get: true,
+        },
         pt,
         Render{
             name: "Dagger".to_string(),
@@ -37,7 +45,11 @@ pub fn dagger_tuple(pt: Point) -> (Item, Point, Render, Stats) {
 
 pub fn mushroom1_tuple(pt: Point) -> (Item, Point, Render, Stats) {
         (
-            Item::new(false, false),
+            Item{
+                blocking: false, 
+                opaque: false,
+                can_get: true,
+            },
             pt,
             Render{
                 name: "Mushroom".to_string(),
@@ -54,7 +66,11 @@ pub fn mushroom1_tuple(pt: Point) -> (Item, Point, Render, Stats) {
 
 pub fn mushroom2_tuple(pt: Point) -> (Item, Point, Render, Stats) {
     (
-        Item::new(false, false),
+        Item{
+            blocking: false, 
+            opaque: false,
+            can_get: true,
+        },
         pt,
         Render{
             name: "Mushroom".to_string(),
@@ -71,7 +87,11 @@ pub fn mushroom2_tuple(pt: Point) -> (Item, Point, Render, Stats) {
 
 pub fn chest_tuple(pt: Point) -> (Item, Point, Render, Stats, Spawns) {
     (
-        Item::new(true, false),
+        Item{
+            blocking: true,
+            opaque: false,
+            can_get: false,
+        },
         pt,
         Render{
             name: "Closed Chest".to_string(),
@@ -94,7 +114,11 @@ pub fn chest_tuple(pt: Point) -> (Item, Point, Render, Stats, Spawns) {
 
 pub fn stairs_down_tuple(pt: Point, to_depth: i32) -> (Item, Point, Render, Stats, Stairs) {
     (
-        Item::new(false, false),
+        Item{
+            blocking: false, 
+            opaque: false,
+            can_get: false,
+        },
         pt,
         Render{
             name: "Stairs Down".to_string(),
@@ -113,7 +137,11 @@ pub fn stairs_down_tuple(pt: Point, to_depth: i32) -> (Item, Point, Render, Stat
 
 pub fn stairs_up_tuple(pt: Point, to_depth: i32) -> (Item, Point, Render, Stats, Stairs) {
     (
-        Item::new(false, false),
+        Item{
+            blocking: false, 
+            opaque: false,
+            can_get: false,
+        },
         pt,
         Render{
             name: "Stairs Up".to_string(),
@@ -131,7 +159,11 @@ pub fn stairs_up_tuple(pt: Point, to_depth: i32) -> (Item, Point, Render, Stats,
 
 pub fn open_door_tuple(pt: Point) -> (Item, Point, Render, Stats) {
     (
-        Item::new(false, false),
+        Item{
+            blocking: false,
+            opaque: false,
+            can_get: false,
+        },
         pt,
         Render{
             name: "Door".to_string(),
@@ -148,7 +180,11 @@ pub fn open_door_tuple(pt: Point) -> (Item, Point, Render, Stats) {
 
 pub fn closed_door_tuple(pt: Point) -> (Item, Point, Render, Stats, Spawns) {
     (
-        Item::new(true, true),
+        Item{
+            blocking: true, 
+            opaque: true,
+            can_get: false,
+        },
         pt,
         Render{
             name: "Door".to_string(),

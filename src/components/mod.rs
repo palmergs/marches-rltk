@@ -15,12 +15,21 @@ pub struct Player {
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Item {
+    // if true this item blocks movement if on the map
     pub blocking: bool,
+
+    // if true this item blocks vision if on the map
     pub opaque: bool,
+
+    // if true this item can be picked up (and dropped)
+    // to add to inventory
+    pub can_get: bool,
 }
 
 impl Item {
-    pub fn new(blocking: bool, opaque: bool) -> Self { Self{ blocking, opaque } }
+    pub fn is_blocking(&self) -> bool { self.blocking }
+    pub fn is_opaque(&self) -> bool { self.opaque }
+    pub fn is_carryable(&self) -> bool { self.can_get }
 }
 
 #[derive(Debug, Clone, Copy, PartialEq)]
