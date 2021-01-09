@@ -15,13 +15,12 @@ pub fn state_change(
     let curr_state = turn_state.clone();
     let mut new_state = match curr_state {
         TurnState::InitializeMap => TurnState::AwaitingInput,
-        TurnState::AwaitingInput => return,
         TurnState::ComputerTurn => if tick.act(player_stats.speed) {
             TurnState::AwaitingInput
         } else {
             TurnState::ComputerTurn
         },
-        TurnState::GameOver => return,
+        _ => return,
     };
 
     if player_stats.vigor.is_zero() {

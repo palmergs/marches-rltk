@@ -12,7 +12,9 @@ pub use areas::*;
 pub fn spawn_player(ecs: &mut World, pt: Point) {
     ecs.push(
         (
-            Player,
+            Player{
+                depth: 0,
+            },
             Actor,
             Render{
                 name: "Borimir".to_string(),
@@ -91,4 +93,78 @@ pub fn spawn_item(ecs: &mut World, rng: &mut Rng, pt: Point, depth: i32) -> Opti
         _      => None
     }
 }
+
+pub fn spawn_room_stairs_up(ecs: &mut World, rng: &mut Rng, map: &Map, rect: &Rect, to_depth: i32) {
+    let mut tries = 10;
+    loop {
+        tries -= 1;
+        if tries == 0 {
+            spawn_map_stairs_up(ecs, rng, map, to_depth);
+            return
+        }
+        let x = rng.range(rect.x1, rect.x2 + 1);
+        let y = rng.range(rect.y1, rect.y2 + 1);
+        let pt = Point::new(x, y);
+        if map.can_enter(pt) {
+            ecs.push(stairs_up_tuple(pt, to_depth));
+            return
+        }
+    }
+}
+
+pub fn spawn_map_stairs_up(ecs: &mut World, rng: &mut Rng, map: &Map, to_depth: i32) {
+    let mut tries = 10;
+    loop {
+        tries -= 1;
+        if tries == 0 {
+            return
+        }
+
+        let x = rng.range(1, MAP_WIDTH - 2);
+        let y = rng.range(1, MAP_HEIGHT - 2);
+        let pt = Point::new(x, y);
+        if map.can_enter(pt) {
+            ecs.push(stairs_up_tuple(pt, to_depth));
+            return
+        }
+    }
+}
+
+pub fn spawn_room_stairs_down(ecs: &mut World, rng: &mut Rng, map: &Map, rect: &Rect, to_depth: i32) {
+    let mut tries = 10;
+    loop {
+        tries -= 1;
+        if tries == 0 {
+            spawn_map_stairs_down(ecs, rng, map, to_depth);
+            return
+        }
+        let x = rng.range(rect.x1, rect.x2 + 1);
+        let y = rng.range(rect.y1, rect.y2 + 1);
+        let pt = Point::new(x, y);
+        if map.can_enter(pt) {
+            ecs.push(stairs_down_tuple(pt, to_depth));
+            return
+        }
+    }
+}
+
+pub fn spawn_map_stairs_down(ecs: &mut World, rng: &mut Rng, map: &Map, to_depth: i32) {
+    let mut tries = 10;
+    loop {
+        tries -= 1;
+        if tries == 0 {
+            return
+        }
+
+        let x = rng.range(1, MAP_WIDTH - 2);
+        let y = rng.range(1, MAP_HEIGHT - 2);
+        let pt = Point::new(x, y);
+        if map.can_enter(pt) {
+            ecs.push(stairs_down_tuple(pt, to_depth));
+            return
+        }
+    }
+}
+
+
 

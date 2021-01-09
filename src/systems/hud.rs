@@ -13,8 +13,8 @@ pub fn character(
     // #[resource] map: &Map,
     // #[resource] tick: &TickCount,
 ) {
-    let mut query = <(&Render, &Physical, &Mental, &Stats)>::query().filter(component::<Player>());
-    let (render, physical, mental, stats) = query.iter(ecs).next().unwrap();
+    let mut query = <(&Render, &Physical, &Mental, &Stats, &Player)>::query();
+    let (render, physical, mental, stats, player) = query.iter(ecs).next().unwrap();
 
     let border_color = ColorPair::new(RGB::from_f32(0.25, 0.25, 0.25), BLACK);
     let label_color = ColorPair::new(RGB::from_f32(0.5, 0.5, 0.5), BLACK);
@@ -48,6 +48,9 @@ pub fn character(
 
     draw_batch.print_color(Point::new(2, 15), "ARMOR".to_string(), label_color);
     draw_batch.print(Point::new(8, 15), "None".to_string());
+
+    draw_batch.print_color(Point::new(2, 17), "Level".to_string(), label_color);
+    draw_batch.print(Point::new(8, 17), format!("{}", player.depth));
 
     let mut query = <&FieldOfView>::query().filter(component::<Player>());
     let fov = query.iter(ecs).next().unwrap();

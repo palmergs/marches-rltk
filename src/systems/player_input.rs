@@ -5,6 +5,7 @@ use crate::prelude::*;
 #[read_component(Player)]
 #[read_component(Stats)]
 #[read_component(Item)]
+#[read_component(Stairs)]
 pub fn player_input(
     ecs: &mut SubWorld,
     commands: &mut CommandBuffer,
@@ -16,8 +17,8 @@ pub fn player_input(
         let mut query = <(Entity, &Render)>::query().filter(component::<Player>());
         let (player, location) = query.iter(ecs)
             .find_map(|(entity, render)| Some((*entity, render.pt))).unwrap();
-
-        match key {
+            
+        let new_state = match key {
             VirtualKeyCode::Left  | VirtualKeyCode::Numpad4 | VirtualKeyCode::Key4 => handle_move(ecs, commands, player, location, Point::new(-1, 0)),
             VirtualKeyCode::Right | VirtualKeyCode::Numpad6 | VirtualKeyCode::Key6 => handle_move(ecs, commands, player, location, Point::new(1, 0)),
             VirtualKeyCode::Up    | VirtualKeyCode::Numpad8 | VirtualKeyCode::Key8 => handle_move(ecs, commands, player, location, Point::new(0, -1)),
@@ -26,11 +27,25 @@ pub fn player_input(
             VirtualKeyCode::Numpad9 | VirtualKeyCode::Key9 => handle_move(ecs, commands, player, location, Point::new(1, -1)),
             VirtualKeyCode::Numpad1 | VirtualKeyCode::Key1 => handle_move(ecs, commands, player, location, Point::new(-1, 1)),
             VirtualKeyCode::Numpad3 | VirtualKeyCode::Key3 => handle_move(ecs, commands, player, location, Point::new(1, 1)),
-            _ => (),
+
+            VirtualKeyCode::Period => handle_stairs(ecs, location),
+            VirtualKeyCode::Comma => handle_stairs(ecs, location),
+            _ => TurnState::ComputerTurn,
         };
 
         turn.increment();
-        *state = TurnState::ComputerTurn;
+        *state = new_state;
+    }
+}
+
+fn handle_stairs(
+    ecs: &mut SubWorld,
+    location: Point,
+) -> TurnState {
+    let mut query = <(&Render, &Stairs)>::query();
+    match query.iter(ecs).filter(|(render, _)| render.pt == location ).next() {
+        Some((_, stairs)) => return TurnState::NewLevel(stairs.to_depth),
+        None => TurnState::ComputerTurn,
     }
 }
 
@@ -40,7 +55,7 @@ fn handle_move(
     player: Entity,
     from: Point,
     delta: Point
-) {
+) -> TurnState {
     let destination = from + delta;
     let mut hit_something = false;
     let mut query = <(Entity, &Render)>::query().filter(component::<Stats>());
@@ -63,4 +78,6 @@ fn handle_move(
     if !hit_something {
         commands.push((WantsToMove{ actor: player, destination }, ));
     }
+
+    TurnState::ComputerTurn
 }

@@ -92,7 +92,7 @@ pub fn chest_tuple(pt: Point) -> (Item, Render, Stats, Spawns) {
     )
 }
 
-pub fn stairs_down_tuple(pt: Point, to_depth: i32) -> (Item, Render, Stairs) {
+pub fn stairs_down_tuple(pt: Point, to_depth: i32) -> (Item, Render, Stats, Stairs) {
     (
         Item::new(false, false),
         Render{
@@ -100,12 +100,18 @@ pub fn stairs_down_tuple(pt: Point, to_depth: i32) -> (Item, Render, Stairs) {
             tile: tile_index(2, 5),
             pt,
         },
+        Stats{
+            armor: 5,
+            speed: 0,
+            vigor: Vigor::new(30),
+            focus: Focus::new(0),
+        },        
         Stairs{ to_depth },
     )
 }
 
 
-pub fn stairs_up_tuple(pt: Point, to_depth: i32) -> (Item, Render, Stairs) {
+pub fn stairs_up_tuple(pt: Point, to_depth: i32) -> (Item, Render, Stats, Stairs) {
     (
         Item::new(false, false),
         Render{
@@ -113,6 +119,12 @@ pub fn stairs_up_tuple(pt: Point, to_depth: i32) -> (Item, Render, Stairs) {
             tile: tile_index(1, 5),
             pt,
         },
+        Stats{
+            armor: 5,
+            speed: 0,
+            vigor: Vigor::new(30),
+            focus: Focus::new(0),
+        },        
         Stairs{ to_depth },
     )
 }

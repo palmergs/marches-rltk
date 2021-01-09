@@ -9,7 +9,9 @@ mod commands;
 pub use commands::*;
 
 #[derive(Debug, Clone, Copy, PartialEq)]
-pub struct Player;
+pub struct Player {
+    pub depth: i32,
+}
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Item {

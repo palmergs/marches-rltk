@@ -1,8 +1,11 @@
 use crate::prelude::*;
 
+use std::collections::HashSet;
+
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum TurnState {
     InitializeMap,
+    NewLevel(i32),
     AwaitingInput,
     ComputerTurn,
     GameOver,
@@ -46,6 +49,8 @@ impl State {
 
         state.resources.insert(TickCount(0));
         state.resources.insert(TurnCount(0));
+
+        spawn_player(&mut state.ecs, Point::zero());
         state.load_level(0);
         state
     }
@@ -55,14 +60,30 @@ impl State {
         self.resources = Resources::default();
         self.resources.insert(TickCount(0));
         self.resources.insert(TurnCount(0));
+
+        spawn_player(&mut self.ecs, Point::zero());
         self.load_level(0);
     }
 
     fn load_level(&mut self, depth: i32) {
+        println!("in load level.... {:?}", depth);
         let mut rng = Rng::new();
-        let mb = MapBuilder::build(&mut rng, depth);
+        let player_entity = *<Entity>::query().filter(component::<Player>())
+            .iter(&self.ecs)
+            .next()
+            .unwrap();
+            
+        let mut entities_to_keep = HashSet::new();
+        entities_to_keep.insert(player_entity);
+        let mut cb = CommandBuffer::new(&mut self.ecs);
+        for e in Entity::query().iter(&self.ecs) {
+            if !entities_to_keep.contains(e) {
+                cb.remove(*e);
+            }
+        }
+        &cb.flush(&mut self.ecs);
 
-        spawn_player(&mut self.ecs, mb.player_start);
+        let mb = MapBuilder::build(&mut rng, depth);
         mb.monster_spawns.iter().for_each(|pt| {
             spawn_monster(&mut self.ecs, &mut rng, *pt, depth); 
         });
@@ -70,6 +91,32 @@ impl State {
             spawn_room_items(&mut self.ecs, &mut rng, &mb.map, *rect, depth); 
         });
         spawn_map_items(&mut self.ecs, &mut rng, &mb.map, 20, depth);
+        if mb.rooms.len() > 1 {
+            for _ in 0..10 {
+                if depth < 0 {
+                    let rect = &mb.rooms[rng.range(0, mb.rooms.len())];
+                    spawn_room_stairs_up(&mut self.ecs, &mut rng, &mb.map, rect, depth + 1);
+                }
+                let rect = &mb.rooms[rng.range(0, mb.rooms.len())];
+                spawn_room_stairs_down(&mut self.ecs, &mut rng, &mb.map, rect, depth - 1);
+            }
+        } else {
+            for _ in 0..10 {
+                if depth < 0  {
+                    spawn_map_stairs_up(&mut self.ecs, &mut rng, &mb.map, depth + 1);
+                }
+                spawn_map_stairs_down(&mut self.ecs, &mut rng, &mb.map, depth + 1);
+            }
+        }
+
+        <(&mut Player, &mut Render, &mut FieldOfView, &mut FieldOfLight)>::query()
+            .iter_mut(&mut self.ecs)
+            .for_each(|(player, render, fov, fol)| {
+                player.depth = depth;
+                render.pt = mb.player_start;
+                fov.is_dirty = true;
+                fol.is_dirty = true;
+            });
         
         self.resources.insert(mb.map);
         self.resources.insert(Camera::new(mb.player_start));
@@ -110,6 +157,7 @@ impl GameState for State {
         let curr_state = self.resources.get::<TurnState>().unwrap().clone();
         match curr_state {
             TurnState::InitializeMap => self.initialize_schedule.execute(&mut self.ecs, &mut self.resources),
+            TurnState::NewLevel(depth) => self.load_level(depth),
             TurnState::AwaitingInput => self.input_schedule.execute(&mut self.ecs, &mut self.resources),
             TurnState::ComputerTurn => self.computer_schedule.execute(&mut self.ecs, &mut self.resources),
             TurnState::GameOver => self.game_over(ctx),
