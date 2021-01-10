@@ -30,12 +30,31 @@ pub fn player_input(
 
             VirtualKeyCode::Period => handle_stairs(ecs, location),
             VirtualKeyCode::Comma => handle_stairs(ecs, location),
+
+            VirtualKeyCode::G => handle_pickup(ecs, commands, player, location),
+
             _ => TurnState::ComputerTurn,
         };
 
         turn.increment();
         *state = new_state;
     }
+}
+
+fn handle_pickup(
+    ecs: &mut SubWorld,
+    commands: &mut CommandBuffer,
+    player: Entity,
+    location: Point,
+) -> TurnState {
+    let mut query = <(Entity, &Point, &Item)>::query();
+    query.iter(ecs)
+        .filter(|(_, pt, _)| **pt == location )
+        .filter(|(_, _, item)| item.is_carryable() )
+        .for_each(|(entity, _, _)| {
+            commands.push((WantsToGet{ actor: player, item: *entity }, ));
+        });
+    TurnState::ComputerTurn
 }
 
 fn handle_stairs(

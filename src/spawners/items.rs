@@ -16,6 +16,7 @@ pub fn torch_tuple(pt: Point) -> (Item, Point, Render, FieldOfLight, Stats) {
         Stats{
             armor: 0,
             speed: 0,
+            power: 1,
             vigor: Vigor::new(3),
             focus: Focus::new(0),
         },
@@ -37,6 +38,7 @@ pub fn dagger_tuple(pt: Point) -> (Item, Point, Render, Stats) {
         Stats{
             armor: 0,
             speed: 0,
+            power: 1,
             vigor: Vigor::new(10),
             focus: Focus::new(0),
         },
@@ -58,6 +60,7 @@ pub fn mushroom1_tuple(pt: Point) -> (Item, Point, Render, Stats) {
             Stats{
                 armor: 0,
                 speed: 0,
+                power: 0,
                 vigor: Vigor::new(1),
                 focus: Focus::new(0),
             },
@@ -79,6 +82,7 @@ pub fn mushroom2_tuple(pt: Point) -> (Item, Point, Render, Stats) {
         Stats{
             armor: 0,
             speed: 0,
+            power: 0,
             vigor: Vigor::new(1),
             focus: Focus::new(0),
         },
@@ -100,6 +104,7 @@ pub fn chest_tuple(pt: Point) -> (Item, Point, Render, Stats, Spawns) {
         Stats{
             armor: 5,
             speed: 0,
+            power: 0,
             vigor: Vigor::new(30),
             focus: Focus::new(0),
         },
@@ -127,6 +132,7 @@ pub fn stairs_down_tuple(pt: Point, to_depth: i32) -> (Item, Point, Render, Stat
         Stats{
             armor: 5,
             speed: 0,
+            power: 0,
             vigor: Vigor::new(30),
             focus: Focus::new(0),
         },        
@@ -150,6 +156,7 @@ pub fn stairs_up_tuple(pt: Point, to_depth: i32) -> (Item, Point, Render, Stats,
         Stats{
             armor: 5,
             speed: 0,
+            power: 0,
             vigor: Vigor::new(30),
             focus: Focus::new(0),
         },        
@@ -172,6 +179,7 @@ pub fn open_door_tuple(pt: Point) -> (Item, Point, Render, Stats) {
         Stats{
             armor: 3,
             speed: 0,
+            power: 0,
             vigor: Vigor::new(30),
             focus: Focus::new(0),
         },
@@ -193,6 +201,7 @@ pub fn closed_door_tuple(pt: Point) -> (Item, Point, Render, Stats, Spawns) {
         Stats{
             armor: 3,
             speed: 0,
+            power: 0,
             vigor: Vigor::new(30),
             focus: Focus::new(0),
         },

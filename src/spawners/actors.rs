@@ -16,6 +16,7 @@ pub fn rat_tuple(pt: Point) -> (Actor, Point, Render, FieldOfView, MightTalk, St
         Stats {
             armor: 0,
             speed: 2,
+            power: 1,
             vigor: Vigor::new(5),
             focus: Focus::new(4),
         },
@@ -48,6 +49,7 @@ pub fn giant_rat_tuple(pt: Point) -> (Actor, Point, Render, FieldOfView, MightTa
         Stats {
             armor: 0,
             speed: 2,
+            power: 2,
             vigor: Vigor::new(8),
             focus: Focus::new(5),
         },
@@ -80,6 +82,7 @@ pub fn doormouse_tuple(pt: Point) -> (Actor, Point, Render, FieldOfView, MightTa
         Stats {
             armor: 0,
             speed: 2,
+            power: 1,
             vigor: Vigor::new(8),
             focus: Focus::new(5),
         },
@@ -108,6 +111,7 @@ pub fn bat_tuple(pt: Point) -> (Actor, Point, Render, FieldOfView, Stats, Physic
         Stats {
             armor: 0,
             speed: 1,
+            power: 1,
             vigor: Vigor::new(5),
             focus: Focus::new(4),
         },
@@ -140,6 +144,7 @@ pub fn animated_tree_tuple(pt: Point) -> (Actor, Point, Render, FieldOfView, Mig
         Stats {
             armor: 3,
             speed: 5,
+            power: 5,
             vigor: Vigor::new(40),
             focus: Focus::new(10),
         },
@@ -179,6 +184,7 @@ pub fn goblin_with_torch_tuple(pt: Point) -> (Actor, Point, Render, FieldOfView,
         Stats {
             armor: 0,
             speed: 2,
+            power: 2,
             vigor: Vigor::new(10),
             focus: Focus::new(5),
         },
@@ -215,6 +221,7 @@ pub fn goblin_tuple(pt: Point) -> (Actor, Point, Render, FieldOfView, MightTalk,
         Stats {
             armor: 0,
             speed: 2,
+            power: 2,
             vigor: Vigor::new(10),
             focus: Focus::new(5),
         },
@@ -244,6 +251,7 @@ pub fn skeleton_with_torch_tuple(pt: Point) -> (Actor, Point, Render, FieldOfVie
         Stats {
             armor: 1,
             speed: 2,
+            power: 2,
             vigor: Vigor::new(15),
             focus: Focus::new(0),
         },
@@ -272,6 +280,7 @@ pub fn skeleton_tuple(pt: Point) -> (Actor, Point, Render, FieldOfView, Stats, P
         Stats {
             armor: 1,
             speed: 2,
+            power: 2,
             vigor: Vigor::new(15),
             focus: Focus::new(0),
         },
@@ -300,6 +309,7 @@ pub fn skeleton_warrior_tuple(pt: Point) -> (Actor, Point, Render, FieldOfView, 
         Stats {
             armor: 1,
             speed: 2,
+            power: 3,
             vigor: Vigor::new(15),
             focus: Focus::new(0),
         },

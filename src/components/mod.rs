@@ -41,12 +41,29 @@ pub struct Render {
     pub tile: usize,
 }
 
+#[derive(Debug, Clone, PartialEq)]
 pub struct Carried {
-    pub actor: Entity,
-    pub item: Entity,
+    pub by: Entity,
 }
 
+#[derive(Debug, Clone, PartialEq)]
+pub enum EquipmentSlot {
+    Head,
+    Neck,
+    RightRing,
+    LeftRing,
+    RightHand,
+    LeftHand,
+    BothHands,
+    Belt,
+    Feet,
+    Body,
+    Shoulders,
+}
+
+#[derive(Debug, Clone, PartialEq)]
 pub struct Equipped {
+    pub slot: EquipmentSlot,
     pub actor: Entity,
     pub item: Entity,
 }

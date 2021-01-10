@@ -85,15 +85,17 @@ impl Mental {
 pub struct Stats {
     pub speed: usize,
     pub armor: i32,
+    pub power: i32,
     pub vigor: Vigor,
     pub focus: Focus,
 }
 
 impl Stats {
-    pub fn new(armor: i32, speed: usize, vigor: i32, focus: i32) -> Self {
+    pub fn new(armor: i32, speed: usize, power: i32, vigor: i32, focus: i32) -> Self {
         Self {
             armor,
             speed,
+            power,
             vigor: Vigor::new(vigor),
             focus: Focus::new(focus),
         }

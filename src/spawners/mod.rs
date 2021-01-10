@@ -26,6 +26,7 @@ pub fn spawn_player(ecs: &mut World, pt: Point) {
             Stats {
                 armor: 0,
                 speed: 2,
+                power: 0,
                 vigor: Vigor::new(15),
                 focus: Focus::new(15),
             },
