@@ -11,7 +11,7 @@ pub fn pickup(
     commands: &mut CommandBuffer,
 ) {
     if let Ok(entry) = ecs.entry_ref(cmd.item) {
-        commands.add_component(cmd.item, Carried{ by: cmd.actor });
+        commands.add_component(cmd.item, Carried{ by: cmd.actor, equipped: false });
 
         if let Ok(pt) = entry.get_component::<Point>() {
             commands.remove_component::<Point>(cmd.item);

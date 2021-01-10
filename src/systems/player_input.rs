@@ -32,6 +32,11 @@ pub fn player_input(
             VirtualKeyCode::Comma => handle_stairs(ecs, location),
 
             VirtualKeyCode::G => handle_pickup(ecs, commands, player, location),
+            VirtualKeyCode::O => handle_activate(ecs, commands, player, location),
+            VirtualKeyCode::U => handle_use_item(ecs, commands, player, location),
+            VirtualKeyCode::W => handle_equip_item(ecs, commands, player, location),
+            VirtualKeyCode::F => handle_fire(ecs, commands, player, location),
+            VirtualKeyCode::T => handle_talk(ecs, commands, player, location),
 
             _ => TurnState::ComputerTurn,
         };
@@ -39,6 +44,51 @@ pub fn player_input(
         turn.increment();
         *state = new_state;
     }
+}
+
+fn handle_fire(
+    ecs: &mut SubWorld,
+    commands: &mut CommandBuffer,
+    player: Entity,
+    location: Point,
+) -> TurnState {
+    TurnState::AwaitingInput
+}
+
+fn handle_talk(
+    ecs: &mut SubWorld,
+    commands: &mut CommandBuffer,
+    player: Entity,
+    location: Point,
+) -> TurnState {
+    TurnState::AwaitingInput
+}
+
+fn handle_equip_item(
+    ecs: &mut SubWorld,
+    commands: &mut CommandBuffer,
+    player: Entity,
+    location: Point,
+) -> TurnState {
+    TurnState::AwaitingInput
+}
+
+fn handle_use_item(
+    ecs: &mut SubWorld,
+    commands: &mut CommandBuffer,
+    player: Entity,
+    location: Point,
+) -> TurnState {
+    TurnState::AwaitingInput
+}
+
+fn handle_activate(
+    ecs: &mut SubWorld,
+    commands: &mut CommandBuffer,
+    player: Entity,
+    location: Point,
+) -> TurnState {
+    TurnState::AwaitingInput
 }
 
 fn handle_pickup(
