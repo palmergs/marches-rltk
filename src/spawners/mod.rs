@@ -23,7 +23,6 @@ pub fn spawn_player(ecs: &mut World, pt: Point) {
             },
             FieldOfView::new(10),
             FieldOfLight::new(1),
-            Equipment::default(),
             Stats {
                 armor: 0,
                 speed: 2,

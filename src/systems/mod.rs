@@ -2,6 +2,7 @@ use crate::prelude::*;
 
 mod map_initialize;
 mod input;
+mod select_item;
 mod render;
 mod state_change;
 mod move_strategy;
@@ -53,6 +54,9 @@ pub fn build_select_item_schedule() -> Schedule {
         .flush()
         .add_system(render::render_system())
         .add_system(hud::character_system())
+        .add_system(hud::inventory_system())
+        .flush()
+        .add_system(select_item::select_item_system())
         .build()
 }
 

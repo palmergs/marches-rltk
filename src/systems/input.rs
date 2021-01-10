@@ -28,16 +28,34 @@ pub fn player_input(
             VirtualKeyCode::Numpad1 | VirtualKeyCode::Key1 => handle_move(ecs, commands, player, location, Point::new(-1, 1)),
             VirtualKeyCode::Numpad3 | VirtualKeyCode::Key3 => handle_move(ecs, commands, player, location, Point::new(1, 1)),
 
-            VirtualKeyCode::Period => handle_stairs(ecs, location),
-            VirtualKeyCode::Comma => handle_stairs(ecs, location),
+            VirtualKeyCode::Period =>   handle_stairs(ecs, location),
+            VirtualKeyCode::Comma =>    handle_stairs(ecs, location),
+            VirtualKeyCode::G =>        handle_pickup(ecs, commands, player, location),
 
-            VirtualKeyCode::G => handle_pickup(ecs, commands, player, location),
-            VirtualKeyCode::A | VirtualKeyCode::O => handle_activate(ecs, commands, player, location),
-            VirtualKeyCode::U => handle_use_item(ecs, commands, player, location),
-            VirtualKeyCode::W | VirtualKeyCode::E => handle_equip_item(ecs, commands, player, location),
-            VirtualKeyCode::F => handle_fire(ecs, commands, player, location),
-            VirtualKeyCode::T => handle_talk(ecs, commands, player, location),
-            VirtualKeyCode::D => handle_drop(ecs, commands, player, location),
+            // activate or open by selecting a nearby door, chest, etc 
+            VirtualKeyCode::A | VirtualKeyCode::O =>    TurnState::SelectingTarget(VirtualKeyCode::A, None),
+
+            // fire or throw the currently equipped weapon
+            VirtualKeyCode::F =>                        TurnState::SelectingTarget(VirtualKeyCode::F, None),
+
+            // talk to the selected item
+            VirtualKeyCode::T =>                        TurnState::SelectingTarget(VirtualKeyCode::T, None),
+
+            // look at a item or actor 
+            VirtualKeyCode::L =>                        TurnState::SelectingTarget(VirtualKeyCode::L, None),
+
+            // examine or read a carried item
+            VirtualKeyCode::X | VirtualKeyCode::R =>    TurnState::SelectingItem(VirtualKeyCode::R),
+
+            // drop a carried item (unequipping it if necessary)
+            VirtualKeyCode::D =>                        TurnState::SelectingItem(VirtualKeyCode::D),
+
+            // use a carried item
+            VirtualKeyCode::U =>                        TurnState::SelectingItem(VirtualKeyCode::U),
+
+            // equip or wield or wear an item
+            VirtualKeyCode::W | VirtualKeyCode::E =>    TurnState::SelectingItem(VirtualKeyCode::E),            
+            
 
             _ => TurnState::ComputerTurn,
         };
@@ -45,51 +63,6 @@ pub fn player_input(
         turn.increment();
         *state = new_state;
     }
-}
-
-fn handle_fire(
-    ecs: &mut SubWorld,
-    commands: &mut CommandBuffer,
-    player: Entity,
-    location: Point,
-) -> TurnState {
-    TurnState::AwaitingInput
-}
-
-fn handle_talk(
-    ecs: &mut SubWorld,
-    commands: &mut CommandBuffer,
-    player: Entity,
-    location: Point,
-) -> TurnState {
-    TurnState::AwaitingInput
-}
-
-fn handle_equip_item(
-    ecs: &mut SubWorld,
-    commands: &mut CommandBuffer,
-    player: Entity,
-    location: Point,
-) -> TurnState {
-    TurnState::AwaitingInput
-}
-
-fn handle_use_item(
-    ecs: &mut SubWorld,
-    commands: &mut CommandBuffer,
-    player: Entity,
-    location: Point,
-) -> TurnState {
-    TurnState::AwaitingInput
-}
-
-fn handle_activate(
-    ecs: &mut SubWorld,
-    commands: &mut CommandBuffer,
-    player: Entity,
-    location: Point,
-) -> TurnState {
-    TurnState::AwaitingInput
 }
 
 fn handle_pickup(
@@ -107,16 +80,6 @@ fn handle_pickup(
         });
     TurnState::ComputerTurn
 }
-
-fn handle_drop(
-    ecs: &mut SubWorld,
-    commands: &mut CommandBuffer,
-    player: Entity,
-    location: Point,
-) -> TurnState {
-    TurnState::AwaitingInput
-}
-
 
 fn handle_stairs(
     ecs: &mut SubWorld,

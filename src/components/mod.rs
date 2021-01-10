@@ -63,34 +63,9 @@ pub enum EquipmentSlot {
 }
 
 #[derive(Debug, Clone, PartialEq)]
-pub struct Equipment {
-    pub head: Option<Entity>,
-    pub neck: Option<Entity>,
-    pub body: Option<Entity>,
-    pub hand: Option<Entity>,
-    pub off_hand: Option<Entity>,
-    pub ring_left: Option<Entity>,
-    pub ring_right: Option<Entity>,
-    pub belt: Option<Entity>,
-    pub feet: Option<Entity>,
-    pub back: Option<Entity>,
-}
-
-impl Default for Equipment {
-    fn default() -> Self {
-        Equipment{
-            head: None,
-            neck: None,
-            body: None,
-            hand: None,
-            off_hand: None,
-            ring_left: None,
-            ring_right: None,
-            belt: None,
-            feet: None,
-            back: None,
-        }
-    }
+pub struct Equipped {
+    pub slot: EquipmentSlot,
+    pub item: Entity,
 }
 
 #[derive(Debug, Clone, PartialEq)]

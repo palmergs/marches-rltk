@@ -30,7 +30,14 @@ pub struct WantsToSpawn {
     pub id: String,
 }
 
+#[derive(Debug, Clone, PartialEq)]
 pub struct WantsToGet {
+    pub actor: Entity,
+    pub item: Entity,
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct WantsToDrop {
     pub actor: Entity,
     pub item: Entity,
 }

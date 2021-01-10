@@ -13,15 +13,10 @@ pub fn fov(
 ) {
     
     // Build a set of all the tiles that are illuminated in the map
-    let mut illuminated_tiles = HashSet::new();
     let mut query_light = <(&Point, &FieldOfLight)>::query();
-    query_light.iter(ecs)
-        .for_each(|(pt, fol)| {
-            illuminated_tiles.extend(field_of_view_set(*pt, fol.radius, map));
-            // for pt in field_of_view_set(*pt, fol.radius, map).into_iter() {
-            //     illuminated_tiles.insert(pt);
-            // }
-        });
+    let illuminated_tiles = query_light.iter(ecs)
+        .flat_map(|(pt, fol)| field_of_view_set(*pt, fol.radius, map))
+        .collect::<HashSet<_>>();
 
     // The viewable tiles is the intersection between the actors
     // view radius and the set of illuminated tiles
@@ -29,11 +24,7 @@ pub fn fov(
     query_view.iter_mut(ecs)
         .filter(|(_, fov)| fov.is_dirty )
         .for_each(|(pt, fov)| {
-            let mut new_set = HashSet::new();
-            for pt in illuminated_tiles.intersection(&field_of_view_set(*pt, fov.radius, map)).into_iter() {
-                new_set.insert(*pt);
-            }
-            fov.visible_tiles = new_set;
+            fov.visible_tiles = &illuminated_tiles & &field_of_view_set(*pt, fov.radius, map);
             fov.is_dirty = false;
         });
 
