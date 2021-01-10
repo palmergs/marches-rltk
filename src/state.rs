@@ -7,6 +7,8 @@ pub enum TurnState {
     InitializeMap,
     NewLevel(i32),
     AwaitingInput,
+    SelectingItem(VirtualKeyCode),
+    SelectingTarget(VirtualKeyCode, Option<Entity>),
     ComputerTurn,
     GameOver,
 }
@@ -16,6 +18,8 @@ pub struct State {
     resources: Resources,
     initialize_schedule: Schedule,
     input_schedule: Schedule,
+    select_target_schedule: Schedule,
+    select_item_schedule: Schedule,
     computer_schedule: Schedule,
 }
 
@@ -44,6 +48,8 @@ impl State {
             resources: Resources::default(),
             initialize_schedule: build_initialize_schedule(),
             input_schedule: build_input_schedule(),
+            select_target_schedule: build_select_target_schedule(),
+            select_item_schedule: build_select_item_schedule(),
             computer_schedule: build_computer_schedule(),
          };
 
@@ -165,6 +171,8 @@ impl GameState for State {
             TurnState::InitializeMap => self.initialize_schedule.execute(&mut self.ecs, &mut self.resources),
             TurnState::NewLevel(depth) => self.load_level(depth),
             TurnState::AwaitingInput => self.input_schedule.execute(&mut self.ecs, &mut self.resources),
+            TurnState::SelectingTarget(_, _) => self.select_target_schedule.execute(&mut self.ecs, &mut self.resources),
+            TurnState::SelectingItem(_) => self.select_item_schedule.execute(&mut self.ecs, &mut self.resources),
             TurnState::ComputerTurn => self.computer_schedule.execute(&mut self.ecs, &mut self.resources),
             TurnState::GameOver => self.game_over(ctx),
         };

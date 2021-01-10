@@ -25,6 +25,19 @@ pub fn character(
     draw_batch.submit(9999).expect("batch error in drawing character");
 }
 
+#[system]
+#[read_component(Player)]
+#[read_component(Carried)]
+#[read_component(Equipment)]
+pub fn inventory(
+    ecs: &SubWorld,
+) {
+    let mut draw_batch = DrawBatch::new();
+    draw_batch.target(UI_LAYER);
+    draw_inventory_select(ecs, &mut draw_batch, &Rect::with_size(DISPLAY_WIDTH - 30, 1, 30, 20));
+    draw_batch.submit(9999).expect("batch error in drawing inventory select");
+}
+
 fn draw_character(ecs: &SubWorld, draw_batch: &mut DrawBatch, rect: &Rect) {
     let border_color: ColorPair = ColorPair::new(RGB::from_f32(0.25, 0.25, 0.25), BLACK);
     let label_color: ColorPair = ColorPair::new(RGB::from_f32(0.5, 0.5, 0.5), BLACK);
@@ -121,6 +134,34 @@ fn draw_inventory(ecs: &SubWorld, draw_batch: &mut DrawBatch, rect: &Rect) {
     let x = rect.x1 + 1;
     let y = rect.y1 + 1;
     draw_batch.print_color(Point::new(x, y), "Inventory".to_string(), label_color);
+    let mut item_offset = 2;
+    for (name, count) in inventory.iter() {
+        if item_offset < 18 {
+            if *count > 1 {
+                draw_batch.print(Point::new(x, y + item_offset), format!("{} {}", count, name));
+            } else {
+                draw_batch.print(Point::new(x, y + item_offset), format!("{}", name));
+            }
+        }
+        item_offset += 1;
+    }
+}
+
+fn draw_inventory_select(ecs: &SubWorld, draw_batch: &mut DrawBatch, rect: &Rect) {
+    let border_color: ColorPair = ColorPair::new(RGB::from_f32(0.75, 0.75, 0.75), BLACK);
+    let label_color: ColorPair = ColorPair::new(RGB::from_f32(0.75, 0.75, 0.75), BLACK);
+
+    let mut inventory: BTreeMap<&str, usize> = BTreeMap::new();
+    let mut query = <&Render>::query().filter(component::<Carried>());
+    query.iter(ecs)
+        .for_each(|render| {
+            *inventory.entry(&render.name[..]).or_insert(0) += 1;
+        });
+
+    draw_batch.draw_double_box(*rect, border_color);
+    let x = rect.x1 + 1;
+    let y = rect.y1 + 1;
+    draw_batch.print_color(Point::new(x, y), "Select Item...".to_string(), label_color);
     let mut item_offset = 2;
     for (name, count) in inventory.iter() {
         if item_offset < 18 {

@@ -1,7 +1,7 @@
 use crate::prelude::*;
 
 mod map_initialize;
-mod player_input;
+mod input;
 mod render;
 mod state_change;
 mod move_strategy;
@@ -41,11 +41,22 @@ pub fn build_input_schedule() -> Schedule {
         .add_system(tooltip::tooltip_system())
         .flush()
         .add_system(display_text::display_text_system())
-        .add_system(player_input::player_input_system())
+        .flush()
+        .add_system(input::player_input_system())
         .build()
 }
 
-pub fn build_activate_schedule() -> Schedule {
+pub fn build_select_item_schedule() -> Schedule {
+    Schedule::builder()
+        .add_system(fov::fov_system())
+        .add_system(fol::fol_system())
+        .flush()
+        .add_system(render::render_system())
+        .add_system(hud::character_system())
+        .build()
+}
+
+pub fn build_select_target_schedule() -> Schedule {
     Schedule::builder()
         .add_system(fov::fov_system())
         .add_system(fol::fol_system())
