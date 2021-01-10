@@ -75,6 +75,11 @@ impl State {
             
         let mut entities_to_keep = HashSet::new();
         entities_to_keep.insert(player_entity);
+        <Entity>::query()
+            .filter(component::<Carried>())
+            .iter(&self.ecs)
+            .for_each(|entity| { entities_to_keep.insert(*entity); });
+
         let mut cb = CommandBuffer::new(&mut self.ecs);
         for e in Entity::query().iter(&self.ecs) {
             if !entities_to_keep.contains(e) {
