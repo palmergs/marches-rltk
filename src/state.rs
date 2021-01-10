@@ -96,6 +96,7 @@ impl State {
             spawn_room_items(&mut self.ecs, &mut rng, &mb.map, *rect, depth); 
         });
         spawn_map_items(&mut self.ecs, &mut rng, &mb.map, 20, depth);
+        spawn("torch", &mut self.ecs, mb.player_start + Point::new(1,0));
         if mb.rooms.len() > 1 {
             for _ in 0..10 {
                 if depth < 0 {

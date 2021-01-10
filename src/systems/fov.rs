@@ -1,20 +1,53 @@
 use crate::prelude::*;
 
+use std::collections::HashSet;
+
 #[system]
 #[read_component(Point)]
 #[read_component(Player)]
+#[read_component(FieldOfLight)]
 #[write_component(FieldOfView)]
 pub fn fov(
     ecs: &mut SubWorld,
     #[resource] map: &mut Map,
 ) {
-    let mut views = <(&Point, &mut FieldOfView)>::query();
-    views.iter_mut(ecs)
+    
+    // Build a set of all the tiles that are illuminated in the map
+    let mut illuminated_tiles = HashSet::new();
+    let mut query_light = <(&Point, &FieldOfLight)>::query();
+    query_light.iter(ecs)
+        .for_each(|(pt, fol)| {
+            for pt in field_of_view_set(*pt, fol.radius, map).into_iter() {
+                illuminated_tiles.insert(pt);
+            }
+            // illuminated_tiles = illuminated_tiles.union(&lit_tiles).collect::<HashSet<Point>>();
+        });
+
+    // The viewable tiles is the intersection between the actors
+    // view radius and the set of illuminated tiles
+    let mut query_view = <(&Point, &mut FieldOfView)>::query();
+    query_view.iter_mut(ecs)
         .filter(|(_, fov)| fov.is_dirty )
         .for_each(|(pt, fov)| {
-            fov.visible_tiles = field_of_view_set(*pt, fov.radius, map);
+            let view_set = field_of_view_set(*pt, fov.radius, map);
+            let mut new_set = HashSet::new();
+            for pt in illuminated_tiles.intersection(&view_set).into_iter() {
+                new_set.insert(*pt);
+            }
+            fov.visible_tiles = new_set;
             fov.is_dirty = false;
         });
+
+
+    // // Old algorithm that only shows visible tiles based on the 
+    // // view field of the actor
+    // let mut views = <(&Point, &mut FieldOfView)>::query();
+    // views.iter_mut(ecs)
+    //     .filter(|(_, fov)| fov.is_dirty )
+    //     .for_each(|(pt, fov)| {
+    //         fov.visible_tiles = field_of_view_set(*pt, fov.radius, map);
+    //         fov.is_dirty = false;
+    //     });
 }
 
 #[cfg(test)]

@@ -33,8 +33,6 @@ pub fn build_initialize_schedule() -> Schedule {
 // Awaiting keyboard input and creating new player commands
 pub fn build_input_schedule() -> Schedule {
     Schedule::builder()
-        .add_system(player_input::player_input_system())
-        .flush()
         .add_system(fov::fov_system())
         .add_system(fol::fol_system())
         .flush()
@@ -43,6 +41,17 @@ pub fn build_input_schedule() -> Schedule {
         .add_system(tooltip::tooltip_system())
         .flush()
         .add_system(display_text::display_text_system())
+        .add_system(player_input::player_input_system())
+        .build()
+}
+
+pub fn build_activate_schedule() -> Schedule {
+    Schedule::builder()
+        .add_system(fov::fov_system())
+        .add_system(fol::fol_system())
+        .flush()
+        .add_system(render::render_system())
+        .add_system(hud::character_system())
         .build()
 }
 

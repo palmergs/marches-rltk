@@ -22,7 +22,7 @@ pub fn spawn_player(ecs: &mut World, pt: Point) {
                 tile: tile_index(2, 21),
             },
             FieldOfView::new(10),
-            FieldOfLight::new(5),
+            FieldOfLight::new(1),
             Equipment::default(),
             Stats {
                 armor: 0,
