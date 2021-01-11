@@ -41,3 +41,9 @@ pub struct WantsToDrop {
     pub actor: Entity,
     pub item: Entity,
 }
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct WantsToEquip {
+    pub actor: Entity,
+    pub item: Entity,    
+}

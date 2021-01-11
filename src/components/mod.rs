@@ -48,6 +48,11 @@ pub struct Carried {
 }
 
 #[derive(Debug, Clone, PartialEq)]
+pub struct Equippable {
+    pub primary: EquipmentSlot,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub enum EquipmentSlot {
     Head,
     Neck,
@@ -65,7 +70,6 @@ pub enum EquipmentSlot {
 #[derive(Debug, Clone, PartialEq)]
 pub struct Equipped {
     pub slot: EquipmentSlot,
-    pub item: Entity,
 }
 
 #[derive(Debug, Clone, PartialEq)]

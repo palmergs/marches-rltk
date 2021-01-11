@@ -19,7 +19,6 @@ pub fn character(
     draw_character(ecs, &mut draw_batch, &Rect::with_size(1, 1, 20, 15));
     draw_equipment(ecs, &mut draw_batch, &Rect::with_size(1, 17, 20, 20));
     draw_visible(ecs, &mut draw_batch, &Rect::with_size(1, 38, 20, 20));
-    // draw_inventory(ecs, &mut draw_batch, &Rect::with_size(1, 38, 20, 20));
     draw_batch.submit(9999).expect("batch error in drawing character");
 }
 
@@ -157,11 +156,10 @@ fn draw_equipment(ecs: &SubWorld, draw_batch: &mut DrawBatch, rect: &Rect) {
 
     draw_batch.draw_double_box(*rect, border_color);
     let x = rect.x1 + 1;
-    let mut y = rect.y1 + 1;
+    let mut y = rect.y1 + 2;
     draw_batch.print_color(Point::new(x, y), "Equipment".to_string(), label_color);
 
     <(&Equipped, &Render)>::query()
-        .filter(component::<Item>())
         .iter(ecs)
         .for_each(|(equipped, render)| {
             y += 1;

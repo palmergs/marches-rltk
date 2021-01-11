@@ -1,11 +1,14 @@
 use crate::prelude::*;
 
-pub fn torch_tuple(pt: Point) -> (Item, Point, Render, FieldOfLight, Stats) {
+pub fn torch_tuple(pt: Point) -> (Item, Equippable, Point, Render, FieldOfLight, Stats) {
     (
         Item{
             blocking: false, 
             opaque: false,
             can_get: true,
+        },
+        Equippable{
+            primary: EquipmentSlot::LeftHand,
         },
         pt,
         Render{
@@ -23,13 +26,16 @@ pub fn torch_tuple(pt: Point) -> (Item, Point, Render, FieldOfLight, Stats) {
     )
 }
 
-pub fn dagger_tuple(pt: Point) -> (Item, Point, Render, Stats) {
+pub fn dagger_tuple(pt: Point) -> (Item, Equippable, Point, Render, Stats) {
     (
         Item{
             blocking: false, 
             opaque: false,
             can_get: true,
         },
+        Equippable{
+            primary: EquipmentSlot::RightHand,
+        },        
         pt,
         Render{
             name: "Dagger".to_string(),
@@ -43,6 +49,31 @@ pub fn dagger_tuple(pt: Point) -> (Item, Point, Render, Stats) {
             focus: Focus::new(0),
         },
     )
+}
+
+pub fn buckler_tuple(pt: Point) -> (Item, Equippable, Point, Render, Stats) {
+    (
+        Item{
+            blocking: false, 
+            opaque: false,
+            can_get: true,
+        },
+        Equippable{
+            primary: EquipmentSlot::LeftHand,
+        },        
+        pt,
+        Render{
+            name: "Buckler".to_string(),
+            tile: tile_index(13, 96),
+        },
+        Stats{
+            armor: 0,
+            speed: 0,
+            power: 1,
+            vigor: Vigor::new(10),
+            focus: Focus::new(0),
+        },
+    )    
 }
 
 pub fn mushroom1_tuple(pt: Point) -> (Item, Point, Render, Stats) {

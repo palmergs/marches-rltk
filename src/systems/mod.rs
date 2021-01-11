@@ -81,6 +81,8 @@ pub fn build_computer_schedule() -> Schedule {
         .flush()
         .add_system(item::drop_system())
         .flush()
+        .add_system(item::equip_system())
+        .flush()
         .add_system(strategy::strategy_system())
         .add_system(combat::combat_system())
         .flush()

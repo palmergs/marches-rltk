@@ -48,6 +48,7 @@ pub fn spawn(id: &str, ecs: &mut World, pt: Point) -> Option<Entity> {
     let entity = match id {
         "torch" =>          ecs.push(torch_tuple(pt)),
         "dagger" =>         ecs.push(dagger_tuple(pt)),
+        "buckler" =>        ecs.push(buckler_tuple(pt)),
         "open door" =>      ecs.push(open_door_tuple(pt)),
         "closed door" =>    ecs.push(closed_door_tuple(pt)),
         "chest" =>          ecs.push(chest_tuple(pt)),
@@ -88,7 +89,9 @@ pub fn spawn_monster(ecs: &mut World, rng: &mut Rng, pt: Point, depth: i32) -> O
 pub fn spawn_item(ecs: &mut World, rng: &mut Rng, pt: Point, depth: i32) -> Option<Entity> {
     match rng.range(0 + depth, 14 + depth) {
         0..=3  => spawn("dagger", ecs, pt),
-        4      => spawn("chest", ecs, pt),
+        4..=5  => spawn("buckler", ecs, pt),
+        6..=8  => spawn("torch", ecs, pt),
+        9      => spawn("chest", ecs, pt),
         10     => spawn("mushroom1", ecs, pt),
         11     => spawn("mushroom2", ecs, pt),
         _      => None
