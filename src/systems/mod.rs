@@ -1,5 +1,7 @@
 use crate::prelude::*;
 
+pub mod utils;
+
 mod map_initialize;
 mod input;
 mod select_item;
@@ -76,6 +78,8 @@ pub fn build_computer_schedule() -> Schedule {
         .add_system(movement::movement_system())
         .flush()
         .add_system(item::pickup_system())
+        .flush()
+        .add_system(item::drop_system())
         .flush()
         .add_system(strategy::strategy_system())
         .add_system(combat::combat_system())

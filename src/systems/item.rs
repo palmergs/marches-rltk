@@ -10,8 +10,22 @@ pub fn pickup(
     ecs: &mut SubWorld,
     commands: &mut CommandBuffer,
 ) {
+    let player = <Entity>::query()
+        .filter(component::<Player>())
+        .iter(ecs)
+        .next()
+        .unwrap();
+
     if let Ok(entry) = ecs.entry_ref(cmd.item) {
         commands.add_component(cmd.item, Carried{ by: cmd.actor, equipped: false });
+
+        // if you pick up a light source update the field of view
+        if let Ok(fol) = ecs.entry_ref(cmd.item).unwrap().get_component::<FieldOfLight>() {
+            commands.add_component(cmd.item, fol.clone_dirty());
+            if let Ok(fov) = ecs.entry_ref(*player).unwrap().get_component::<FieldOfView>() {
+                commands.add_component(*player, fov.clone_dirty());
+            }
+        }
 
         if let Ok(pt) = entry.get_component::<Point>() {
             commands.remove_component::<Point>(cmd.item);
@@ -19,7 +33,7 @@ pub fn pickup(
                 display: TextDisplay::Fade(*pt),
                 text: format!("got it").to_string(),
                 color: RGBA::from_f32(0., 1., 0., 1.0),
-                ticks: 200,
+                ticks: 40,
                 count: 0,
             },));
         }
@@ -34,31 +48,40 @@ pub fn pickup(
 #[read_component(Equipped)]
 #[read_component(Carried)]
 #[read_component(Point)]
+#[read_component(FieldOfView)]
+#[read_component(FieldOfLight)]
 pub fn drop(
     entity: &Entity,
     cmd: &WantsToDrop,
     ecs: &mut SubWorld,
     commands: &mut CommandBuffer,
-    #[resource] map: &mut Map,
 ) {
-    let (player_entity, player_pt) = <(Entity, &Player)>::query()
+    let (player, player_pt) = <(Entity, &Point)>::query()
+        .filter(component::<Player>())
         .iter(ecs)
         .next()
         .unwrap();
 
-    if let Ok(entry) = ecs.entry_ref(cmd.item) {
+    // Remove the carried component
+    commands.remove_component::<Carried>(cmd.item);
+    commands.remove_component::<Equipped>(cmd.item);
+    commands.add_component(cmd.item, *player_pt);
 
-        // Remove the carried component
-        commands.remove_component::<Carried>(cmd.item);
-        commands.remove_component::<Equipped>(cmd.item);
-        commands.add_component(cmd.item, *player_pt);
-
-
+    // if you drop a light source update the field of view
+    if let Ok(fol) = ecs.entry_ref(cmd.item).unwrap().get_component::<FieldOfLight>() {
+        commands.add_component(cmd.item, fol.clone_dirty());
+        if let Ok(fov) = ecs.entry_ref(*player).unwrap().get_component::<FieldOfView>() {
+            commands.add_component(*player, fov.clone_dirty());
+        }
     }
-}
 
-pub fn list_of_items<'a>(ecs: &SubWorld, player: Entity) -> Vec<(usize, &'a str, Entity)> {
-    let mut vec = Vec::new();
+    commands.push((Text{
+        display: TextDisplay::Fade(*player_pt),
+        text: format!("dropped").to_string(),
+        color: RGBA::from_f32(0., 1., 0., 1.0),
+        ticks: 40,
+        count: 0,
+    },));
 
-    vec
+    commands.remove(*entity);
 }

@@ -18,6 +18,7 @@ pub mod prelude {
     pub use crate::maps::*;
     pub use crate::map_builders::*;
     pub use crate::components::*;
+    pub use crate::systems::utils::*;
     pub use crate::systems::*;
     pub use crate::spawners::*;
     pub use crate::cameras::*;

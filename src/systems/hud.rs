@@ -1,7 +1,5 @@
 use crate::prelude::*;
 
-use std::collections::BTreeMap;
-
 #[system]
 #[read_component(Player)]
 #[read_component(Point)]
@@ -29,6 +27,7 @@ pub fn character(
 #[read_component(Player)]
 #[read_component(Point)]
 #[read_component(Render)]
+#[read_component(Item)]
 #[read_component(Carried)]
 #[read_component(Equipped)]
 pub fn inventory(
@@ -121,44 +120,11 @@ fn draw_visible(ecs: &SubWorld, draw_batch: &mut DrawBatch, rect: &Rect) {
         });
 }
 
-fn draw_inventory(ecs: &SubWorld, draw_batch: &mut DrawBatch, rect: &Rect) {
-    let border_color: ColorPair = ColorPair::new(RGB::from_f32(0.25, 0.25, 0.25), BLACK);
-    let label_color: ColorPair = ColorPair::new(RGB::from_f32(0.5, 0.5, 0.5), BLACK);
-
-    let mut inventory: BTreeMap<&str, usize> = BTreeMap::new();
-    let mut query = <&Render>::query().filter(component::<Carried>());
-    query.iter(ecs)
-        .for_each(|render| {
-            *inventory.entry(&render.name[..]).or_insert(0) += 1;
-        });
-
-    draw_batch.draw_double_box(*rect, border_color);
-    let x = rect.x1 + 1;
-    let y = rect.y1 + 1;
-    draw_batch.print_color(Point::new(x, y), "Inventory".to_string(), label_color);
-    let mut item_offset = 2;
-    for (name, count) in inventory.iter() {
-        if item_offset < 18 {
-            if *count > 1 {
-                draw_batch.print(Point::new(x, y + item_offset), format!("{} {}", count, name));
-            } else {
-                draw_batch.print(Point::new(x, y + item_offset), format!("{}", name));
-            }
-        }
-        item_offset += 1;
-    }
-}
-
 fn draw_inventory_select(ecs: &SubWorld, draw_batch: &mut DrawBatch, rect: &Rect) {
     let border_color: ColorPair = ColorPair::new(RGB::from_f32(0.75, 0.75, 0.75), BLACK);
     let label_color: ColorPair = ColorPair::new(RGB::from_f32(0.75, 0.75, 0.75), BLACK);
 
-    let mut inventory: BTreeMap<&str, usize> = BTreeMap::new();
-    let mut query = <&Render>::query().filter(component::<Carried>());
-    query.iter(ecs)
-        .for_each(|render| {
-            *inventory.entry(&render.name[..]).or_insert(0) += 1;
-        });
+    let inventory = list_of_items(ecs);
 
     draw_batch.draw_double_box(*rect, border_color);
     let x = rect.x1 + 1;
@@ -166,7 +132,7 @@ fn draw_inventory_select(ecs: &SubWorld, draw_batch: &mut DrawBatch, rect: &Rect
     draw_batch.print_color(Point::new(x, y), "Select Item (a-z)".to_string(), label_color);
     let mut item_offset = 2;
     let mut item_char = b'a';
-    for (name, count) in inventory.iter() {
+    for (name, _, count) in inventory.iter() {
         if item_offset < 18 {
             if *count > 1 {
                 draw_batch.print(

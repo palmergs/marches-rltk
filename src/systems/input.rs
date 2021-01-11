@@ -50,6 +50,9 @@ pub fn player_input(
             // drop a carried item (unequipping it if necessary)
             VirtualKeyCode::D =>                        TurnState::SelectingItem(VirtualKeyCode::D),
 
+            // inventory with no secondary action
+            VirtualKeyCode::I =>                        TurnState::SelectingItem(VirtualKeyCode::I),            
+
             // use a carried item
             VirtualKeyCode::U =>                        TurnState::SelectingItem(VirtualKeyCode::U),
 
