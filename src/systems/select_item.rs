@@ -10,16 +10,17 @@ use crate::prelude::*;
 pub fn select_item(
     ecs: &SubWorld,
     commands: &mut CommandBuffer,
-    #[resource] map: &Map,
     #[resource] key: &Option<VirtualKeyCode>,
     #[resource] state: &mut TurnState,
 ) {
     println!("in select item...");
     if let Some(item_key) = key {
 
-        let mut query = <(Entity, &Point)>::query().filter(component::<Player>());
-        let (player, location) = query.iter(ecs)
-            .find_map(|(entity, pt)| Some((*entity, *pt))).unwrap();
+        let player = <Entity>::query()
+            .filter(component::<Player>())
+            .iter(ecs)
+            .next()
+            .unwrap();
 
         match item_key {
             VirtualKeyCode::Escape | VirtualKeyCode::Back | VirtualKeyCode::Delete => {
@@ -33,7 +34,7 @@ pub fn select_item(
         let new_state = match state {
             TurnState::SelectingItem(cmd) => {
                 match cmd {
-                    VirtualKeyCode::D => handle_drop(ecs, commands, player, item_key),
+                    VirtualKeyCode::D => handle_drop(ecs, commands, *player, item_key),
                     _ => return
                 }
             },

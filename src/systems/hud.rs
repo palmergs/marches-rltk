@@ -168,13 +168,3 @@ fn draw_equipment(ecs: &SubWorld, draw_batch: &mut DrawBatch, rect: &Rect) {
             draw_batch.print(Point::new(x, y), format!("{} ({:?})", render.name, equipped.slot));
         });
 }
-
-fn draw_item(ecs: &SubWorld, draw_batch: &mut DrawBatch, item: Entity, x: i32, y: i32, label: &str, color: &ColorPair) -> i32 {
-    if let Ok(render) = ecs.entry_ref(item).unwrap().get_component::<Render>() {
-        draw_batch.print_color(Point::new(x, y), label, *color);
-        draw_batch.print(Point::new(x + 5, y), &render.name);
-        y + 1
-    } else {
-        y
-    }
-}
