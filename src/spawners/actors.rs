@@ -136,7 +136,7 @@ pub fn animated_tree_tuple(pt: Point) -> (Actor, Point, Render, FieldOfView, Mig
             name: "Animated Tree".to_string(),
             tile: tile_index(1, 22),
         },
-        FieldOfView::new(4),
+        FieldOfView::new(8),
         MightTalk{
             chance: 1,
             phrases: vec!["Haroom!".to_string()],
