@@ -8,9 +8,7 @@ pub fn state_change(
     #[resource] turn_state: &mut TurnState,
     #[resource] tick: &TickCount,
 ) {
-    // query the player to see if killed or if slowed (and should skip a turn)
-    let mut query = <&Stats>::query().filter(component::<Player>());
-    let player_stats = query.iter(ecs).next().unwrap();
+    let player_stats = player_stats(ecs);
 
     let curr_state = turn_state.clone();
     let mut new_state = match curr_state {

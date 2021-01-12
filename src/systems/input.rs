@@ -14,9 +14,7 @@ pub fn player_input(
     #[resource] turn: &mut TurnCount,
 ) {
     if let Some(key) = key {
-        let mut query = <(Entity, &Point)>::query().filter(component::<Player>());
-        let (player, location) = query.iter(ecs)
-            .find_map(|(entity, pt)| Some((*entity, *pt))).unwrap();
+        let (player, location) = player_at(ecs);
             
         let new_state = match key {
             VirtualKeyCode::Left  | VirtualKeyCode::Numpad4 | VirtualKeyCode::Key4 => handle_move(ecs, commands, player, location, Point::new(-1, 0)),

@@ -9,12 +9,7 @@ pub fn(
 ) {
     if let Some(item_key) = key {
 
-        let player = <Entity>::query()
-            .filter(component::<Player>())
-            .iter(ecs)
-            .next()
-            .unwrap();
-
+        let player = player_entity(ecs);
         match item_key {
             VirtualKeyCode::Escape | VirtualKeyCode::Back | VirtualKeyCode::Delete => {
                 println!("escaping back to awaiting input from select target...");

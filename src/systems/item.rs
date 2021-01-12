@@ -10,20 +10,15 @@ pub fn pickup(
     ecs: &mut SubWorld,
     commands: &mut CommandBuffer,
 ) {
-    let player = <Entity>::query()
-        .filter(component::<Player>())
-        .iter(ecs)
-        .next()
-        .unwrap();
-
+    let player = player_entity(ecs);
     if let Ok(entry) = ecs.entry_ref(cmd.item) {
         commands.add_component(cmd.item, Carried{ by: cmd.actor, equipped: false });
 
         // if you pick up a light source update the field of view
         if let Ok(fol) = ecs.entry_ref(cmd.item).unwrap().get_component::<FieldOfLight>() {
             commands.add_component(cmd.item, fol.clone_dirty());
-            if let Ok(fov) = ecs.entry_ref(*player).unwrap().get_component::<FieldOfView>() {
-                commands.add_component(*player, fov.clone_dirty());
+            if let Ok(fov) = ecs.entry_ref(player).unwrap().get_component::<FieldOfView>() {
+                commands.add_component(player, fov.clone_dirty());
             }
         }
 
@@ -56,27 +51,23 @@ pub fn drop(
     ecs: &mut SubWorld,
     commands: &mut CommandBuffer,
 ) {
-    let (player, player_pt) = <(Entity, &Point)>::query()
-        .filter(component::<Player>())
-        .iter(ecs)
-        .next()
-        .unwrap();
+    let (player, player_pt) = player_at(ecs);
 
     // Remove the carried component
     commands.remove_component::<Carried>(cmd.item);
-    commands.add_component(cmd.item, *player_pt);
-    unequip_item(ecs, commands, *player, cmd.item);
+    commands.add_component(cmd.item, player_pt);
+    unequip_item(ecs, commands, player, cmd.item);
 
     // if you drop a light source update the field of view
     if let Ok(fol) = ecs.entry_ref(cmd.item).unwrap().get_component::<FieldOfLight>() {
         commands.add_component(cmd.item, fol.clone_dirty());
-        if let Ok(fov) = ecs.entry_ref(*player).unwrap().get_component::<FieldOfView>() {
-            commands.add_component(*player, fov.clone_dirty());
+        if let Ok(fov) = ecs.entry_ref(player).unwrap().get_component::<FieldOfView>() {
+            commands.add_component(player, fov.clone_dirty());
         }
     }
 
     commands.push((Text{
-        display: TextDisplay::Fade(*player_pt),
+        display: TextDisplay::Fade(player_pt),
         text: format!("dropped").to_string(),
         color: RGBA::from_f32(0., 1., 0., 1.0),
         ticks: 40,
@@ -102,13 +93,8 @@ pub fn equip(
     ecs: &mut SubWorld,
     commands: &mut CommandBuffer,
 ) {
-    println!("in eqiop...");
     if let Ok(equippable) = ecs.entry_ref(cmd.item).unwrap().get_component::<Equippable>() {
-        let player = <Entity>::query()
-            .filter(component::<Player>())
-            .iter(ecs)
-            .next()
-            .unwrap();
+        let player = player_entity(ecs);
 
         // step 1: check to see if the player is already using those slote
         let mut unequip_entities = Vec::new();
@@ -133,14 +119,12 @@ pub fn equip(
             });
 
         // step 2: unequip any currently used slots
-        println!("unequipping items {:?}", unequip_entities);
         for entity in unequip_entities {
-            unequip_item(ecs, commands, *player, *entity);
+            unequip_item(ecs, commands, player, *entity);
         }
 
         // step 3: equip the new item
-        println!("equip new item: {:?} in {:?}", cmd, equippable.primary);
-        equip_item(ecs, commands, *player, cmd.item, equippable.primary);
+        equip_item(ecs, commands, player, cmd.item, equippable.primary);
     }
 
     commands.remove(*entity);
@@ -198,11 +182,7 @@ pub fn unequip(
     commands: &mut CommandBuffer,
 ) {
     if let Ok(equippable) = ecs.entry_ref(cmd.item).unwrap().get_component::<Equippable>() {
-        let (player, player_pt) = <(Entity, &Point)>::query()
-            .filter(component::<Player>())
-            .iter(ecs)
-            .next()
-            .unwrap();
+        let (player, player_pt) = player_at(ecs);
     }
 
     commands.remove(*entity);

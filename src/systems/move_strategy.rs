@@ -23,11 +23,10 @@ pub fn move_strategy(
         .for_each(|(entity, pt)| { npcs.insert(*pt, *entity); });
 
     // location and entity for player
-    let mut query = <(Entity, &Player, &Point)>::query();
-    let (player_entity, _, player_pt) = query.iter(ecs).next().unwrap();
+    let (player_entity, player_pt) = player_at(ecs);
 
     // map path to player from nearby locations
-    let player_idx = map.point2d_to_index(*player_pt);
+    let player_idx = map.point2d_to_index(player_pt);
     let search_targets = vec![player_idx];
     let dijkstra_map = DijkstraMap::new(
         MAP_WIDTH,
@@ -59,7 +58,7 @@ pub fn move_strategy(
                     };
 
                     if let Some(npc_entity) = npcs.get(&destination) {
-                        if npc_entity == player_entity {
+                        if *npc_entity == player_entity {
                             commands.push((WantsToAttack{ actor: *entity, victim: *npc_entity }, ));
                         } else {
                             commands.push((WantsToChangeStrategy{ actor: *entity, strategy: MoveStrategy::Patrol(dir.next())}, ));
@@ -87,7 +86,7 @@ pub fn move_strategy(
                     };
 
                     if let Some(npc_entity) = npcs.get(&destination) {
-                        if npc_entity == player_entity {
+                        if *npc_entity == player_entity {
                             commands.push((WantsToAttack{ actor: *entity, victim: *npc_entity }, ));
                         }
                     } else {
@@ -100,14 +99,14 @@ pub fn move_strategy(
                 MoveStrategy::Chase => {
                     let entity_idx = map.point2d_to_index(*pt);
                     if let Some(destination) = DijkstraMap::find_lowest_exit(&dijkstra_map, entity_idx, map) {
-                        let distance = DistanceAlg::Pythagoras.distance2d(*pt, *player_pt);
+                        let distance = DistanceAlg::Pythagoras.distance2d(*pt, player_pt);
                         if distance > 1.2 {
                             let destination = map.index_to_point2d(destination);
                             if npcs.get(&destination).is_none() {
                                 commands.push((WantsToMove{ actor: *entity, destination }, ));
                             }
                         } else {
-                            commands.push((WantsToAttack{ actor: *entity, victim: *player_entity }, ));
+                            commands.push((WantsToAttack{ actor: *entity, victim: player_entity }, ));
                         };
                     }
                 },
@@ -115,14 +114,14 @@ pub fn move_strategy(
                 MoveStrategy::Flee => {
                     let entity_idx = map.point2d_to_index(*pt);
                     if let Some(destination) = DijkstraMap::find_highest_exit(&dijkstra_map, entity_idx, map) {
-                        let distance = DistanceAlg::Pythagoras.distance2d(*pt, *player_pt);
+                        let distance = DistanceAlg::Pythagoras.distance2d(*pt, player_pt);
                         if distance > 1.2 {
                             let destination = map.index_to_point2d(destination);
                             if npcs.get(&destination).is_none() {
                                 commands.push((WantsToMove{ actor: *entity, destination }, ));
                             }
                         } else {
-                            commands.push((WantsToAttack{ actor: *entity, victim: *player_entity }, ));
+                            commands.push((WantsToAttack{ actor: *entity, victim: player_entity }, ));
                         };
                     }
                 },

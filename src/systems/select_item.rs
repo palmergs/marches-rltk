@@ -15,15 +15,10 @@ pub fn select_item(
 ) {
     if let Some(item_key) = key {
 
-        let player = <Entity>::query()
-            .filter(component::<Player>())
-            .iter(ecs)
-            .next()
-            .unwrap();
+        let player = player_entity(ecs);
 
         match item_key {
             VirtualKeyCode::Escape | VirtualKeyCode::Back | VirtualKeyCode::Delete => {
-                println!("escaping back to awaiting input...");
                 *state = TurnState::AwaitingInput;
                 return
             },
@@ -33,8 +28,8 @@ pub fn select_item(
         let new_state = match state {
             TurnState::SelectingItem(cmd) => {
                 match cmd {
-                    VirtualKeyCode::D => handle_drop(ecs, commands, *player, item_key),
-                    VirtualKeyCode::E | VirtualKeyCode::W => handle_equip(ecs, commands, *player, item_key),
+                    VirtualKeyCode::D => handle_drop(ecs, commands, player, item_key),
+                    VirtualKeyCode::E | VirtualKeyCode::W => handle_equip(ecs, commands, player, item_key),
                     _ => return
                 }
             },
@@ -56,7 +51,6 @@ fn handle_drop(ecs: &SubWorld, commands: &mut CommandBuffer, actor: Entity, key:
 
 fn handle_equip(ecs: &SubWorld, commands: &mut CommandBuffer, actor: Entity, key: &VirtualKeyCode) -> TurnState {
     if let Some((_, entity, _)) = key_to_entity(ecs, key) {
-        println!("in handle equip...");
         commands.push((WantsToEquip{ actor, item: entity }, ));
         return TurnState::ComputerTurn
     }

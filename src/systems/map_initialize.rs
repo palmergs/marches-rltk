@@ -12,12 +12,13 @@ pub fn map_initialize(
     map.blocked.clear();
     map.opaque.clear();
 
-    let mut query = <(&Actor, &Point)>::query();
-    query.iter(ecs)
-        .for_each(|(_, pt)| { map.actors.insert(*pt); });
+    <&Point>::query()
+        .filter(component::<Actor>())
+        .iter(ecs)
+        .for_each(|pt| { map.actors.insert(*pt); });
 
-    let mut query = <(&Item, &Point)>::query();
-    query.iter(ecs)
+    <(&Item, &Point)>::query()
+        .iter(ecs)
         .for_each(|(item, pt)| {
             if item.opaque { map.opaque.insert(*pt); }
             if item.blocking { map.blocked.insert(*pt); }
