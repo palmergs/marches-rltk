@@ -5,6 +5,7 @@ pub mod utils;
 mod map_initialize;
 mod input;
 mod select_item;
+mod select_target;
 mod render;
 mod state_change;
 mod move_strategy;
@@ -69,6 +70,8 @@ pub fn build_select_target_schedule() -> Schedule {
         .flush()
         .add_system(render::render_system())
         .add_system(hud::character_system())
+        .flush()
+        .add_system(select_target::select_target_system())
         .build()
 }
 
