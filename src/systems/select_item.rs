@@ -16,7 +16,6 @@ pub fn select_item(
     if let Some(item_key) = key {
 
         let player = player_entity(ecs);
-
         match item_key {
             VirtualKeyCode::Escape | VirtualKeyCode::Back | VirtualKeyCode::Delete => {
                 *state = TurnState::AwaitingInput;

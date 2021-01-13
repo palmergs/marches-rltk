@@ -33,17 +33,20 @@ pub fn player_input(
             // activate or open by selecting a nearby door, chest, etc 
             VirtualKeyCode::A | VirtualKeyCode::O =>    TurnState::SelectingTarget(VirtualKeyCode::A, None),
 
-            // fire or throw the currently equipped weapon
-            VirtualKeyCode::F =>                        TurnState::SelectingTarget(VirtualKeyCode::F, None),
-
             // talk to the selected item
             VirtualKeyCode::T =>                        TurnState::SelectingTarget(VirtualKeyCode::T, None),
 
             // look at a item or actor 
             VirtualKeyCode::L =>                        TurnState::SelectingTarget(VirtualKeyCode::L, None),
 
+            // fire or throw the currently equipped weapon
+            VirtualKeyCode::F =>                        TurnState::SelectingEquipped(VirtualKeyCode::F),
+
+            // remove or unequip item
+            VirtualKeyCode::R =>                        TurnState::SelectingEquipped(VirtualKeyCode::R),
+
             // examine or read a carried item
-            VirtualKeyCode::X | VirtualKeyCode::R =>    TurnState::SelectingItem(VirtualKeyCode::R),
+            VirtualKeyCode::X =>                        TurnState::SelectingItem(VirtualKeyCode::R),
 
             // drop a carried item (unequipping it if necessary)
             VirtualKeyCode::D =>                        TurnState::SelectingItem(VirtualKeyCode::D),

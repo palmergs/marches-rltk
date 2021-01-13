@@ -5,6 +5,7 @@ pub mod utils;
 mod map_initialize;
 mod input;
 mod select_item;
+mod select_equipped;
 mod select_target;
 mod render;
 mod state_change;
@@ -60,6 +61,19 @@ pub fn build_select_item_schedule() -> Schedule {
         .add_system(hud::inventory_system())
         .flush()
         .add_system(select_item::select_item_system())
+        .build()
+}
+
+pub fn build_select_equipped_schedule() -> Schedule {
+    Schedule::builder()
+        .add_system(fov::fov_system())
+        .add_system(fol::fol_system())
+        .flush()
+        .add_system(render::render_system())
+        .add_system(hud::character_system())
+        .add_system(hud::equipment_system())
+        .flush()
+        .add_system(select_equipped::select_equipped_system())
         .build()
 }
 

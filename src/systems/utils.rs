@@ -53,3 +53,15 @@ pub fn list_of_items<'a>(ecs: &'a SubWorld) -> Vec<(&'a str, Entity, usize)> {
     vec.sort_by(|a, b| a.0.partial_cmp(b.0).unwrap());
     vec
 }
+
+pub fn list_of_equipment<'a>(ecs: &'a SubWorld) -> Vec<(&'a str, Entity, EquipmentSlot)> {
+
+    let mut query = <(Entity, &Render, &Equipped)>::query();
+    let mut vec = query
+        .iter(ecs)
+        .map(|(entity, render, equipped)| (&render.name[..], *entity, equipped.slot))
+        .collect::<Vec<_>>();
+
+    vec.sort_by(|a, b| a.0.partial_cmp(b.0).unwrap());
+    vec
+}

@@ -38,6 +38,22 @@ pub fn inventory(
     draw_batch.submit(9999).expect("batch error in drawing inventory select");
 }
 
+#[system]
+#[read_component(Player)]
+#[read_component(Point)]
+#[read_component(Render)]
+#[read_component(Item)]
+#[read_component(Carried)]
+#[read_component(Equipped)]
+pub fn equipment(
+    ecs: &SubWorld,
+) {
+    let mut draw_batch = DrawBatch::new();
+    draw_batch.target(UI_LAYER);
+    draw_equipment_select(ecs, &mut draw_batch, &Rect::with_size(DISPLAY_WIDTH - 32, 1, 30, 30));
+    draw_batch.submit(9999).expect("batch error in drawing equipment select");
+}
+
 fn draw_character(ecs: &SubWorld, draw_batch: &mut DrawBatch, rect: &Rect) {
     let border_color: ColorPair = ColorPair::new(RGB::from_f32(0.25, 0.25, 0.25), BLACK);
     let label_color: ColorPair = ColorPair::new(RGB::from_f32(0.5, 0.5, 0.5), BLACK);
@@ -119,7 +135,11 @@ fn draw_visible(ecs: &SubWorld, draw_batch: &mut DrawBatch, rect: &Rect) {
         });
 }
 
-fn draw_inventory_select(ecs: &SubWorld, draw_batch: &mut DrawBatch, rect: &Rect) {
+fn draw_inventory_select(
+    ecs: &SubWorld, 
+    draw_batch: &mut DrawBatch, 
+    rect: &Rect
+) {
     let border_color: ColorPair = ColorPair::new(RGB::from_f32(0.75, 0.75, 0.75), BLACK);
     let label_color: ColorPair = ColorPair::new(RGB::from_f32(0.75, 0.75, 0.75), BLACK);
 
@@ -136,17 +156,42 @@ fn draw_inventory_select(ecs: &SubWorld, draw_batch: &mut DrawBatch, rect: &Rect
             if *count > 1 {
                 draw_batch.print(
                     Point::new(x, y + item_offset), 
-                    format!("{}. {} ({})", 
-                    item_char as char, name, count));
+                    format!("{}. {} ({})", item_char as char, name, count));
             } else {
                 draw_batch.print(
                     Point::new(x, y + item_offset), 
-                    format!("{}. {}", 
-                    item_char as char, name));
+                    format!("{}. {}", item_char as char, name));
             }
         }
         item_char += 1;
         item_offset += 1;
+    }
+}
+
+fn draw_equipment_select(
+    ecs: &SubWorld, 
+    draw_batch: &mut DrawBatch, 
+    rect: &Rect
+) {
+    let border_color: ColorPair = ColorPair::new(RGB::from_f32(0.75, 0.75, 0.75), BLACK);
+    let label_color: ColorPair = ColorPair::new(RGB::from_f32(0.75, 0.75, 0.75), BLACK);
+
+    let equipment = list_of_equipment(ecs);
+
+    draw_batch.draw_double_box(*rect, border_color);
+    let x = rect.x1 + 1;
+    let mut y = rect.y1 + 1;
+    draw_batch.print_color(Point::new(x, y), "Select Equipment (a-z)".to_string(), label_color);
+    y += 2;
+    let mut item_char = b'a';
+    for (name, _, slot) in equipment.iter() {
+        if y < 20 {
+            draw_batch.print(
+                Point::new(x, y), 
+                format!("{}. {} ({:?})", item_char as char, name, slot));
+        }
+        item_char += 1;
+        y += 1;
     }
 }
 
