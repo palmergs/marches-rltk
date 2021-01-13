@@ -1,6 +1,7 @@
 use crate::prelude::*;
 
 pub mod utils;
+pub mod equipment;
 
 mod map_initialize;
 mod input;

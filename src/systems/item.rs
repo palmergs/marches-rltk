@@ -12,7 +12,7 @@ pub fn pickup(
 ) {
     let player = player_entity(ecs);
     if let Ok(entry) = ecs.entry_ref(cmd.item) {
-        commands.add_component(cmd.item, Carried{ by: cmd.actor, equipped: false });
+        commands.add_component(cmd.item, Carried{});
 
         // if you pick up a light source update the field of view
         if let Ok(fol) = ecs.entry_ref(cmd.item).unwrap().get_component::<FieldOfLight>() {
@@ -96,7 +96,7 @@ pub fn equip(
     if let Ok(equippable) = ecs.entry_ref(cmd.item).unwrap().get_component::<Equippable>() {
         let player = player_entity(ecs);
 
-        // step 1: check to see if the player is already using those slote
+        // step 1: check to see if the player is already using that slot
         let mut unequip_entities = Vec::new();
         <(Entity, &Equipped)>::query()
             .iter(ecs)

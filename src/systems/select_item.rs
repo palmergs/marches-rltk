@@ -3,19 +3,22 @@ use crate::prelude::*;
 #[system]
 #[read_component(Player)]
 #[read_component(Equipped)]
+#[read_component(Equippable)]
 #[read_component(Carried)]
 #[read_component(Render)]
+#[read_component(FieldOfLight)]
+#[read_component(Stats)]
 #[read_component(Point)]
 #[read_component(Item)]
 pub fn select_item(
-    ecs: &SubWorld,
+    ecs: &mut SubWorld,
     commands: &mut CommandBuffer,
     #[resource] key: &Option<VirtualKeyCode>,
     #[resource] state: &mut TurnState,
 ) {
     if let Some(item_key) = key {
 
-        let player = player_entity(ecs);
+    
         match item_key {
             VirtualKeyCode::Escape | VirtualKeyCode::Back | VirtualKeyCode::Delete => {
                 *state = TurnState::AwaitingInput;
@@ -27,8 +30,8 @@ pub fn select_item(
         let new_state = match state {
             TurnState::SelectingItem(cmd) => {
                 match cmd {
-                    VirtualKeyCode::D => handle_drop(ecs, commands, player, item_key),
-                    VirtualKeyCode::E | VirtualKeyCode::W => handle_equip(ecs, commands, player, item_key),
+                    VirtualKeyCode::D => handle_drop(ecs, commands, item_key),
+                    VirtualKeyCode::E | VirtualKeyCode::W => handle_equip(ecs, commands, item_key),
                     _ => return
                 }
             },
@@ -39,18 +42,19 @@ pub fn select_item(
     }
 }
 
-fn handle_drop(ecs: &SubWorld, commands: &mut CommandBuffer, actor: Entity, key: &VirtualKeyCode) -> TurnState {
+fn handle_drop(ecs: &mut SubWorld, commands: &mut CommandBuffer, key: &VirtualKeyCode) -> TurnState {
     if let Some((_, entity, _)) = key_to_entity(ecs, key) {
-        commands.push((WantsToDrop{ actor, item: entity }, ));
+        drop_item(ecs, commands, entity);
         return TurnState::ComputerTurn
     }
 
     TurnState::SelectingItem(VirtualKeyCode::D)
 }
 
-fn handle_equip(ecs: &SubWorld, commands: &mut CommandBuffer, actor: Entity, key: &VirtualKeyCode) -> TurnState {
+fn handle_equip(ecs: &mut SubWorld, commands: &mut CommandBuffer, key: &VirtualKeyCode) -> TurnState {
     if let Some((_, entity, _)) = key_to_entity(ecs, key) {
-        commands.push((WantsToEquip{ actor, item: entity }, ));
+        let player = player_entity(ecs);
+        equip_item(ecs, commands, player, entity);
         return TurnState::ComputerTurn
     }
 
@@ -58,7 +62,7 @@ fn handle_equip(ecs: &SubWorld, commands: &mut CommandBuffer, actor: Entity, key
 } 
 
 fn key_to_entity<'a>(ecs: &'a SubWorld, key: &VirtualKeyCode) -> Option<(&'a str, Entity, usize)> {
-    let inventory = list_of_items(ecs);
+    let inventory = list_of_item_counts(ecs);
     let idx = match key {
         VirtualKeyCode::A => 0,
         VirtualKeyCode::B => 1,

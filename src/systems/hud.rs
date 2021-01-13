@@ -18,7 +18,7 @@ pub fn character(
     draw_batch.target(UI_LAYER);
     draw_character(ecs, &mut draw_batch, &Rect::with_size(1, 1, 20, 15));
     draw_equipment(ecs, &mut draw_batch, &Rect::with_size(1, 17, 20, 20));
-    draw_visible(ecs, &mut draw_batch, &Rect::with_size(1, 38, 20, 20));
+    draw_visible(ecs, &mut draw_batch, &Rect::with_size(1, 38, 20, 30));
     draw_batch.submit(9999).expect("batch error in drawing character");
 }
 
@@ -143,7 +143,7 @@ fn draw_inventory_select(
     let border_color: ColorPair = ColorPair::new(RGB::from_f32(0.75, 0.75, 0.75), BLACK);
     let label_color: ColorPair = ColorPair::new(RGB::from_f32(0.75, 0.75, 0.75), BLACK);
 
-    let inventory = list_of_items(ecs);
+    let inventory = list_of_item_counts(ecs);
 
     draw_batch.draw_double_box(*rect, border_color);
     let x = rect.x1 + 1;

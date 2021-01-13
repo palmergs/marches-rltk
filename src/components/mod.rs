@@ -42,10 +42,7 @@ pub struct Render {
 }
 
 #[derive(Debug, Clone, PartialEq)]
-pub struct Carried {
-    pub by: Entity,
-    pub equipped: bool,
-}
+pub struct Carried;
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct Equippable {
