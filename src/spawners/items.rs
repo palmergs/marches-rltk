@@ -51,6 +51,32 @@ pub fn dagger_tuple(pt: Point) -> (Item, Equippable, Point, Render, Stats) {
     )
 }
 
+pub fn flaming_sword_tuple(pt: Point) -> (Item, Equippable, Point, Render, FieldOfLight, Stats) {
+    (
+        Item{
+            blocking: false, 
+            opaque: false,
+            can_get: true,
+        },
+        Equippable{
+            primary: EquipmentSlot::BothHands,
+        },
+        pt,
+        Render{
+            name: "Flaming Sword".to_string(),
+            tile: tile_index(13, 128),
+        },
+        FieldOfLight::new(8),
+        Stats{
+            armor: 0,
+            speed: 0,
+            power: 4,
+            vigor: Vigor::new(100),
+            focus: Focus::new(0),
+        }
+    )
+}
+
 pub fn buckler_tuple(pt: Point) -> (Item, Equippable, Point, Render, Stats) {
     (
         Item{
@@ -143,6 +169,10 @@ pub fn chest_tuple(pt: Point) -> (Item, Point, Render, Stats, Spawns) {
             entities: vec![ 
                 SpawnEntity::new("skeleton", 100, SpawnTrigger::Killed),
                 SpawnEntity::new("skeleton", 100, SpawnTrigger::Opened),
+                SpawnEntity::new("torch", 100, SpawnTrigger::Killed),
+                SpawnEntity::new("torch", 100, SpawnTrigger::Opened),                
+                SpawnEntity::new("flaming sword", 10, SpawnTrigger::Killed),
+                SpawnEntity::new("flaming sword", 10, SpawnTrigger::Opened),
             ],
         },
     )

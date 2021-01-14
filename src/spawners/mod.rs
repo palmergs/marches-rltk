@@ -54,6 +54,7 @@ pub fn spawn(id: &str, ecs: &mut World, pt: Point) -> Option<Entity> {
         "chest" =>          ecs.push(chest_tuple(pt)),
         "mushroom1" =>      ecs.push(mushroom1_tuple(pt)),
         "mushroom2" =>      ecs.push(mushroom2_tuple(pt)),
+        "flaming sword" =>  ecs.push(flaming_sword_tuple(pt)),
 
         "rat" =>            ecs.push(rat_tuple(pt)),
         "bat" =>            ecs.push(bat_tuple(pt)),
@@ -94,6 +95,7 @@ pub fn spawn_item(ecs: &mut World, rng: &mut Rng, pt: Point, depth: i32) -> Opti
         9      => spawn("chest", ecs, pt),
         10     => spawn("mushroom1", ecs, pt),
         11     => spawn("mushroom2", ecs, pt),
+        99     => spawn("flaming sword", ecs, pt),
         _      => None
     }
 }
