@@ -122,6 +122,7 @@ pub trait ValueWithMax {
     fn heal(&self, n: i32) -> i32 { std::cmp::min(self.max() - self.curr(), n) }
 
     fn hit(&self, n: i32) -> (i32, i32) {
+        if n < 0 { return (0, 0); }
         if n <= self.curr() { return (n, 0); }
         return (self.curr(), n - self.curr());
     }

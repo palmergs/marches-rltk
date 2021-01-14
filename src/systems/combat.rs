@@ -13,14 +13,19 @@ pub fn combat(
     commands: &mut CommandBuffer,
     #[resource] map: &mut Map,
  ) {
-    let mut rng = Rng::new();
-    let dmg = rng.range(1, 5);
 
-    if let Ok(mut stats) = ecs.entry_mut(cmd.victim).unwrap().get_component_mut::<Stats>() {
-        let (focus_dmg, vigor_dmg) = stats.focus.hit(dmg);
-        stats.focus.curr -= focus_dmg;
-        stats.vigor.curr -= vigor_dmg;
-        let is_killed = stats.vigor.is_zero();
+    let player_entry = ecs.entry_ref(cmd.actor).unwrap();
+    let attacker_power = player_entry.get_component::<Stats>().unwrap().power;
+
+    if let Ok(mut victim_stats) = ecs.entry_mut(cmd.victim).unwrap().get_component_mut::<Stats>() {
+
+        let mut rng = Rng::new();
+        let dmg = std::cmp::max(0, rng.range(-2, 5) + attacker_power - victim_stats.armor);
+
+        let (focus_dmg, vigor_dmg) = victim_stats.focus.hit(dmg);
+        victim_stats.focus.curr -= focus_dmg;
+        victim_stats.vigor.curr -= vigor_dmg;
+        let is_killed = victim_stats.vigor.is_zero();
         let is_player = ecs.entry_ref(cmd.victim)
             .unwrap()
             .get_component::<Player>()
@@ -74,10 +79,16 @@ pub fn combat(
                 }
                 map.actors.remove(pt);
             } else {
+                let color = if dmg > 0 {
+                    RGBA::from_f32(1., 0., 0., 1.)
+                } else {
+                    RGBA::from_f32(0.5, 0.5, 0.5, 1.)
+                };
+
                 commands.push((Text{
                     display: TextDisplay::AnimateUp(*pt),
                     text: format!("{}", dmg).to_string(),
-                    color: RGBA::from_f32(1., 0., 0., 1.),
+                    color,
                     ticks: 50,
                     count: 0,
                 },));

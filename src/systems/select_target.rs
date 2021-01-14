@@ -11,7 +11,6 @@ pub fn select_target(
     if let Some(dir_key) = key {
         
         println!("key press...");
-        let player = player_entity(ecs);
         match dir_key {
             VirtualKeyCode::Escape | VirtualKeyCode::Back | VirtualKeyCode::Delete => {
                 println!("escaping back to awaiting input from select target...");
@@ -20,7 +19,6 @@ pub fn select_target(
             },
             _ => ()
         }
-
 
         let player = player_entity(ecs);
         let new_state = match state {
