@@ -4,8 +4,12 @@ use crate::prelude::*;
 #[read_component(Point)]
 #[read_component(Player)]
 #[read_component(Stats)]
+#[read_component(Carried)]
+#[read_component(Equippable)]
 #[read_component(Item)]
 #[read_component(Stairs)]
+#[read_component(FieldOfView)]
+#[read_component(FieldOfLight)]
 pub fn player_input(
     ecs: &mut SubWorld,
     commands: &mut CommandBuffer,
@@ -28,7 +32,7 @@ pub fn player_input(
 
             VirtualKeyCode::Period =>   handle_stairs(ecs, location),
             VirtualKeyCode::Comma =>    handle_stairs(ecs, location),
-            VirtualKeyCode::G =>        handle_pickup(ecs, commands, player, location),
+            VirtualKeyCode::G =>        handle_pickup(ecs, commands, location),
 
             // activate or open by selecting a nearby door, chest, etc 
             VirtualKeyCode::A | VirtualKeyCode::O =>    TurnState::SelectingTarget(VirtualKeyCode::A, None),
@@ -72,16 +76,17 @@ pub fn player_input(
 fn handle_pickup(
     ecs: &mut SubWorld,
     commands: &mut CommandBuffer,
-    player: Entity,
     location: Point,
 ) -> TurnState {
-    let mut query = <(Entity, &Point, &Item)>::query();
-    query.iter(ecs)
-        .filter(|(_, pt, _)| **pt == location )
-        .filter(|(_, _, item)| item.is_carryable() )
-        .for_each(|(entity, _, _)| {
-            commands.push((WantsToGet{ actor: player, item: *entity }, ));
-        });
+    let items = <(Entity, &Point, &Item)>::query()
+        .iter(ecs)
+        .filter(|(_, pt, _)| **pt == location)
+        .filter(|(_, _, item)| item.can_get)
+        .map(|(entity, _, _)| *entity)
+        .collect::<Vec<_>>();
+    for item in items.into_iter() {
+        get_item(ecs, commands, item);
+    }
     TurnState::ComputerTurn
 }
 

@@ -67,7 +67,7 @@ pub fn buckler_tuple(pt: Point) -> (Item, Equippable, Point, Render, Stats) {
             tile: tile_index(13, 96),
         },
         Stats{
-            armor: 0,
+            armor: 1,
             speed: 0,
             power: 1,
             vigor: Vigor::new(10),

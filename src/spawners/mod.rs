@@ -21,7 +21,7 @@ pub fn spawn_player(ecs: &mut World, pt: Point) {
                 name: "Borimir".to_string(),
                 tile: tile_index(2, 21),
             },
-            FieldOfView::new(10),
+            FieldOfView::new(24),
             FieldOfLight::new(1),
             Stats {
                 armor: 0,

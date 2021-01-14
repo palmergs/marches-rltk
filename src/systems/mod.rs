@@ -21,7 +21,6 @@ mod fol;
 mod display_text;
 mod hud;
 mod tooltip;
-mod item;
 
 // Initializing the map before the first render and player input
 pub fn build_initialize_schedule() -> Schedule {
@@ -94,12 +93,6 @@ pub fn build_select_target_schedule() -> Schedule {
 pub fn build_computer_schedule() -> Schedule {
     Schedule::builder()
         .add_system(movement::movement_system())
-        .flush()
-        .add_system(item::pickup_system())
-        .flush()
-        .add_system(item::drop_system())
-        .flush()
-        .add_system(item::equip_system())
         .flush()
         .add_system(strategy::strategy_system())
         .add_system(combat::combat_system())

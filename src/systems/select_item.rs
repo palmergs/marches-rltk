@@ -7,6 +7,7 @@ use crate::prelude::*;
 #[read_component(Carried)]
 #[read_component(Render)]
 #[read_component(FieldOfLight)]
+#[read_component(FieldOfView)]
 #[read_component(Stats)]
 #[read_component(Point)]
 #[read_component(Item)]

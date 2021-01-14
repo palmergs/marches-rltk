@@ -23,12 +23,12 @@ pub fn equip_item(
             .map(|(entity, _)| *entity)
             .collect::<Vec<_>>();
 
-        println!("unequipping {:?} for {:?}", items_to_unequip, slot);
         for i in items_to_unequip.into_iter() {
             unequip_item(ecs, commands, player, i);
         }
 
         // equip the item
+        println!("equipping at {:?}", slot);
         commands.add_component(item, Equipped{ slot });
 
         // update stats based on the item
@@ -47,10 +47,13 @@ pub fn equip_item(
         if let Ok(fol) = ecs.entry_ref(item).unwrap().get_component::<FieldOfLight>() {
             let radius = fol.radius;
             if let Ok(fol) = ecs.entry_ref(player).unwrap().get_component::<FieldOfLight>() {
-                if radius > fol.radius {
+                if radius >= fol.radius {
                     commands.add_component(player, FieldOfLight::new(radius));
                 }
             }
+        }
+        if let Ok(fov) = ecs.entry_ref(player).unwrap().get_component::<FieldOfView>() {
+            commands.add_component(player, fov.clone_dirty());
         }
     }
 }
@@ -84,6 +87,9 @@ pub fn unequip_item(
         Some(radius) => commands.add_component(player, FieldOfLight::new(radius)),
         _ => commands.add_component(player, FieldOfLight::new(1)),
     }
+    if let Ok(fov) = ecs.entry_ref(player).unwrap().get_component::<FieldOfView>() {
+        commands.add_component(player, fov.clone_dirty());
+    }
 
     commands.remove_component::<Equipped>(item);
 }
@@ -97,15 +103,47 @@ pub fn drop_item(ecs: &mut SubWorld, commands: &mut CommandBuffer, item: Entity)
 
         commands.remove_component::<Carried>(item);
         commands.add_component(item, player_pt);
+
+        // if this is a light source, let the world know that it needs ot 
+        // update the lit tiles.
+        if let Ok(fol) = ecs.entry_ref(item).unwrap().get_component::<FieldOfLight>() {
+            commands.add_component(item, fol.clone_dirty());
+            if let Ok(fov) = ecs.entry_ref(player).unwrap().get_component::<FieldOfView>() {
+                commands.add_component(player, fov.clone_dirty());
+            }
+        }
+        commands.push((Text{
+            display: TextDisplay::Fade(player_pt),
+            text: format!("dropped").to_string(),
+            color: RGBA::from_f32(0., 1., 0., 1.0),
+            ticks: 40,
+            count: 0,
+        },));
     }
 }
 
 pub fn get_item(ecs: &SubWorld, commands: &mut CommandBuffer, item: Entity) {
     let (player, player_pt) = player_at(ecs);
-    if let Ok(item_ref) = ecs.entry_ref(item) {
-        commands.remove_component::<Point>(item);
-        commands.add_component(item, Carried{})
+
+    commands.remove_component::<Point>(item);
+    commands.add_component(item, Carried{});
+
+    // if this is a light source, let the world know that it needs ot 
+    // update the lit tiles.
+    if let Ok(fol) = ecs.entry_ref(item).unwrap().get_component::<FieldOfLight>() {
+        commands.add_component(item, fol.clone_dirty());
+        if let Ok(fov) = ecs.entry_ref(player).unwrap().get_component::<FieldOfView>() {
+            commands.add_component(player, fov.clone_dirty());
+        }
     }
+
+    commands.push((Text{
+        display: TextDisplay::Fade(player_pt),
+        text: format!("got it").to_string(),
+        color: RGBA::from_f32(0., 1., 0., 1.0),
+        ticks: 40,
+        count: 0,
+    },));
 }
 
 pub fn list_of_items<'a>(ecs: &'a SubWorld) -> Vec<(&'a str, Entity)> {
