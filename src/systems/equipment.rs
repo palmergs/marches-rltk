@@ -74,10 +74,12 @@ pub fn unequip_item(
         let armor = item_stats.armor;
         let speed = item_stats.speed;
         let power = item_stats.power;
-        if let Ok(mut player_stats) = ecs.entry_mut(player).unwrap().get_component_mut::<Stats>() {
-            player_stats.armor -= armor;
-            player_stats.speed -= speed;
-            player_stats.power -= power;
+        if let Ok(player_stats) = ecs.entry_ref(player).unwrap().get_component::<Stats>() {
+            let mut stats = player_stats.clone();
+                stats.armor -= armor;
+                stats.speed -= speed;
+                stats.power -= power;
+                commands.add_component(player, stats);
         }
     }
 
