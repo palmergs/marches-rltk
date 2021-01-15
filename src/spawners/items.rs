@@ -224,7 +224,7 @@ pub fn seltzer_tuple(pt: Point) -> (Item, Point, Render, Stats, Consumable, Rest
             focus: Focus::new(0),
         },
         Consumable{ count: 1 },
-        RestoresFocus{ amount: 5 },
+        RestoresFocus{ amount: 10 },
     )
 }
 
