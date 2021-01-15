@@ -102,29 +102,181 @@ pub fn buckler_tuple(pt: Point) -> (Item, Equippable, Point, Render, Stats) {
     )    
 }
 
-pub fn mushroom1_tuple(pt: Point) -> (Item, Point, Render, Stats) {
-        (
-            Item{
-                blocking: false, 
-                opaque: false,
-                can_get: true,
-            },
-            pt,
-            Render{
-                name: "Mushroom".to_string(),
-                tile: tile_index(12, 35),
-            },
-            Stats{
-                armor: 0,
-                speed: 0,
-                power: 0,
-                vigor: Vigor::new(1),
-                focus: Focus::new(0),
-            },
-        )
+pub fn ring_of_protection_tuple(pt: Point) -> (Item, Equippable, Point, Render, Stats) {
+    (
+        Item{
+            blocking: false, 
+            opaque: false,
+            can_get: true,
+        },
+        Equippable{
+            primary: EquipmentSlot::LeftRing,
+        },        
+        pt,
+        Render{
+            name: "Ring of Protection".to_string(),
+            tile: tile_index(12, 59),
+        },
+        Stats{
+            armor: 2,
+            speed: 0,
+            power: 0,
+            vigor: Vigor::new(20),
+            focus: Focus::new(0),
+        },
+    )  
 }
 
-pub fn mushroom2_tuple(pt: Point) -> (Item, Point, Render, Stats) {
+pub fn ring_of_power_tuple(pt: Point) -> (Item, Equippable, Point, Render, Stats) {
+    (
+        Item{
+            blocking: false, 
+            opaque: false,
+            can_get: true,
+        },
+        Equippable{
+            primary: EquipmentSlot::RightHand,
+        },        
+        pt,
+        Render{
+            name: "Ring of Power".to_string(),
+            tile: tile_index(12, 57),
+        },
+        Stats{
+            armor: 0,
+            speed: 0,
+            power: 2,
+            vigor: Vigor::new(20),
+            focus: Focus::new(0),
+        },
+    )  
+}
+
+pub fn ring_of_lesser_radiance_tuple(pt: Point) -> (Item, Equippable, Point, Render, Stats, FieldOfLight) {
+    (
+        Item{
+            blocking: false, 
+            opaque: false,
+            can_get: true,
+        },
+        Equippable{
+            primary: EquipmentSlot::LeftRing,
+        },        
+        pt,
+        Render{
+            name: "Ring of Light".to_string(),
+            tile: tile_index(12, 58),
+        },
+        Stats{
+            armor: 0,
+            speed: 0,
+            power: 0,
+            vigor: Vigor::new(20),
+            focus: Focus::new(0),
+        },
+        FieldOfLight::new(3)
+    )  
+}
+
+pub fn ring_of_greater_radiance_tuple(pt: Point) -> (Item, Equippable, Point, Render, Stats, FieldOfLight) {
+    (
+        Item{
+            blocking: false, 
+            opaque: false,
+            can_get: true,
+        },
+        Equippable{
+            primary: EquipmentSlot::LeftRing,
+        },        
+        pt,
+        Render{
+            name: "Ring of Light".to_string(),
+            tile: tile_index(12, 58),
+        },
+        Stats{
+            armor: 2,
+            speed: 0,
+            power: 2,
+            vigor: Vigor::new(20),
+            focus: Focus::new(0),
+        },
+        FieldOfLight::new(12)
+    )  
+}
+
+pub fn seltzer_tuple(pt: Point) -> (Item, Point, Render, Stats, Consumable, RestoresFocus) {
+    (
+        Item{
+            blocking: false, 
+            opaque: false,
+            can_get: true,
+        },
+        pt,
+        Render{
+            name: "Selzer".to_string(),
+            tile: tile_index(12, 56),
+        },
+        Stats{
+            armor: 0,
+            speed: 0,
+            power: 0,
+            vigor: Vigor::new(1),
+            focus: Focus::new(0),
+        },
+        Consumable{ count: 1 },
+        RestoresFocus{ amount: 5 },
+    )
+}
+
+pub fn healing_potion_tuple(pt: Point) -> (Item, Point, Render, Stats, Consumable, RestoresVigor) {
+    (
+        Item{
+            blocking: false, 
+            opaque: false,
+            can_get: true,
+        },
+        pt,
+        Render{
+            name: "Healing Potion".to_string(),
+            tile: tile_index(12, 55),
+        },
+        Stats{
+            armor: 0,
+            speed: 0,
+            power: 0,
+            vigor: Vigor::new(1),
+            focus: Focus::new(0),
+        },
+        Consumable{ count: 1 },
+        RestoresVigor{ amount: 5 },
+    )
+}
+
+pub fn mushroom1_tuple(pt: Point) -> (Item, Point, Render, Stats, Consumable, RestoresVigor ) {
+    (
+        Item{
+            blocking: false, 
+            opaque: false,
+            can_get: true,
+        },
+        pt,
+        Render{
+            name: "Mushroom".to_string(),
+            tile: tile_index(12, 35),
+        },
+        Stats{
+            armor: 0,
+            speed: 0,
+            power: 0,
+            vigor: Vigor::new(1),
+            focus: Focus::new(0),
+        },
+        Consumable{ count: 1 },
+        RestoresVigor{ amount: 1 },
+    )
+}
+
+pub fn mushroom2_tuple(pt: Point) -> (Item, Point, Render, Stats, Consumable, RestoresVigor) {
     (
         Item{
             blocking: false, 
@@ -143,6 +295,8 @@ pub fn mushroom2_tuple(pt: Point) -> (Item, Point, Render, Stats) {
             vigor: Vigor::new(1),
             focus: Focus::new(0),
         },
+        Consumable{ count: 1 },
+        RestoresVigor{ amount: -3 },        
     )
 }
 

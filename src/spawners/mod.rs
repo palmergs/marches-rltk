@@ -55,6 +55,12 @@ pub fn spawn(id: &str, ecs: &mut World, pt: Point) -> Option<Entity> {
         "mushroom1" =>      ecs.push(mushroom1_tuple(pt)),
         "mushroom2" =>      ecs.push(mushroom2_tuple(pt)),
         "flaming sword" =>  ecs.push(flaming_sword_tuple(pt)),
+        "ring of protection" => ecs.push(ring_of_protection_tuple(pt)),
+        "ring of power" =>  ecs.push(ring_of_power_tuple(pt)),
+        "ring of lesser radiance" => ecs.push(ring_of_lesser_radiance_tuple(pt)),
+        "ring of greater radiance" => ecs.push(ring_of_greater_radiance_tuple(pt)),
+        "seltzer" =>        ecs.push(seltzer_tuple(pt)),
+        "healing potion" => ecs.push(healing_potion_tuple(pt)),
 
         "rat" =>            ecs.push(rat_tuple(pt)),
         "bat" =>            ecs.push(bat_tuple(pt)),
@@ -88,15 +94,21 @@ pub fn spawn_monster(ecs: &mut World, rng: &mut Rng, pt: Point, depth: i32) -> O
 }
 
 pub fn spawn_item(ecs: &mut World, rng: &mut Rng, pt: Point, depth: i32) -> Option<Entity> {
-    match rng.range(0 + depth, 14 + depth) {
-        0..=3  => spawn("dagger", ecs, pt),
-        4..=5  => spawn("buckler", ecs, pt),
-        6..=8  => spawn("torch", ecs, pt),
-        9      => spawn("chest", ecs, pt),
-        10     => spawn("mushroom1", ecs, pt),
-        11     => spawn("mushroom2", ecs, pt),
-        99     => spawn("flaming sword", ecs, pt),
-        _      => None
+    match rng.range(0 + depth, 20 + depth) {
+        0..=3   => spawn("dagger", ecs, pt),
+        4..=5   => spawn("buckler", ecs, pt),
+        6..=8   => spawn("torch", ecs, pt),
+        9       => spawn("chest", ecs, pt),
+        10      => spawn("mushroom1", ecs, pt),
+        11      => spawn("mushroom2", ecs, pt),
+        12..=15 => spawn("selzer", ecs, pt),
+        16..=17 => spawn("healing potion", ecs, pt),
+        18      => spawn("ring of protection", ecs, pt),
+        19      => spawn("ring of lesser radiance", ecs, pt),
+        20      => spawn("ring of power", ecs, pt),
+        98      => spawn("ring of greater radiance", ecs, pt),
+        99      => spawn("flaming sword", ecs, pt),
+        _       => None
     }
 }
 

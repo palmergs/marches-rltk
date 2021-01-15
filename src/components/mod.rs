@@ -44,6 +44,19 @@ pub struct Render {
 #[derive(Debug, Clone, PartialEq)]
 pub struct Carried;
 
+pub struct RestoresVigor {
+    pub amount: i32,
+}
+
+pub struct RestoresFocus {
+    pub amount: i32,
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct Consumable{
+    pub count: i32,
+}
+
 #[derive(Debug, Clone, PartialEq)]
 pub struct Equippable {
     pub primary: EquipmentSlot,

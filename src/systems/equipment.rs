@@ -32,18 +32,15 @@ pub fn equip_item(
         commands.add_component(item, Equipped{ slot });
 
         // update stats based on the item
-        println!("did the item have stats?");
         if let Ok(item_stats) = ecs.entry_ref(item).unwrap().get_component::<Stats>() {
             let armor = item_stats.armor;
             let speed = item_stats.speed;
             let power = item_stats.power;
-            println!("the stats are armor={} speed={} power={}", armor, speed, power);
             if let Ok(player_stats) = ecs.entry_ref(player).unwrap().get_component::<Stats>() {
                 let mut stats = player_stats.clone();
                 stats.armor += armor;
                 stats.speed += speed;
                 stats.power += power;
-                println!("the player stats have been updated I think: {:?}", stats);
                 commands.add_component(player, stats);
             }
         }
