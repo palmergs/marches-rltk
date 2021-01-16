@@ -16,7 +16,7 @@ pub fn mouse(
             let mut draw_batch = DrawBatch::new();
             draw_batch.target(FLOOR_LAYER);
             let line = Bresenham::new(mouse_pt, player_pt);
-            let color = ColorPair::new(RGB::from_f32(0., 0., 0.9), BLACK);
+            let color = ColorPair::new(RGB::from_f32(0.5, 0.5, 0.9), BLACK);
             for pt in line.into_iter() {
                 let screen_pt = pt - camera.offset();
                 let map_idx = map.point2d_to_index(pt);
