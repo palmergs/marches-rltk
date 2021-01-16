@@ -14,6 +14,9 @@ pub enum TurnState {
     GameOver,
 }
 
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct MouseClick(pub bool);
+
 pub struct State {
     ecs: World,
     resources: Resources,
@@ -170,6 +173,13 @@ impl GameState for State {
         self.resources.get_mut::<TickCount>().unwrap().increment();
         self.resources.insert(ctx.key);
         self.resources.insert(Point::from_tuple(ctx.mouse_pos()));
+
+        let mc = if let Some(mc) = self.resources.get::<MouseClick>() {
+            MouseClick(mc.0 || ctx.left_click)
+        } else {
+            MouseClick( ctx.left_click)
+        };
+        self.resources.insert(mc);
 
         let curr_state = self.resources.get::<TurnState>().unwrap().clone();
         match curr_state {
