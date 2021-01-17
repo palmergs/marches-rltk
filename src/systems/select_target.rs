@@ -5,6 +5,8 @@ use crate::prelude::*;
 #[read_component(Render)]
 #[read_component(Point)]
 #[read_component(Actor)]
+#[read_component(FieldOfView)]
+#[read_component(FieldOfLight)]
 #[read_component(Item)]
 pub fn select_target(
     ecs: &mut SubWorld,
@@ -16,6 +18,7 @@ pub fn select_target(
     #[resource] state: &mut TurnState,   
     #[resource] camera: &Camera,
 ) {
+    println!("key={:?} click={:?} state={:?}", key, click, state);
     let (player, player_pt) = player_at(ecs);
     if let Some(dir_key) = key {
         match dir_key {
@@ -31,6 +34,7 @@ pub fn select_target(
             TurnState::SelectingItem(cmd) => {
                 match cmd {
                     VirtualKeyCode::A | VirtualKeyCode::O => {
+                        println!("activating location with direction key {:?}", dir_key);
                         if let Some((item, item_pt)) = item_at_direction(ecs, player_pt, *dir_key) {
                             handle_activate(ecs, commands, map, player, item, item_pt)
                         } else {
@@ -48,6 +52,7 @@ pub fn select_target(
         let map_point = camera.offset() + *point;
         let distance = DistanceAlg::Pythagoras.distance2d(player_pt, map_point);
         let mut new_state = *state;
+        println!("mouse click at {:?} ({})", map_point, distance);
         <(Entity, &Render, &Point)>::query()
             .iter(ecs)
             .filter(|(_, _, pt)| **pt == map_point)
@@ -58,28 +63,33 @@ pub fn select_target(
                 }
     
                 if let Ok(_) = ecs.entry_ref(*entity).unwrap().get_component::<Item>() {
+                    println!("selecting item...");
                     new_state = match state {
                         TurnState::SelectingItem(cmd) => {
                             match cmd {
                                 VirtualKeyCode::A | VirtualKeyCode::O => if distance < 2.0 {
                                     handle_activate(ecs, commands, map, player, *entity, *pt)
                                 } else {
-                                    return
+                                    TurnState::ComputerTurn
                                 },
-                                _ => return
+                                _ => TurnState::ComputerTurn
                             }
                         },
-                        _ => return
+                        _ => TurnState::ComputerTurn
                     };
+
+                    
                 }
             });
 
+        println!("clearing click and setting state {:?}", new_state);
         click.0 = false;
-        *state = TurnState::ComputerTurn;
+        *state = new_state;
     }
 }
 
 fn item_at_direction(ecs: &SubWorld, player_pt: Point, dir: VirtualKeyCode) -> Option<(Entity, Point)> {
+    println!("item at direction?");
     let item_pt = match dir {
         VirtualKeyCode::Left  | VirtualKeyCode::Numpad4 | VirtualKeyCode::Key4 => Point::new(-1, 0),
         VirtualKeyCode::Right | VirtualKeyCode::Numpad6 | VirtualKeyCode::Key6 => Point::new(1, 0),
@@ -99,6 +109,7 @@ fn item_at_direction(ecs: &SubWorld, player_pt: Point, dir: VirtualKeyCode) -> O
         .filter(|(_, pt)| **pt == item_pt)
         .next() {
 
+        println!("item found at {:?}", item_pt);
         return Some((*entity, item_pt));
     }
 
