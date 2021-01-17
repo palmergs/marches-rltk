@@ -16,9 +16,9 @@ Probably something like this:
 
 * No character builder
 * No town or stores
-* No usable items or inventory
+* ~~No usable items or inventory~~
 * No spells or effects
-* No stairs or additional levels
+* ~~No stairs or additional levels~~
 * No save or load game
 * No win condition
 
