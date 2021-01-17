@@ -9,10 +9,13 @@ pub enum TurnState {
     AwaitingInput,
     SelectingItem(VirtualKeyCode),
     SelectingEquipped(VirtualKeyCode),
-    SelectingTarget(VirtualKeyCode, Option<Entity>),
+    SelectingTarget(VirtualKeyCode),
     ComputerTurn,
     GameOver,
 }
+
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct MouseClick(pub bool);
 
 pub struct State {
     ecs: World,
@@ -171,12 +174,19 @@ impl GameState for State {
         self.resources.insert(ctx.key);
         self.resources.insert(Point::from_tuple(ctx.mouse_pos()));
 
+        let mc = if let Some(mc) = self.resources.get::<MouseClick>() {
+            MouseClick(mc.0 || ctx.left_click)
+        } else {
+            MouseClick( ctx.left_click)
+        };
+        self.resources.insert(mc);
+
         let curr_state = self.resources.get::<TurnState>().unwrap().clone();
         match curr_state {
             TurnState::InitializeMap => self.initialize_schedule.execute(&mut self.ecs, &mut self.resources),
             TurnState::NewLevel(depth) => self.load_level(depth),
             TurnState::AwaitingInput => self.input_schedule.execute(&mut self.ecs, &mut self.resources),
-            TurnState::SelectingTarget(_, _) => self.select_target_schedule.execute(&mut self.ecs, &mut self.resources),
+            TurnState::SelectingTarget(_) => self.select_target_schedule.execute(&mut self.ecs, &mut self.resources),
             TurnState::SelectingItem(_) => self.select_item_schedule.execute(&mut self.ecs, &mut self.resources),
             TurnState::SelectingEquipped(_) => self.select_equipped_schedule.execute(&mut self.ecs, &mut self.resources),
             TurnState::ComputerTurn => self.computer_schedule.execute(&mut self.ecs, &mut self.resources),

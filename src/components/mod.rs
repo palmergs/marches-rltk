@@ -15,6 +15,9 @@ pub struct Player {
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Item {
+    // hard coded id of this item
+    pub id: &'static str,
+
     // if true this item blocks movement if on the map
     pub blocking: bool,
 

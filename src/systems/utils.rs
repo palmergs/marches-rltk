@@ -26,3 +26,13 @@ pub fn player_info<'a>(ecs: &'a SubWorld) -> (&'a Entity, &'a Point, &'a Stats, 
         .unwrap()
 }
 
+pub fn player_view_dirty(ecs: &SubWorld, commands: &mut CommandBuffer, player: Entity) {
+    if let Ok(fol) = ecs.entry_ref(player).unwrap().get_component::<FieldOfLight>() {
+        commands.add_component(player, fol.clone_dirty());
+    }
+
+    if let Ok(fov) = ecs.entry_ref(player).unwrap().get_component::<FieldOfView>() {
+        commands.add_component(player, fov.clone_dirty());
+    }
+}
+
