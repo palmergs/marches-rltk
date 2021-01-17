@@ -18,21 +18,43 @@ pub fn player_input(
     #[resource] turn: &mut TurnCount,
 ) {
     if let Some(key) = key {
-        let (player, location) = player_at(ecs);
-            
         let new_state = match key {
-            VirtualKeyCode::Left  | VirtualKeyCode::Numpad4 | VirtualKeyCode::Key4 => handle_move(ecs, commands, player, location, Point::new(-1, 0)),
-            VirtualKeyCode::Right | VirtualKeyCode::Numpad6 | VirtualKeyCode::Key6 => handle_move(ecs, commands, player, location, Point::new(1, 0)),
-            VirtualKeyCode::Up    | VirtualKeyCode::Numpad8 | VirtualKeyCode::Key8 => handle_move(ecs, commands, player, location, Point::new(0, -1)),
-            VirtualKeyCode::Down  | VirtualKeyCode::Numpad2 | VirtualKeyCode::Key2 => handle_move(ecs, commands, player, location, Point::new(0, 1)),
-            VirtualKeyCode::Numpad7 | VirtualKeyCode::Key7 => handle_move(ecs, commands, player, location, Point::new(-1, -1)),
-            VirtualKeyCode::Numpad9 | VirtualKeyCode::Key9 => handle_move(ecs, commands, player, location, Point::new(1, -1)),
-            VirtualKeyCode::Numpad1 | VirtualKeyCode::Key1 => handle_move(ecs, commands, player, location, Point::new(-1, 1)),
-            VirtualKeyCode::Numpad3 | VirtualKeyCode::Key3 => handle_move(ecs, commands, player, location, Point::new(1, 1)),
+            VirtualKeyCode::Left  | VirtualKeyCode::Numpad4 | VirtualKeyCode::Key4 => handle_move(
+                ecs, 
+                commands, 
+                Point::new(-1, 0)),
+            VirtualKeyCode::Right | VirtualKeyCode::Numpad6 | VirtualKeyCode::Key6 => handle_move(
+                ecs, 
+                commands, 
+                Point::new(1, 0)),
+            VirtualKeyCode::Up    | VirtualKeyCode::Numpad8 | VirtualKeyCode::Key8 => handle_move(
+                ecs, 
+                commands, 
+                Point::new(0, -1)),
+            VirtualKeyCode::Down  | VirtualKeyCode::Numpad2 | VirtualKeyCode::Key2 => handle_move(
+                ecs, 
+                commands, 
+                Point::new(0, 1)),
+            VirtualKeyCode::Numpad7 | VirtualKeyCode::Key7 => handle_move(
+                ecs, 
+                commands, 
+                Point::new(-1, -1)),
+            VirtualKeyCode::Numpad9 | VirtualKeyCode::Key9 => handle_move(
+                ecs, 
+                commands, 
+                Point::new(1, -1)),
+            VirtualKeyCode::Numpad1 | VirtualKeyCode::Key1 => handle_move(
+                ecs, 
+                commands, 
+                Point::new(-1, 1)),
+            VirtualKeyCode::Numpad3 | VirtualKeyCode::Key3 => handle_move(
+                ecs, 
+                commands, 
+                Point::new(1, 1)),
 
-            VirtualKeyCode::Period =>   handle_stairs(ecs, location),
-            VirtualKeyCode::Comma =>    handle_stairs(ecs, location),
-            VirtualKeyCode::G =>        handle_pickup(ecs, commands, location),
+            VirtualKeyCode::Period =>   handle_stairs(ecs),
+            VirtualKeyCode::Comma =>    handle_stairs(ecs),
+            VirtualKeyCode::G =>        handle_pickup(ecs, commands),
 
             // activate or open by selecting a nearby door, chest, etc 
             VirtualKeyCode::A | VirtualKeyCode::O =>    TurnState::SelectingTarget(VirtualKeyCode::A),
@@ -76,11 +98,11 @@ pub fn player_input(
 fn handle_pickup(
     ecs: &mut SubWorld,
     commands: &mut CommandBuffer,
-    location: Point,
 ) -> TurnState {
+    let (_, player_pt) = player_at(ecs);
     let items = <(Entity, &Point, &Item)>::query()
         .iter(ecs)
-        .filter(|(_, pt, _)| **pt == location)
+        .filter(|(_, pt, _)| **pt == player_pt)
         .filter(|(_, _, item)| item.can_get)
         .map(|(entity, _, _)| *entity)
         .collect::<Vec<_>>();
@@ -92,10 +114,10 @@ fn handle_pickup(
 
 fn handle_stairs(
     ecs: &mut SubWorld,
-    location: Point,
 ) -> TurnState {
+    let (_, player_pt) = player_at(ecs);
     let mut query = <(&Point, &Stairs)>::query();
-    match query.iter(ecs).filter(|(pt, _)| **pt == location ).next() {
+    match query.iter(ecs).filter(|(pt, _)| **pt == player_pt ).next() {
         Some((_, stairs)) => return TurnState::NewLevel(stairs.to_depth),
         None => TurnState::ComputerTurn,
     }
@@ -104,11 +126,10 @@ fn handle_stairs(
 fn handle_move(
     ecs: &mut SubWorld,
     commands: &mut CommandBuffer,
-    player: Entity,
-    from: Point,
     delta: Point
 ) -> TurnState {
-    let destination = from + delta;
+    let (player, player_pt) = player_at(ecs);
+    let destination = player_pt + delta;
     let mut hit_something = false;
     let mut query = <(Entity, &Point)>::query().filter(component::<Stats>());
     query.iter(ecs)
