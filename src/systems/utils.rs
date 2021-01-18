@@ -1,5 +1,4 @@
 use crate::prelude::*;
-use std::collections::HashMap;
 
 pub fn player_entity(ecs: &SubWorld) -> Entity {
     *<Entity>::query().filter(component::<Player>()).iter(ecs).next().unwrap()

@@ -100,11 +100,7 @@ impl Map {
         let e = self.can_enter(pt + Point::new(  1,  0));
         let w = self.can_enter(pt + Point::new( -1,  0));
         (c && n && s && !e && !w) || (c && e && w && !n && !s)
-    }
-
-    fn point2d_to_index(pt: Point) -> usize {
-        ((pt.y * EXTENT.x) + pt.x) as usize
-    }    
+    } 
 }
 
 impl Algorithm2D for Map {
