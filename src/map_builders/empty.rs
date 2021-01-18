@@ -13,11 +13,11 @@ impl EmptyArchitect {
 impl MapArchitect for EmptyArchitect {
     fn build(&mut self, rng: &mut Rng, depth: i32) -> MapBuilder {
         let mut mb = MapBuilder::new(depth);
-        mb.fill(TileType::Wall);
+        mb.fill(TileType::Wall(STONE));
         for y in 1 .. MAP_HEIGHT - 1 {
             for x in 1 .. MAP_WIDTH - 1 {
                 let idx = mb.map.point2d_to_index(Point::new(x, y));
-                mb.map.tiles[idx] = TileType::Floor;
+                mb.map.tiles[idx] = TileType::Floor(FLOOR);
             }
         }
 

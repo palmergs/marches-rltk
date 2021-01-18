@@ -13,7 +13,7 @@ impl SewersArchitect {
 impl MapArchitect for SewersArchitect {
     fn build(&mut self, rng: &mut Rng, depth: i32) -> MapBuilder {
         let mut mb = MapBuilder::new(depth);
-        mb.fill(TileType::Wall);
+        mb.fill(TileType::Wall(STONE));
 
         let grid = 9;
         let gridh = MAP_HEIGHT / grid;
@@ -25,7 +25,7 @@ impl MapArchitect for SewersArchitect {
                 let x = (c * gridw) + (gridw - w) / 2;
                 let y = (r * gridh) + (gridh - h) / 2;
                 let rb = RoomBuilder{ extent: Rect::with_size(x, y, w, h), shape: RoomShape::Rectangle };
-                rb.excavate(&mut mb.map, TileType::Floor);
+                rb.excavate(&mut mb.map, TileType::Floor(FLOOR));
                 mb.rooms.push(rb.extent);
             }
         }
@@ -36,11 +36,11 @@ impl MapArchitect for SewersArchitect {
         for i in 1 .. rooms.len() {
             let prev = rooms[i-1].center();
             let curr = rooms[i].center();
-            mb.excavate_tunnel(rng, prev, curr, TileType::Floor);
+            mb.excavate_tunnel(rng, prev, curr, TileType::Floor(WATER));
             if i >= grid && rng.range(0, 2) == 0 {
                 let prev = rooms[i-grid].center();
                 let curr = rooms[i].center();
-                mb.excavate_tunnel(rng, prev, curr, TileType::Floor);
+                mb.excavate_tunnel(rng, prev, curr, TileType::Floor(WATER));
             }
         }
 

@@ -17,9 +17,9 @@ impl RoomsArchitect {
 impl MapArchitect for RoomsArchitect {
     fn build(&mut self, rng: &mut Rng, depth: i32) -> MapBuilder {
         let mut mb = MapBuilder::new(depth);
-        mb.fill(TileType::Wall);
-        mb.excavate_random_rooms(rng, NUM_ROOMS, TileType::Floor);
-        mb.excavate_tunnels(rng, TileType::Floor);
+        mb.fill(TileType::Wall(STONE));
+        mb.excavate_random_rooms(rng, NUM_ROOMS, TileType::Floor(FLOOR));
+        mb.excavate_tunnels(rng, TileType::Floor(FLOOR));
 
         mb.player_start = mb.rooms[0].center();
         for room in mb.rooms.iter().skip(1) {

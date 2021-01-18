@@ -20,7 +20,7 @@ pub fn mouse(
             for pt in line.into_iter() {
                 let screen_pt = pt - camera.offset();
                 let map_idx = map.point2d_to_index(pt);
-                draw_batch.set(screen_pt, color, map.font_idx(map_idx));
+                draw_batch.set(screen_pt, color, map.tiles[map_idx].tile_idx());
             }
             draw_batch.submit(500).expect("batch error in render mouse");
         }

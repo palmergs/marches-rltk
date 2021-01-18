@@ -59,7 +59,7 @@ pub fn render(
                         draw_batch.set(
                             screen_pt,
                             ColorPair::new(RGB::from_f32(fg, fg, fg), bg),
-                            map.font_idx(map_idx));
+                            map.tiles[map_idx].tile_idx());
                     },
                     None => ()
                 }
