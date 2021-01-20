@@ -66,7 +66,7 @@ pub fn player_input(
             VirtualKeyCode::L =>                        TurnState::SelectingTarget(VirtualKeyCode::L),
 
             // fire or throw the currently equipped weapon
-            VirtualKeyCode::F =>                        TurnState::SelectingEquipped(VirtualKeyCode::F),
+            VirtualKeyCode::F =>                        TurnState::SelectingTarget(VirtualKeyCode::F),
 
             // remove or unequip item
             VirtualKeyCode::R =>                        TurnState::SelectingEquipped(VirtualKeyCode::R),
