@@ -11,7 +11,6 @@ use std::collections::HashSet;
 #[read_component(Text)]
 pub fn tooltip(
     ecs: &SubWorld,
-    commands: &mut CommandBuffer,
     #[resource] camera: &Camera,
     #[resource] mouse: &Point,
 ) {
