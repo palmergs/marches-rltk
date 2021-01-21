@@ -1,7 +1,5 @@
 use crate::prelude::*;
 
-use std::collections::HashSet;
-
 #[system]
 #[read_component(Point)]
 #[read_component(Render)]

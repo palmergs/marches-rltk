@@ -99,14 +99,19 @@ pub fn unequip_item(
 }
 
 pub fn drop_item(ecs: &mut SubWorld, commands: &mut CommandBuffer, item: Entity) {
-    let (player, player_pt) = player_at(ecs);
+    let (_, player_pt) = player_at(ecs);
+    drop_item_at(ecs, commands, item, player_pt);
+}
+
+pub fn drop_item_at(ecs: &mut SubWorld, commands: &mut CommandBuffer, item: Entity, pt: Point) {
+    let (player, _) = player_at(ecs);
     if let Ok(item_ref) = ecs.entry_ref(item) {
         if item_ref.get_component::<Equipped>().is_ok() {
             unequip_item(ecs, commands, player, item);
         }
 
         commands.remove_component::<Carried>(item);
-        commands.add_component(item, player_pt);
+        commands.add_component(item, pt);
 
         // if this is a light source, let the world know that it needs ot 
         // update the lit tiles.
@@ -117,7 +122,7 @@ pub fn drop_item(ecs: &mut SubWorld, commands: &mut CommandBuffer, item: Entity)
             }
         }
         commands.push((Text{
-            display: TextDisplay::Fade(player_pt),
+            display: TextDisplay::Fade(pt),
             text: format!("dropped").to_string(),
             color: RGBA::from_f32(0., 1., 0., 1.0),
             ticks: 40,
@@ -172,6 +177,25 @@ pub fn list_of_item_counts<'a>(ecs: &'a SubWorld) -> Vec<(&'a str, Entity, usize
         }
     }
     vec
+}
+
+pub fn player_weapon(ecs: &SubWorld) -> Option<Entity> {
+    let mut query = <(Entity, &Equipped)>::query();
+    if let Some((entity, _)) = query.iter(ecs)
+        .filter(|(_, e)| e.slot == EquipmentSlot::RightHand || e.slot == EquipmentSlot::BothHands )
+        .next() {
+
+           return Some(*entity);
+    }
+    
+    if let Some((entity, _)) = query.iter(ecs)
+        .filter(|(_, e)| e.slot == EquipmentSlot::LeftHand )
+        .next() {
+
+            return Some(*entity);
+    }
+
+    None
 }
 
 pub fn list_of_equipment<'a>(ecs: &'a SubWorld) -> Vec<(&'a str, Entity, EquipmentSlot)> {
