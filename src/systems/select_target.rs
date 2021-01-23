@@ -9,6 +9,8 @@ use crate::prelude::*;
 #[read_component(FieldOfLight)]
 #[read_component(Item)]
 #[read_component(Equipped)]
+#[read_component(Carried)]
+#[read_component(Stats)]
 pub fn select_target(
     ecs: &mut SubWorld,
     commands: &mut CommandBuffer,
@@ -43,8 +45,8 @@ pub fn select_target(
                         },
 
                         VirtualKeyCode::F => {
-                            if let Some(actor) = actor_first_at(ecs, map, player_pt, pt, 10) {
-                                handle_fire(ecs, commands, map, player, actor, pt)
+                            if let Some((actor, actor_pt)) = actor_first_at(ecs, map, player_pt, pt, 10) {
+                                handle_fire(ecs, commands, map, player, actor, actor_pt)
                             } else {
                                 TurnState::ComputerTurn
                             }
@@ -168,7 +170,7 @@ fn actor_first_at(
     start: Point, 
     dir: Point, 
     max: usize
-) -> Option<Entity> {
+) -> Option<(Entity, Point)> {
     let mut steps = 0;
     let mut curr = start + dir;
     while steps < max {
@@ -178,7 +180,7 @@ fn actor_first_at(
         }
 
         if let Some(entity) = actor_at(ecs, curr) {
-            return Some(entity);
+            return Some((entity, curr));
         }
 
         curr = curr + dir;
@@ -202,7 +204,7 @@ fn item_first_at(
     dir: Point, 
     max: usize, 
     non_blocking: bool
-) -> Option<Entity> {
+) -> Option<(Entity, Point)> {
     let mut steps = 0;
     let mut curr = start + dir;
     while steps < max {
@@ -212,7 +214,7 @@ fn item_first_at(
         }
 
         if let Some(entity) = item_at(ecs, curr, non_blocking) {
-            return Some(entity);
+            return Some((entity, curr));
         }
 
         curr = curr + dir;
