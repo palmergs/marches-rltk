@@ -1,0 +1,215 @@
+[
+  {
+    "id": "torch",
+    "name": "Torch",
+    "tile": { "row": 1, "col": 11 },
+    "field-of-light": 5,
+    "stats": {
+      "armor": 0,
+      "speed": 0,
+      "power": 1
+    },
+    "equipment": {
+      "type": "weapon",
+      "slots": [ "left hand", "right hand" ]
+    }
+  },
+  {
+    "id": "dagger",
+    "name": "Dagger",
+    "tile": { "row": 13, "col": 116 },
+    "stats": { 
+      "armor": 0,
+      "speed": 0,
+      "power": 1
+    },
+    "equipment": {
+      "type": "weapon",
+      "slots": [ "left hand", "right hand" ]
+    }
+  },
+  {
+    "id": "flaming sword",
+    "name": "Flaming Sword",
+    "tile": { "row": 13, "col": 128 },
+    "field-of-light": 8,
+    "stats": {
+      "armor": 0,
+      "speed": 0,
+      "power": 4
+    },
+    "equipment": {
+      "type": "weapon",
+      "slots": [ "left hand", "right hand" ]
+    }
+  },
+  {
+    "id": "buckler",
+    "name": "Buckler",
+    "tile": { "row": 13, "col": 96 },
+    "stats": {
+      "armor": 1,
+      "speed": 0,
+      "power": 1
+    },
+    "equipment": {
+      "type": "weapon",
+      "slots": [ "left hand" ]
+    }
+  },
+  {
+    "id": "ring of protection",
+    "name": "Ring of Protection",
+    "tile": { "row": 12, "col": 59 },
+    "stats": {
+      "armor": 2,
+      "speed": 0,
+      "power": 0
+    },
+    "equipment": {
+      "type": "jewelry",
+      "slots": [ "left ring", "right ring" ]
+    }
+  },
+  {
+    "id": "ring of power",
+    "name": "Ring of Power",
+    "tile": { "row": 12, "col": 57 },
+    "stats": {
+      "armor": 0,
+      "speed": 0,
+      "power": 2
+    },
+    "equipment": {
+      "type": "jewelry",
+      "slots": [ "left ring", "right ring" ]
+    }
+  },
+  {
+    "id": "ring of lesser radiance",
+    "name": "Ring of Lesser Radiance",
+    "tile": { "row": 12, "col": 58 },
+    "stats": {
+      "armor": 0,
+      "speed": 0,
+      "power": 2
+    },
+    "equipment": {
+      "type": "jewelry",
+      "slots": [ "left ring", "right ring" ]
+    },
+    "field-of-light": 4
+  },
+  {
+    "id": "ring of greater radiance",
+    "name": "Ring of Greater Radiance",
+    "tile": { "row": 12, "col": 58 },
+    "stats": {
+      "armor": 1,
+      "speed": 0,
+      "power": 1
+    },
+    "equipment": {
+      "type": "jewelry",
+      "slots": [ "left ring", "right ring" ]
+    },
+    "field-of-light": 10
+  },
+  {
+    "id": "ring of haste",
+    "name": "Ring of Haste",
+    "tile": { "row": 12, "col": 58 },
+    "stats": {
+      "armor": 0,
+      "speed": -1,
+      "power": 0
+    },
+    "equipment": {
+      "type": "jewelry",
+      "slots": [ "left ring", "right ring" ]
+    }
+  },
+  {
+    "id": "seltzer",
+    "name": "Seltzer",
+    "tile": { "row": 12, "col": 56 },
+    "consumable": 1,
+    "provides-focus": 10
+  },
+  {
+    "id": "healing potion",
+    "name": "Healing Potion",
+    "tile": { "row": 12, "col": 55 },
+    "consumable": 1,
+    "provides-vigor": 10
+  },
+  {
+    "id": "tasty mushroom",
+    "name": "Mushroom",
+    "tile": { "row": 12, "col": 35 },
+    "consumable": 1,
+    "provides-vigor": 2
+  },
+  {
+    "id": "poison mushroom",
+    "name": "Mushroom",
+    "tile": { "row": 12, "col": 35 },
+    "consumable": 1,
+    "provides-vigor": -5
+  },
+  {
+    "id": "closed chest",
+    "name": "Chest",
+    "tile": { "row": 2, "col": 7 },
+    "stats": {
+      "armor": 5,
+      "speed": 0,
+      "power": 0
+    },
+    "vigor": { "max": 30, "curr": 30 },
+    "blocking": true,
+    "might-drop": [
+      { "id": "dagger", "chance": 50 },
+      { "id": "torch", "chance": 50 },
+      { "id": "ring of lesser radiance", "chance": 5 },
+      { "id": "ring of greater radiance", "chance": 1 }
+    ]
+  },
+  {
+    "id": "stairs down",
+    "name": "Stairs Down",
+    "tile": { "row": 2, "col": 5 },
+    "stairs-to": 0
+  },
+  {
+    "id": "stairs up",
+    "name": "Stairs Up",
+    "tile": { "row": 1, "col": 5 },
+    "stairs-to": 0
+  },
+  {
+    "id": "open door",
+    "name": "Open Door",
+    "tile": { "row": 1, "col": 4 },
+    "stats": {
+      "armor": 3,
+      "speed": 0,
+      "power": 0
+    },
+    "vigor": { "max": 30, "curr": 30 }
+  },
+  {
+    "id": "closed door",
+    "name": "Closed Door",
+    "tile": { "row": 1, "col": 4 },
+    "stats": {
+      "armor": 3,
+      "speed": 0,
+      "power": 0
+    },
+    "vigor": { "max": 30, "curr": 30 },
+    "might-drop": [
+      { "id": "dire dormouse", "chance": 200 }
+    ]
+  }
+]
