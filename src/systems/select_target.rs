@@ -67,7 +67,7 @@ pub fn select_target(
                 match cmd {
                     VirtualKeyCode::A | VirtualKeyCode::O => {
                         if distance < 2.0 {
-                            if let Some(item) = item_at(ecs, map_point, false) {
+                            if let Some(item) = item_at(ecs, map_point, true) {
                                 handle_activate(ecs, commands, map, player, item, map_point)                 
                             } else {
                                 TurnState::SelectingTarget(*cmd)

@@ -1,5 +1,10 @@
 use crate::prelude::*;
 
+lazy_static! {
+    pub static ref border_color: ColorPair = ColorPair::new(RGB::from_f32(0.25, 0.25, 0.25), BLACK);
+    pub static ref label_color: ColorPair = ColorPair::new(RGB::from_f32(0.5, 0.5, 0.5), BLACK);
+}
+
 #[system]
 #[read_component(Player)]
 #[read_component(Point)]
@@ -55,37 +60,34 @@ pub fn equipment(
 }
 
 fn draw_character(ecs: &SubWorld, draw_batch: &mut DrawBatch, rect: &Rect) {
-    let border_color: ColorPair = ColorPair::new(RGB::from_f32(0.25, 0.25, 0.25), BLACK);
-    let label_color: ColorPair = ColorPair::new(RGB::from_f32(0.5, 0.5, 0.5), BLACK);
-
     let mut query = <(&Render, &Physical, &Mental, &Stats, &Player)>::query();
     let (render, physical, mental, stats, player) = query.iter(ecs).next().unwrap();
 
-    draw_batch.draw_double_box(*rect, border_color);
+    draw_batch.draw_double_box(*rect, *border_color);
     let x = rect.x1 + 1;
     let y = rect.y1 + 1;
     draw_batch.print(Point::new(x, y), render.name.clone());
 
-    draw_batch.print_color(Point::new(x, y + 2), "Exploring".to_string(), label_color);
+    draw_batch.print_color(Point::new(x, y + 2), "Exploring".to_string(), *label_color);
     draw_batch.print(Point::new(12, 4), format!("{}", player.depth.abs()));
 
-    draw_batch.print_color(Point::new(x, y + 4), "AC".to_string(), label_color);
+    draw_batch.print_color(Point::new(x, y + 4), "AC".to_string(), *label_color);
     draw_batch.print(Point::new(x + 3, y + 4), format!("{}", stats.armor));
-    draw_batch.print_color(Point::new(x + 5, y + 4), "SP".to_string(), label_color);
+    draw_batch.print_color(Point::new(x + 5, y + 4), "SP".to_string(), *label_color);
     draw_batch.print(Point::new(x + 8, y + 4), format!("{}", stats.speed));
-    draw_batch.print_color(Point::new(x + 10, y + 4), "PW".to_string(), label_color);
+    draw_batch.print_color(Point::new(x + 10, y + 4), "PW".to_string(), *label_color);
     draw_batch.print(Point::new(x + 13, y + 4), format!("{}", stats.power));
 
-    draw_batch.print_color(Point::new(x, y + 6), "BRAWN".to_string(), label_color);
+    draw_batch.print_color(Point::new(x, y + 6), "BRAWN".to_string(), *label_color);
     draw_batch.print(Point::new(x + 7, y + 6), format!("{:>+3}", physical.brawn.curr));
-    draw_batch.print_color(Point::new(x, y + 7), "GRACE".to_string(), label_color);
+    draw_batch.print_color(Point::new(x, y + 7), "GRACE".to_string(), *label_color);
     draw_batch.print(Point::new(x + 7, y + 7), format!("{:>+3}", physical.grace.curr));
-    draw_batch.print_color(Point::new(x, y + 8), "CHARM".to_string(), label_color);
+    draw_batch.print_color(Point::new(x, y + 8), "CHARM".to_string(), *label_color);
     draw_batch.print(Point::new(x + 7, y + 8), format!("{:>+3}", mental.charm.curr));
-    draw_batch.print_color(Point::new(x, y + 9), "SMART".to_string(), label_color);
+    draw_batch.print_color(Point::new(x, y + 9), "SMART".to_string(), *label_color);
     draw_batch.print(Point::new(x + 7, y + 9), format!("{:>+3}", mental.smart.curr));     
 
-    draw_batch.print_color(Point::new(x, y + 11), "VIGOR".to_string(), label_color);
+    draw_batch.print_color(Point::new(x, y + 11), "VIGOR".to_string(), *label_color);
     draw_batch.bar_horizontal(
         Point::new(x + 6, y + 11), 
         12, 
@@ -93,7 +95,7 @@ fn draw_character(ecs: &SubWorld, draw_batch: &mut DrawBatch, rect: &Rect) {
         stats.vigor.max, 
         ColorPair::new(PINK, BLACK));
 
-    draw_batch.print_color(Point::new(x, y + 12), "FOCUS".to_string(), label_color);
+    draw_batch.print_color(Point::new(x, y + 12), "FOCUS".to_string(), *label_color);
     draw_batch.bar_horizontal(
         Point::new(x + 6, y + 12), 
         12, 
@@ -103,17 +105,14 @@ fn draw_character(ecs: &SubWorld, draw_batch: &mut DrawBatch, rect: &Rect) {
 }
 
 fn draw_visible(ecs: &SubWorld, draw_batch: &mut DrawBatch, rect: &Rect) {
-    let border_color: ColorPair = ColorPair::new(RGB::from_f32(0.25, 0.25, 0.25), BLACK);
-    let label_color: ColorPair = ColorPair::new(RGB::from_f32(0.5, 0.5, 0.5), BLACK);
-
     let mut query = <&FieldOfView>::query().filter(component::<Player>());
     let fov = query.iter(ecs).next().unwrap();
 
     let mut actor_count = 0;
-    draw_batch.draw_double_box(*rect, border_color);
+    draw_batch.draw_double_box(*rect, *border_color);
     let x = rect.x1 + 1;
     let y = rect.y1 + 1;
-    draw_batch.print_color(Point::new(x, y), "Visible".to_string(), label_color);
+    draw_batch.print_color(Point::new(x, y), "Visible".to_string(), *label_color);
     let mut query = <(&Point, &Render, &Stats)>::query().filter(!component::<Player>());
     query.iter(ecs)
         .filter(|(pt, _, _)| fov.visible_tiles.contains(pt) )
@@ -135,20 +134,27 @@ fn draw_visible(ecs: &SubWorld, draw_batch: &mut DrawBatch, rect: &Rect) {
         });
 }
 
+fn draw_target_select(
+    ecs: &SubWorld,
+    draw_batch: &mut DrawBatch,
+    rect: &Rect
+) {
+    
+}
+
 fn draw_inventory_select(
     ecs: &SubWorld, 
     draw_batch: &mut DrawBatch, 
     rect: &Rect
 ) {
-    let border_color: ColorPair = ColorPair::new(RGB::from_f32(0.75, 0.75, 0.75), BLACK);
-    let label_color: ColorPair = ColorPair::new(RGB::from_f32(0.75, 0.75, 0.75), BLACK);
-
     let inventory = list_of_item_counts(ecs);
 
-    draw_batch.draw_double_box(*rect, border_color);
+    draw_batch.draw_double_box(*rect, *border_color);
     let x = rect.x1 + 1;
-    let y = rect.y1 + 1;
-    draw_batch.print_color(Point::new(x, y), "Select Item (a-z)".to_string(), label_color);
+    let mut y = rect.y1 + 1;
+    draw_batch.print(Point::new(x, y), "Inventory");
+    y += 1;
+    draw_batch.print_color(Point::new(x, y), "Select Item (a-z)", *label_color);
     let mut item_offset = 2;
     let mut item_char = b'a';
     for (name, _, count) in inventory.iter() {
@@ -173,15 +179,13 @@ fn draw_equipment_select(
     draw_batch: &mut DrawBatch, 
     rect: &Rect
 ) {
-    let border_color: ColorPair = ColorPair::new(RGB::from_f32(0.75, 0.75, 0.75), BLACK);
-    let label_color: ColorPair = ColorPair::new(RGB::from_f32(0.75, 0.75, 0.75), BLACK);
-
     let equipment = list_of_equipment(ecs);
 
-    draw_batch.draw_double_box(*rect, border_color);
+    draw_batch.draw_double_box(*rect, *border_color);
     let x = rect.x1 + 1;
     let mut y = rect.y1 + 1;
-    draw_batch.print_color(Point::new(x, y), "Select Equipment (a-z)".to_string(), label_color);
+    draw_batch.print(Point::new(x, y), "Equipment");
+    draw_batch.print_color(Point::new(x, y), "Select Equipment (a-z)", *label_color);
     y += 2;
     let mut item_char = b'a';
     for (name, _, slot) in equipment.iter() {
@@ -196,13 +200,10 @@ fn draw_equipment_select(
 }
 
 fn draw_equipment(ecs: &SubWorld, draw_batch: &mut DrawBatch, rect: &Rect) {
-    let border_color: ColorPair = ColorPair::new(RGB::from_f32(0.25, 0.25, 0.25), BLACK);
-    let label_color: ColorPair = ColorPair::new(RGB::from_f32(0.5, 0.5, 0.5), BLACK);
-
-    draw_batch.draw_double_box(*rect, border_color);
+    draw_batch.draw_double_box(*rect, *border_color);
     let x = rect.x1 + 1;
     let mut y = rect.y1 + 2;
-    draw_batch.print_color(Point::new(x, y), "Equipment".to_string(), label_color);
+    draw_batch.print_color(Point::new(x, y), "Equipment".to_string(), *label_color);
 
     <(&Equipped, &Render)>::query()
         .iter(ecs)
