@@ -59,6 +59,19 @@ pub fn equipment(
     draw_batch.submit(9999).expect("batch error in drawing equipment select");
 }
 
+#[system]
+#[read_component(Player)]
+#[read_component(Point)]
+#[read_component(Render)]
+pub fn target(
+    ecs: &SubWorld,
+) {
+    let mut draw_batch = DrawBatch::new();
+    draw_batch.target(UI_LAYER);
+    draw_target_select(ecs, &mut draw_batch, &Rect::with_size(DISPLAY_WIDTH - 32, 1, 30, 5));
+    draw_batch.submit(9999).expect("batch error in drawing target select");
+}
+
 fn draw_character(ecs: &SubWorld, draw_batch: &mut DrawBatch, rect: &Rect) {
     let mut query = <(&Render, &Physical, &Mental, &Stats, &Player)>::query();
     let (render, physical, mental, stats, player) = query.iter(ecs).next().unwrap();
@@ -139,7 +152,12 @@ fn draw_target_select(
     draw_batch: &mut DrawBatch,
     rect: &Rect
 ) {
-    
+   draw_batch.draw_double_box(*rect, *border_color);
+   let x = rect.x1 + 1;
+   let mut y = rect.y1 + 1;
+   draw_batch.print(Point::new(x, y), "Target");
+   y += 1;
+   draw_batch.print_color(Point::new(x, y), "Select Target (mouse)", *label_color);
 }
 
 fn draw_inventory_select(

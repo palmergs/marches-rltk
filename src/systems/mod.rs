@@ -85,6 +85,7 @@ pub fn build_select_target_schedule() -> Schedule {
         .flush()
         .add_system(render::render_system())
         .add_system(hud::character_system())
+        .add_system(hud::target_system())
         .add_system(mouse::mouse_system())
         .flush()
         .add_system(select_target::select_target_system())
