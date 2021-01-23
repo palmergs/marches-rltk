@@ -105,17 +105,12 @@ pub fn drop_item(ecs: &mut SubWorld, commands: &mut CommandBuffer, item: Entity)
 
 pub fn drop_item_at(ecs: &mut SubWorld, commands: &mut CommandBuffer, item: Entity, pt: Point) {
     let (player, _) = player_at(ecs);
-    println!("in drop item {:?} at {:?}", item, pt);
     if let Ok(item_ref) = ecs.entry_ref(item) {
         if item_ref.get_component::<Equipped>().is_ok() {
-            println!("about to un equip");
             unequip_item(ecs, commands, player, item);
         }
 
-        println!("about to remove component carried");
         commands.remove_component::<Carried>(item);
-
-        println!("about to add component {:?}={:?}", item, pt);
         commands.add_component(item, pt);
 
         // if this is a light source, let the world know that it needs ot 
@@ -133,8 +128,6 @@ pub fn drop_item_at(ecs: &mut SubWorld, commands: &mut CommandBuffer, item: Enti
             ticks: 40,
             count: 0,
         },));
-    } else {
-        println!("could not get entry ref");
     }
 }
 

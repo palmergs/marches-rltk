@@ -62,8 +62,6 @@ pub fn select_target(
     } else if click.0 {
         let map_point = camera.offset() + *point;
         let distance = DistanceAlg::Pythagoras.distance2d(player_pt, map_point);
-        let mut new_state = *state;
-
         let new_state = match state {
             TurnState::SelectingTarget(cmd) => {
                 match cmd {
