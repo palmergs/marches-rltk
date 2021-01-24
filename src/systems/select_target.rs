@@ -99,7 +99,7 @@ fn handle_activate(
 ) -> TurnState {
 
     if let Ok(item_comp) = ecs.entry_ref(item).unwrap().get_component::<Item>() {
-        match item_comp.id {
+        match &item_comp.id[..] {
             "open door" => {
                 commands.remove(item);
                 commands.push(closed_door_tuple(item_pt));

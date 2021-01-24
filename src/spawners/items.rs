@@ -3,7 +3,7 @@ use crate::prelude::*;
 pub fn torch_tuple(pt: Point) -> (Item, Equippable, Point, Render, FieldOfLight, Stats) {
     (
         Item{
-            id: "torch",
+            id: "torch".to_string(),
             blocking: false, 
             opaque: false,
             can_get: true,
@@ -30,7 +30,7 @@ pub fn torch_tuple(pt: Point) -> (Item, Equippable, Point, Render, FieldOfLight,
 pub fn dagger_tuple(pt: Point) -> (Item, Equippable, Point, Render, Stats) {
     (
         Item{
-            id: "dagger",
+            id: "dagger".to_string(),
             blocking: false, 
             opaque: false,
             can_get: true,
@@ -56,7 +56,7 @@ pub fn dagger_tuple(pt: Point) -> (Item, Equippable, Point, Render, Stats) {
 pub fn flaming_sword_tuple(pt: Point) -> (Item, Equippable, Point, Render, FieldOfLight, Stats) {
     (
         Item{
-            id: "flaming sword",
+            id: "flaming sword".to_string(),
             blocking: false, 
             opaque: false,
             can_get: true,
@@ -83,7 +83,7 @@ pub fn flaming_sword_tuple(pt: Point) -> (Item, Equippable, Point, Render, Field
 pub fn buckler_tuple(pt: Point) -> (Item, Equippable, Point, Render, Stats) {
     (
         Item{
-            id: "buckler",
+            id: "buckler".to_string(),
             blocking: false, 
             opaque: false,
             can_get: true,
@@ -109,7 +109,7 @@ pub fn buckler_tuple(pt: Point) -> (Item, Equippable, Point, Render, Stats) {
 pub fn ring_of_protection_tuple(pt: Point) -> (Item, Equippable, Point, Render, Stats) {
     (
         Item{
-            id: "ring of protection",
+            id: "ring of protection".to_string(),
             blocking: false, 
             opaque: false,
             can_get: true,
@@ -135,7 +135,7 @@ pub fn ring_of_protection_tuple(pt: Point) -> (Item, Equippable, Point, Render, 
 pub fn ring_of_power_tuple(pt: Point) -> (Item, Equippable, Point, Render, Stats) {
     (
         Item{
-            id: "ring of power",
+            id: "ring of power".to_string(),
             blocking: false, 
             opaque: false,
             can_get: true,
@@ -161,7 +161,7 @@ pub fn ring_of_power_tuple(pt: Point) -> (Item, Equippable, Point, Render, Stats
 pub fn ring_of_lesser_radiance_tuple(pt: Point) -> (Item, Equippable, Point, Render, Stats, FieldOfLight) {
     (
         Item{
-            id: "ring of lesser radiance",
+            id: "ring of lesser radiance".to_string(),
             blocking: false, 
             opaque: false,
             can_get: true,
@@ -188,7 +188,7 @@ pub fn ring_of_lesser_radiance_tuple(pt: Point) -> (Item, Equippable, Point, Ren
 pub fn ring_of_greater_radiance_tuple(pt: Point) -> (Item, Equippable, Point, Render, Stats, FieldOfLight) {
     (
         Item{
-            id: "ring of greater radiance",
+            id: "ring of greater radiance".to_string(),
             blocking: false, 
             opaque: false,
             can_get: true,
@@ -215,7 +215,7 @@ pub fn ring_of_greater_radiance_tuple(pt: Point) -> (Item, Equippable, Point, Re
 pub fn seltzer_tuple(pt: Point) -> (Item, Point, Render, Stats, Consumable, RestoresFocus) {
     (
         Item{
-            id: "seltzer",
+            id: "seltzer".to_string(),
             blocking: false, 
             opaque: false,
             can_get: true,
@@ -240,7 +240,7 @@ pub fn seltzer_tuple(pt: Point) -> (Item, Point, Render, Stats, Consumable, Rest
 pub fn healing_potion_tuple(pt: Point) -> (Item, Point, Render, Stats, Consumable, RestoresVigor) {
     (
         Item{
-            id: "healing potion",
+            id: "healing potion".to_string(),
             blocking: false, 
             opaque: false,
             can_get: true,
@@ -265,7 +265,7 @@ pub fn healing_potion_tuple(pt: Point) -> (Item, Point, Render, Stats, Consumabl
 pub fn mushroom1_tuple(pt: Point) -> (Item, Point, Render, Stats, Consumable, RestoresVigor ) {
     (
         Item{
-            id: "nourishing mushroom",
+            id: "nourishing mushroom".to_string(),
             blocking: false, 
             opaque: false,
             can_get: true,
@@ -290,7 +290,7 @@ pub fn mushroom1_tuple(pt: Point) -> (Item, Point, Render, Stats, Consumable, Re
 pub fn mushroom2_tuple(pt: Point) -> (Item, Point, Render, Stats, Consumable, RestoresVigor) {
     (
         Item{
-            id: "posion mushroom",
+            id: "posion mushroom".to_string(),
             blocking: false, 
             opaque: false,
             can_get: true,
@@ -315,7 +315,7 @@ pub fn mushroom2_tuple(pt: Point) -> (Item, Point, Render, Stats, Consumable, Re
 pub fn chest_tuple(pt: Point) -> (Item, Point, Render, Stats, Spawns) {
     (
         Item{
-            id: "closed chest",
+            id: "closed chest".to_string(),
             blocking: true,
             opaque: false,
             can_get: false,
@@ -348,7 +348,7 @@ pub fn chest_tuple(pt: Point) -> (Item, Point, Render, Stats, Spawns) {
 pub fn stairs_down_tuple(pt: Point, to_depth: i32) -> (Item, Point, Render, Stats, Stairs) {
     (
         Item{
-            id: "stairs down",
+            id: "stairs down".to_string(),
             blocking: false, 
             opaque: false,
             can_get: false,
@@ -373,7 +373,7 @@ pub fn stairs_down_tuple(pt: Point, to_depth: i32) -> (Item, Point, Render, Stat
 pub fn stairs_up_tuple(pt: Point, to_depth: i32) -> (Item, Point, Render, Stats, Stairs) {
     (
         Item{
-            id: "stairs up",
+            id: "stairs up".to_string(),
             blocking: false, 
             opaque: false,
             can_get: false,
@@ -397,7 +397,7 @@ pub fn stairs_up_tuple(pt: Point, to_depth: i32) -> (Item, Point, Render, Stats,
 pub fn open_door_tuple(pt: Point) -> (Item, Point, Render, Stats) {
     (
         Item{
-            id: "open door",
+            id: "open door".to_string(),
             blocking: false,
             opaque: false,
             can_get: false,
@@ -420,7 +420,7 @@ pub fn open_door_tuple(pt: Point) -> (Item, Point, Render, Stats) {
 pub fn closed_door_tuple(pt: Point) -> (Item, Point, Render, Stats, Spawns) {
     (
         Item{
-            id: "closed door",
+            id: "closed door".to_string(),
             blocking: true, 
             opaque: true,
             can_get: false,
