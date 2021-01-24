@@ -1,8 +1,8 @@
 use crate::prelude::*;
-
+use serde::{ Serialize, Deserialize };
 use std::collections::HashSet;
 
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
 pub enum TileType {
     Floor(i32),
     Wall(i32),
@@ -26,6 +26,7 @@ pub const WATER:i32 = 128 + 26;
 pub const FLOOR:i32 = 128 + 18;
 pub const STONE:i32 = 128 + 2;
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Map {
     pub depth: i32,
     pub origin: Point,

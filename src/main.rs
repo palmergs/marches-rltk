@@ -1,6 +1,7 @@
 #[macro_use]
 extern crate lazy_static;
 extern crate bracket_lib;
+extern crate serde;
 
 mod components;
 mod maps;

@@ -14,6 +14,7 @@ pub fn player_input(
     ecs: &mut SubWorld,
     commands: &mut CommandBuffer,
     #[resource] key: &Option<VirtualKeyCode>,
+    #[resource] map: &Map,
     #[resource] state: &mut TurnState,
     #[resource] turn: &mut TurnCount,
 ) {
@@ -85,7 +86,9 @@ pub fn player_input(
 
             // equip or wield or wear an item
             VirtualKeyCode::W | VirtualKeyCode::E =>    TurnState::SelectingItem(VirtualKeyCode::E),            
-            
+           
+            // temporary placement for save data
+            VirtualKeyCode::S =>                        handle_save(ecs, commands, map),
 
             _ => TurnState::ComputerTurn,
         };
@@ -94,6 +97,17 @@ pub fn player_input(
         *state = new_state;
     }
 }
+
+fn handle_save(
+    ecs: &mut SubWorld,
+    commands: &mut CommandBuffer,
+    map: &Map,
+) -> TurnState {
+    let data = serde_json::to_string(map).unwrap();
+    println!("Saving map data...\n{}", data);
+    TurnState::ComputerTurn
+}
+
 
 fn handle_pickup(
     ecs: &mut SubWorld,
