@@ -88,7 +88,7 @@ pub fn player_input(
             VirtualKeyCode::W | VirtualKeyCode::E =>    TurnState::SelectingItem(VirtualKeyCode::E),            
            
             // temporary placement for save data
-            VirtualKeyCode::S =>                        handle_save(ecs, commands, map),
+            VirtualKeyCode::S =>                        TurnState::SavingWorld,
 
             _ => TurnState::ComputerTurn,
         };
@@ -97,17 +97,6 @@ pub fn player_input(
         *state = new_state;
     }
 }
-
-fn handle_save(
-    ecs: &mut SubWorld,
-    commands: &mut CommandBuffer,
-    map: &Map,
-) -> TurnState {
-    let data = serde_json::to_string(map).unwrap();
-    println!("Saving map data...\n{}", data);
-    TurnState::ComputerTurn
-}
-
 
 fn handle_pickup(
     ecs: &mut SubWorld,

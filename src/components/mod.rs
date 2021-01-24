@@ -13,10 +13,10 @@ pub struct Player {
     pub depth: i32,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Item {
     // hard coded id of this item
-    pub id: &'static str,
+    pub id: String,
 
     // if true this item blocks movement if on the map
     pub blocking: bool,
@@ -35,37 +35,39 @@ impl Item {
     pub fn is_carryable(&self) -> bool { self.can_get }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
 pub struct Actor;
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Render {
     pub name: String,
     pub tile: usize,
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Carried;
 
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RestoresVigor {
     pub amount: i32,
 }
 
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RestoresFocus {
     pub amount: i32,
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Consumable{
     pub count: i32,
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Equippable {
     pub primary: EquipmentSlot,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
 pub enum EquipmentSlot {
     Head,
     Neck,
@@ -80,18 +82,18 @@ pub enum EquipmentSlot {
     Shoulders,
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Equipped {
     pub slot: EquipmentSlot,
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum SpawnTrigger {
     Killed,
     Opened,
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SpawnEntity {
     pub id: String,
     pub chance: i32, // out of 1000
@@ -109,17 +111,17 @@ impl SpawnEntity {
     }
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Spawns {
     pub entities: Vec<SpawnEntity>,
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Stairs {
     pub to_depth: i32,
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FieldOfView {
     pub visible_tiles: HashSet<Point>,
     pub radius: i32,
@@ -142,7 +144,7 @@ impl FieldOfView {
     }
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FieldOfLight {
     pub lit_tiles: HashSet<Point>,
     pub radius: i32,
@@ -161,19 +163,19 @@ impl FieldOfLight {
     }
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MightTalk {
     pub chance: i32, // in 1000
     pub phrases: Vec<String>,
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum TextDisplay {
     Fade(Point),
     AnimateUp(Point),
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Text {
     pub display: TextDisplay,
     pub text: String,
@@ -197,7 +199,7 @@ impl Text {
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
 pub enum Direction {
     North,
     South,
@@ -226,7 +228,7 @@ impl Direction {
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
 pub enum MoveStrategy {
     Player,
     Random,
@@ -235,7 +237,7 @@ pub enum MoveStrategy {
     Flee,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
 pub enum Outlook {
     Player,
     Aggressive,

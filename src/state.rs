@@ -1,5 +1,5 @@
 use crate::prelude::*;
-
+use serde_json;
 use std::collections::HashSet;
 
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -11,6 +11,7 @@ pub enum TurnState {
     SelectingEquipped(VirtualKeyCode),
     SelectingTarget(VirtualKeyCode),
     ComputerTurn,
+    SavingWorld,
     GameOver,
 }
 
@@ -156,6 +157,15 @@ impl State {
             self.reset_game_state();
         }
     }
+
+    fn save_world(&mut self, ctx: &mut BTerm) {
+        let mut registry = Registry::<String>::default();
+        registry.register::<Point>("point".to_string());
+
+        let json = serde_json::to_value(self.ecs.as_serializable(component::<Point>(), &registry)).unwrap();
+        println!("{:#}", json);
+        self.resources.insert(TurnState::AwaitingInput);
+    }
 }
 
 impl GameState for State {
@@ -190,6 +200,7 @@ impl GameState for State {
             TurnState::SelectingItem(_) => self.select_item_schedule.execute(&mut self.ecs, &mut self.resources),
             TurnState::SelectingEquipped(_) => self.select_equipped_schedule.execute(&mut self.ecs, &mut self.resources),
             TurnState::ComputerTurn => self.computer_schedule.execute(&mut self.ecs, &mut self.resources),
+            TurnState::SavingWorld => self.save_world(ctx),
             TurnState::GameOver => self.game_over(ctx),
         };
 
