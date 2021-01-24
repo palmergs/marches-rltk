@@ -1,5 +1,5 @@
 use crate::prelude::*;
-
+use serde::{Serialize, Deserialize};
 use std::collections::HashSet;
 
 mod attributes;
@@ -8,12 +8,12 @@ pub use attributes::*;
 mod commands;
 pub use commands::*;
 
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
 pub struct Player {
     pub depth: i32,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
 pub struct Item {
     // hard coded id of this item
     pub id: &'static str,
