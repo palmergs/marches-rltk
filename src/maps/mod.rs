@@ -26,6 +26,57 @@ pub const WATER:i32 = 128 + 26;
 pub const FLOOR:i32 = 128 + 18;
 pub const STONE:i32 = 128 + 2;
 
+// This is the current amount of navigable space at this tile 
+// necessary to calculate passage for actors that take more than 
+// one tile (max: 7)
+const SPACE:u32 =       0x000_0000;
+
+// Up to 16 tile types are supported (which may look different depending on theme)
+// 0.  0000 Void
+// 1.  0001 Stone Floor 
+// 2.  0010 Grass
+// 3.  0011 Dirt
+// 4.  0100 Wood Floor
+// 5.  0101 Mud
+// 6.  0110 Water Surface
+// 7.  0111 Lava Surface
+// 8.  1000 Solid Stone
+// 9.  1001 Stonework (large stones)
+// 10. 1010 Brick Wall (small rectangular stones)
+// 11. 1011 Earth Wall (packed earth or sand)
+// 12. 1100 Wood Wall (wood construction)
+// 13. 1101 Deep Mud (character is swimming through mud)
+// 14. 1110 Deep Water (character is swimming)
+// 15. 1111 Deep Lava (character is swimming through lava)
+//const TILE_TYPE:u32 =   0x0f00_0000;
+
+// This tile is currently occupied by an actor
+//const ACTOR:u32 =       0x0080_0000;
+
+// This tile is currently blocked
+//const BLOCKED:u32 =     0x0040_0000;
+
+// This tile has been revealed to the player
+//const REVEALED:u32 =    0x0020_0000;
+
+// This tile has been visited by the player
+//const VISITED:u32 =     0x0010_0000;
+
+// This tile blocks light, heat and vision (max: 15)
+//const OPACITY:u32 =     0x000f_0000;
+
+// This tile is a source of heat (max: 15);
+//const HSOURCE:u32 =     0x0000_f000;
+
+// This tile is heated (which may occlude infravision) (max: 15)
+//const HEAT:u32 =        0x0000_0f00;
+
+// This tile is the source of light (max: 15)
+//const LSOURCE:u32 =     0x0000_00f0;
+
+// This tile is lit (max intensity: 15)
+//const LIGHT:u32 =       0x0000_000f;
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Map {
     pub depth: i32,
