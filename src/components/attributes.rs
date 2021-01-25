@@ -1,8 +1,9 @@
 use crate::prelude::*;
+use serde::{Serialize, Deserialize};
 
 // Physical attributes associated with an entity that can engage in
 // its environment. Actors yes, items no.
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Physical {
     pub brawn: Brawn,
     pub grace: Grace,
@@ -19,7 +20,7 @@ impl Physical {
 
 // Mental attributes associated with an entity that can engage in at least
 // rudamentary thought; actors yes, items no (except possible magic items)
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Mental {
     pub outlook: Outlook,
     pub strategy: MoveStrategy,
@@ -81,7 +82,7 @@ impl Mental {
 
 // Attributes associated with an entity that can be damaged and and moved.
 // Actors ues, items yes.
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Stats {
     pub speed: usize,
     pub armor: i32,
@@ -128,7 +129,7 @@ pub trait ValueWithMax {
     }
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Brawn {
     pub curr: i32,
     pub max: i32
@@ -148,7 +149,7 @@ impl ValueWithMax for Brawn {
     fn curr(&self) -> i32 { self.curr }
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Grace {
     pub curr: i32,
     pub max: i32,
@@ -168,7 +169,7 @@ impl ValueWithMax for Grace {
     fn curr(&self) -> i32 { self.curr }
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Charm {
     pub curr: i32,
     pub max: i32,
@@ -188,7 +189,7 @@ impl ValueWithMax for Charm {
     fn curr(&self) -> i32 { self.curr }
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Smart {
     pub curr: i32,
     pub max: i32,
@@ -208,7 +209,7 @@ impl ValueWithMax for Smart {
     fn curr(&self) -> i32 { self.curr }
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Focus {
     pub curr: i32,
     pub max: i32,
@@ -228,7 +229,7 @@ impl ValueWithMax for Focus {
     fn curr(&self) -> i32 { self.curr }
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Vigor {
     pub curr: i32,
     pub max: i32,
