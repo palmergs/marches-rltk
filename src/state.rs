@@ -159,10 +159,43 @@ impl State {
     }
 
     fn save_world(&mut self, ctx: &mut BTerm) {
-        let mut registry = Registry::<String>::default();
-        registry.register::<Point>("point".to_string());
 
-        let json = serde_json::to_value(self.ecs.as_serializable(component::<Point>(), &registry)).unwrap();
+        let map = self.resources.get::<Map>().unwrap().clone();
+        let json = serde_json::to_string(&map).unwrap();
+        println!("{:#}", json);
+
+
+        let mut registry = Registry::<String>::default();
+        registry.register::<Render>("render".to_string());
+        registry.register::<Carried>("carried".to_string());
+        registry.register::<Consumable>("consumable".to_string());
+        registry.register::<Equippable>("equipment".to_string());
+        registry.register::<Equipped>("equipped".to_string());
+        registry.register::<Spawns>("spawner".to_string());
+        registry.register::<Stairs>("stairs".to_string());
+        registry.register::<Point>("point".to_string());
+        registry.register::<Player>("player".to_string());
+        registry.register::<Physical>("physical".to_string());
+        registry.register::<Mental>("mental".to_string());
+        registry.register::<Stats>("stats".to_string());
+        registry.register::<RestoresFocus>("restores_focus".to_string());
+        registry.register::<RestoresVigor>("restores_vigor".to_string());
+        registry.register::<Item>("item".to_string());
+        registry.register::<Actor>("actor".to_string());
+        registry.register::<FieldOfView>("fov".to_string());
+        registry.register::<FieldOfLight>("fol".to_string());
+        registry.register::<Stairs>("stairs".to_string());
+        registry.register::<Text>("text".to_string());
+        registry.register::<MightTalk>("might_talk".to_string());
+
+        registry.register::<i32>("i32".to_string());
+        registry.register::<usize>("usize".to_string());
+        registry.register::<bool>("bool".to_string());
+
+        let json = serde_json::to_value(
+            self.ecs.as_serializable(
+                component::<Point>(), 
+                &registry)).unwrap();
         println!("{:#}", json);
         self.resources.insert(TurnState::AwaitingInput);
     }
