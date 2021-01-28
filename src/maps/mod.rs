@@ -29,7 +29,7 @@ pub const STONE:i32 = 128 + 2;
 // This is the current amount of navigable space at this tile 
 // necessary to calculate passage for actors that take more than 
 // one tile (max: 7)
-const SPACE:u32 =       0x000_0000;
+// const SPACE:u32 =       0x000_0000;
 
 // Up to 16 tile types are supported (which may look different depending on theme)
 // 0.  0000 Void

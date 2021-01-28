@@ -14,7 +14,6 @@ pub fn player_input(
     ecs: &mut SubWorld,
     commands: &mut CommandBuffer,
     #[resource] key: &Option<VirtualKeyCode>,
-    #[resource] map: &Map,
     #[resource] state: &mut TurnState,
     #[resource] turn: &mut TurnCount,
 ) {
