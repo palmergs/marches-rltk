@@ -37,7 +37,7 @@ pub fn select_target(
                     match cmd {
                         VirtualKeyCode::A | VirtualKeyCode::O => {
                             let pt = pt + player_pt;
-                            if let Some(item) = item_at(ecs, pt, false) {
+                            if let Some(item) = item_at(ecs, pt, true) {
                                 handle_activate(ecs, commands, map, player, item, pt)
                             } else {
                                 TurnState::AwaitingInput
