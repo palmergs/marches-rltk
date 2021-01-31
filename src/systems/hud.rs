@@ -24,6 +24,7 @@ pub fn character(
     draw_character(ecs, &mut draw_batch, &Rect::with_size(1, 1, 20, 15));
     draw_equipment(ecs, &mut draw_batch, &Rect::with_size(1, 17, 20, 20));
     draw_visible(ecs, &mut draw_batch, &Rect::with_size(1, 38, 20, 30));
+    draw_instructions(ecs, &mut draw_batch, &Rect::with_size(1, 69, 20, 11));
     draw_batch.submit(9999).expect("batch error in drawing character");
 }
 
@@ -134,17 +135,42 @@ fn draw_visible(ecs: &SubWorld, draw_batch: &mut DrawBatch, rect: &Rect) {
                 actor_count += 1;
                 if stats.vigor.is_wounded() {
                     draw_batch.print_color(
-                        Point::new(x, y + 2 + actor_count), 
+                        Point::new(x, y + 1 + actor_count), 
                         render.name.clone(), 
                         ColorPair::new(PINK, BLACK));
                 } else {
                     draw_batch.print_color(
-                        Point::new(x, y + 2 + actor_count), 
+                        Point::new(x, y + 1 + actor_count), 
                         render.name.clone(), 
                         ColorPair::new(WHITE, BLACK));
                 }
             }
         });
+}
+
+fn draw_instructions(ecs: &SubWorld, draw_batch: &mut DrawBatch, rect: &Rect) {
+    draw_batch.draw_double_box(*rect, *BORDER_COLOR);
+    let x = rect.x1 + 1;
+    let mut y = rect.y1 + 1;
+    draw_batch.print_color(Point::new(x, y), "num / arrow move", *LABEL_COLOR);
+    y += 1;
+    draw_batch.print_color(Point::new(x, y), "(g)et item", *LABEL_COLOR);
+    y += 1;
+    draw_batch.print_color(Point::new(x, y), "(d)rop item", *LABEL_COLOR);
+    y += 1;
+    draw_batch.print_color(Point::new(x, y), "(u)se item", *LABEL_COLOR);
+    y += 1;
+    draw_batch.print_color(Point::new(x, y), "(i)nventory", *LABEL_COLOR);
+    y += 1;
+    draw_batch.print_color(Point::new(x, y), "(o)pen / (a)ctivate", *LABEL_COLOR);
+    y += 1;
+    draw_batch.print_color(Point::new(x, y), "(e)quip or (w)ear", *LABEL_COLOR);
+    y += 1;
+    draw_batch.print_color(Point::new(x, y), "(f)ire or throw", *LABEL_COLOR);
+    y += 1;
+    draw_batch.print_color(Point::new(x, y), "(>) down stairs", *LABEL_COLOR);
+    y += 1;
+    draw_batch.print_color(Point::new(x, y), "(<) up stairs", *LABEL_COLOR);
 }
 
 fn draw_target_select(
@@ -220,8 +246,9 @@ fn draw_equipment_select(
 fn draw_equipment(ecs: &SubWorld, draw_batch: &mut DrawBatch, rect: &Rect) {
     draw_batch.draw_double_box(*rect, *BORDER_COLOR);
     let x = rect.x1 + 1;
-    let mut y = rect.y1 + 2;
+    let mut y = rect.y1 + 1;
     draw_batch.print_color(Point::new(x, y), "Equipment".to_string(), *LABEL_COLOR);
+    y +=1;
 
     <(&Equipped, &Render)>::query()
         .iter(ecs)
