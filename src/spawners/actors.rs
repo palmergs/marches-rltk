@@ -167,7 +167,7 @@ pub fn goblin_with_torch_tuple(pt: Point) -> (Actor, Point, Render, FieldOfView,
         pt,
         Render{
             name: "Goblin with torch".to_string(),
-            tile: tile_index(12, 9),
+            tile: tile_index(11, 9),
         },
         FieldOfView::new(7),
         FieldOfLight::new(5),
@@ -244,7 +244,7 @@ pub fn skeleton_with_torch_tuple(pt: Point) -> (Actor, Point, Render, FieldOfVie
         pt, 
         Render{
             name: "Skeleton with torch".to_string(),
-            tile: tile_index(12, 24),
+            tile: tile_index(11, 24),
         },
         FieldOfView::new(5),
         FieldOfLight::new(5),

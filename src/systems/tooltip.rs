@@ -28,7 +28,7 @@ pub fn tooltip(
             };
             let mut draw_batch = DrawBatch::new();
             draw_batch.target(UI_LAYER);
-            draw_batch.print_color((*pt - camera.offset()) * 2, text, color);
+            draw_batch.print_color((*pt - camera.offset()) * 4, text, color);
             draw_batch.submit(5000).expect("error rendering tooltip text");
         });
 }

@@ -29,13 +29,13 @@ pub mod prelude {
     pub use crate::state::*;
     pub use crate::tile_index;
 
-    pub const SCREEN_WIDTH: i32 = 80;
-    pub const SCREEN_HEIGHT: i32 = 50;
+    pub const SCREEN_WIDTH: i32 = 40;
+    pub const SCREEN_HEIGHT: i32 = 25;
     pub const MAP_WIDTH: usize = 160;
     pub const MAP_HEIGHT: usize = 100;
     pub const MAP_TILES: usize = MAP_WIDTH * MAP_HEIGHT;
-    pub const DISPLAY_WIDTH: i32 = SCREEN_WIDTH * 2;
-    pub const DISPLAY_HEIGHT: i32 = SCREEN_HEIGHT * 2;
+    pub const DISPLAY_WIDTH: i32 = SCREEN_WIDTH * 4;
+    pub const DISPLAY_HEIGHT: i32 = SCREEN_HEIGHT * 4;
 
     // Terminal layers
     pub const FLOOR_LAYER:usize = 0;
@@ -55,13 +55,13 @@ fn main() -> BError {
     let context = BTermBuilder::new()
         .with_title("The Western Marches")
         .with_dimensions(SCREEN_WIDTH, SCREEN_HEIGHT)
-        .with_tile_dimensions(16, 16)
+        .with_tile_dimensions(32, 32)
         .with_resource_path("resources/")
-        .with_font("unicode_trunc_graph_16x16.png", 16, 16)
+        .with_font("unicode_trunc_graph_32x32.png", 32, 32)
         .with_font("terminal8x8.png", 8, 8)
-        .with_simple_console(SCREEN_WIDTH, SCREEN_HEIGHT, "unicode_trunc_graph_16x16.png")
-        .with_simple_console_no_bg(SCREEN_WIDTH, SCREEN_HEIGHT, "unicode_trunc_graph_16x16.png")
-        .with_simple_console_no_bg(SCREEN_WIDTH, SCREEN_HEIGHT, "unicode_trunc_graph_16x16.png")
+        .with_simple_console(SCREEN_WIDTH, SCREEN_HEIGHT, "unicode_trunc_graph_32x32.png")
+        .with_simple_console_no_bg(SCREEN_WIDTH, SCREEN_HEIGHT, "unicode_trunc_graph_32x32.png")
+        .with_simple_console_no_bg(SCREEN_WIDTH, SCREEN_HEIGHT, "unicode_trunc_graph_32x32.png")
         .with_simple_console_no_bg(DISPLAY_WIDTH, DISPLAY_HEIGHT, "terminal8x8.png")
         .build()?;
 

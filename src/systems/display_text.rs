@@ -20,7 +20,7 @@ pub fn display_text(
                     let dy = (fade * 4.0) as i32;
                     let pt = pt - camera.offset() - Point::new(0, dy);
                     draw_batch.print_color(
-                        pt * 2 + Point::new(1,0), 
+                        pt * 4 + Point::new(1,0), 
                         cmd.text.clone(), 
                         ColorPair::new(rgba, BLACK));
                 }
@@ -29,7 +29,7 @@ pub fn display_text(
                 if camera.in_central_view(pt) {
                     let pt = pt - camera.offset();
                     draw_batch.print_color(
-                        pt * 2, 
+                        pt * 4, 
                         cmd.text.clone(), 
                         ColorPair::new(rgba, BLACK));
                 }
