@@ -59,9 +59,9 @@ fn main() -> BError {
         .with_resource_path("resources/")
         .with_font("unicode_trunc_graph_32x32.png", 32, 32)
         .with_font("terminal8x8.png", 8, 8)
-        .with_simple_console(SCREEN_WIDTH, SCREEN_HEIGHT, "unicode_trunc_graph_32x32.png")
-        .with_simple_console_no_bg(SCREEN_WIDTH, SCREEN_HEIGHT, "unicode_trunc_graph_32x32.png")
-        .with_simple_console_no_bg(SCREEN_WIDTH, SCREEN_HEIGHT, "unicode_trunc_graph_32x32.png")
+        .with_fancy_console(SCREEN_WIDTH, SCREEN_HEIGHT, "unicode_trunc_graph_32x32.png")
+        .with_fancy_console(SCREEN_WIDTH, SCREEN_HEIGHT, "unicode_trunc_graph_32x32.png")
+        .with_fancy_console(SCREEN_WIDTH, SCREEN_HEIGHT, "unicode_trunc_graph_32x32.png")
         .with_simple_console_no_bg(DISPLAY_WIDTH, DISPLAY_HEIGHT, "terminal8x8.png")
         .build()?;
 
