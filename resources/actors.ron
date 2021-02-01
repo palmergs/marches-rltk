@@ -1,0 +1,152 @@
+Actors(
+  actors: [
+    Actor(
+      id: "rat",
+      name: "Dungeon Rat",
+      tiles: [(13, 1)],
+      field_of_view: 4,
+      armor: 0, speed: 2, power: 1,
+      vigor: 5, focus: 4,
+      brawn: -2, grace: 2,
+      smart: -3, charm: -1,
+      outlook: Fearful,
+      strategy: Random,
+      talking: Some(Talk(
+        chance: 20,
+        phrases: ["squeek!"]
+      ))
+    ),
+    Actor(
+      id: "giant rat",
+      name: "Giant Rat",
+      tiles: [(13, 2)],
+      field_of_view: 4,
+      armor: 0, speed: 2, power: 2,
+      vigor: 8, focus: 5,
+      brawn: -1, grace: 2,
+      smart: -2, charm: -1,
+      outlook: Aggressive,
+      strategy: Random,
+      talking: Some(Talk(
+        chance: 20,
+        phrases: ["squeek!!"]
+      ))
+    ),
+    Actor(
+      id: "dire dormouse",
+      name: "Dire Dormouse",
+      tiles: [(13, 6)],
+      field_of_view: 4,
+      armor: 0, speed: 2, power: 2,
+      vigor: 8, focus: 5,
+      brawn: -1, grace: 2,
+      smart: -2, charm: -1,
+      outlook: Aggressive,
+      strategy: Random,
+      talking: Some(Talk(
+        chance: 30,
+        phrases: ["Squeek!!"]
+      ))
+    ),
+    Actor(
+      id: "cave bat",
+      name: "Cave Bat",
+      tiles: [(12, 19)],
+      field_of_view: 3,
+      armor: 0, speed: 1, power: 1,
+      vigor: 3, focus: 4,
+      brawn: -2, grace: 3,
+      smart: -3, charm: -1,
+      outlook: Neutral,
+      strategy: Random
+    ),
+    Actor(
+      id: "animated tree",
+      name: "Animated Tree",
+      tiles: [(1, 22)],
+      field_of_view: 8,
+      armor: 3, speed: 5, power: 5,
+      vigor: 40, focus: 10,
+      brawn: 4, grace: -3,
+      smart: 0, charm: 0,
+      outlook: Neutral,
+      strategy: Random,
+      talking: Some(Talk(
+        chance: 10,
+        phrases: ["Haroom!"]
+      ))
+    ),
+    Actor(
+      id: "goblin with torch",
+      name: "Goblin",
+      tiles: [(11, 9)],
+      field_of_view: 7,
+      field_f_light: Some(5),
+      armor: 0, speed: 2, power: 2,
+      vigor: 10, focus: 5,
+      brawn: 0, grace: 1,
+      smart: -1, charm: -2,
+      outlook: Aggressive,
+      strategy: Patrol(North),
+      talking: Some(Talk(
+        chance: 10,
+        phrases: [
+          "Quiet, you maggots!",
+          "Over there! Get it!",
+          "I hate this job",
+          "This is our territory!",
+          "I got the torch, I'm in charge"
+        ]
+      ))
+    ),
+    Actor(
+      id: "goblin",
+      name: "Goblin",
+      tiles: [(12, 10)],
+      field_of_view: 7,
+      armor: 0, speed: 2, power: 2,
+      vigor: 10, focus: 5,
+      brawn: 0, grace: 1,
+      smart: -1, charm: -2,
+      outlook: Aggressive,
+      strategy: Patrol(North),
+      talking: Some(Talk(
+        chance: 10,
+        phrases: [
+          "Meat's back on the menu!",
+          "Wonder if it will squeel?",
+          "I heard something!"
+        ]
+      ))
+    ),
+    Actor(
+      id: "skeleton",
+      name: "Skeleton",
+      tiles: [(12, 24)],
+      field_of_view: 5,
+      armor: 1, speed: 1, power: 2,
+      vigor: 15, focus: 0,
+      brawn: 1, grace: -1, 
+      smart: -3, charm: -3,
+      outlook: Aggressive,
+      strategy: Patrol(North)
+    ),
+    Actor(
+      id: "skeleton with torch",
+      name: "Skeleton",
+      tiles: [(11, 24)],
+      field_of_view: 5,
+      field_of_light: Some(5),
+      armor: 1, speed: 1, power: 2,
+      vigor: 15, focus: 0,
+      brawn: 1, grace: -1,
+      smart: -3, charm: -3,
+      outlook: Aggressive,
+      strategy: Patrol(North)
+    )
+  ]
+)
+
+
+
+

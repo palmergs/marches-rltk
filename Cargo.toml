@@ -11,4 +11,5 @@ bracket-lib = { version="*", features = ["serde"] }
 legion = { version = "0.3.1", features = ["extended-tuple-impls"] }
 lazy_static = "*"
 serde = { version = "1.0", features = ["derive"] }
+ron = "*"
 serde_json = "1.0"

@@ -1,0 +1,202 @@
+Items(
+  items: [
+    Item(
+      id: "dagger",
+      name: "Dagger",
+      type: Weapon(armor: 0, power: 1, speed: 0),
+      tiles: [(13, 116)],
+      slots: Some([LeftHand, RightHand])
+    ),
+    Item(
+      id: "torch",
+      name: "Torch",
+      type: Weapon(armor: 0, power: 1, speed: 0),
+      tiles: [(1, 11)],
+      slots: Some([LeftHand, RightHand]),
+      field_of_light: Some(5),
+    ),
+    Item(
+      id: "flaming sword",
+      name: "Flaming Sword",
+      type: Weapon(armor: 0, power: 4, speed: 0),
+      tiles: [(13, 128)],
+      slots: Some([BothHands]),
+    ),
+    Item(
+      id: "buckler",
+      name: "Buckler",
+      type: Weapon(armor: 2, power: 1, speed: 0),
+      tiles: [(13, 96)],
+      slots: Some([LeftHand])
+    ),
+    Item(
+      id: "ring of protection",
+      name: "Ring of Protection",
+      type: Jewelry,
+      tiles: [(12, 59)],
+      slots: Some([LeftRing, RightRing]),
+      equip: Some([
+        ItemAction(effects: [ Armor(2) ]
+      ])
+    ),
+    Item(
+      id: "ring of power",
+      name: "Ring of Power",
+      type: Jewelry,
+      tiles: [(12, 57)],
+      slots: Some([LeftRing, RightRing])
+      equip: Some([
+        ItemAction(effects: [ Power(2) ])
+      ])
+    ),
+    Item(
+      id: "ring of lesser radiance",
+      name: "Ring of Lesser Radiance",
+      type: Jewelry,
+      tiles: [(12, 58)],
+      slots: Some([LeftRing, RightRing]),
+      equip: Some([
+        ItemAction(effects: [ Light(4) ])
+      ])
+    ),
+    Item(
+      id: "ring of greater radiance",
+      name: "Ring of Greater Radiance",
+      type: Jewelry,
+      tiles: [(12, 58)],
+      slots: Some([LeftRing, RightRing]),
+      equip: Some([
+        ItemAction(effects: [ Light(8), Power(1), Armor(1) ])
+      ])
+    ),
+    Item(
+      id: "ring of speed",
+      name: "Ring of Speed",
+      type: Jewelry,
+      tiles: [(12, 58)],
+      slots: Some([LeftRing, RightRing]),
+      equip: Some([
+        ItemAction(effects: [ Speed(-1), Power(1), Armor(1) ])
+      ])
+    ),
+    Item(
+      id: "bottle",
+      name: "Empty Bottle",
+      type: Treasure,
+      tiles: [(13, 55)],
+    ),
+    Item(
+      id: "seltzer",
+      name: "Seltzer",
+      type: Result,
+      tiles: [(12, 56)],
+      activate: Some([
+        ItemAction(
+          uses: Some(1),
+          effects: [ Focus(10) ]
+        ),
+      ]),
+      destroy: Some([
+        ItemAction(effects: [ Spawn("bottle") ])
+      ])
+    ),
+    Item(
+      id: "healing potion",
+      name: "Healing Potion",
+      type: Result,
+      tiles: [(12, 55)],
+      activate: Some([
+        ItemAction(
+          uses: Some(1),
+          effects: [ Vigor(10) ]
+        ),
+      ]),
+      destroy: Some([
+        ItemAction(effects: [ Spawn("bottle") ])
+      ])
+    ),
+    Item(
+      id: "tasty mushroom",
+      name: "Mushroom",
+      type: Result,
+      tiles: [(12, 35)],
+      activate: Some([
+        ItemAction(
+          uses: Some(1),
+          text: Some("That tasted ok"),
+          effects: [ Vigor(3) ]
+        ),
+      ])
+    ),
+    Item(
+      id: "poison mushroom",
+      name: "Mushroom",
+      type: Result,
+      tiles: [(12, 35)],
+      activate: Some([
+        ItemAction(
+          uses: Some(1),
+          text: Some("That tasted terrible"),
+          effects: [ Vigor(-5) ]
+        ),
+      ])
+    ),
+    Item(
+      id: "closed door",
+      name: "Door",
+      type: Furniture,
+      tiles: [(1, 4)],
+      blocking: Option(true),
+      opaque: Option(true),
+      armor: Option(4),
+      vigor: Option(30),
+      activate: Some([
+        ItemAction(effects: [ Spawn("closed door") ])
+      ]),
+      destroy: Some([
+        ItemAction(
+          effects: [ Spawn("dire dormouse") ],
+          text: Some("There was a dire dormouse hiding in the door!"),
+          chance: Some(200),
+        )
+      ])
+    ),
+    Item(
+      id: "open door",
+      name: "Door",
+      type: Furniture,
+      tiles: [(1, 4)],
+      activate: Some([
+        ItemAction(effects: [ Spawn("closed door") ])
+      ])
+    ),
+    Item(
+      id: "closed chest",
+      name: "Chest",
+      type: Furniture,
+      blocking: Some(true),
+      armor: Option(4),
+      vigor: Option(30),
+      tiles: [(2, 7)],
+      activate: Some([
+        ItemAction(effects: [ Replace("open chest") ]),
+        ItemAction( 
+          effects: [ Spawn("skeleton") ], 
+          chance: Some(200),
+          text: Some("There was a skeleton hiding in this chest.")
+        ),
+        ItemAction(
+          effects: [ Spawn("flaming sword") ],
+          chance: Some(100),
+          text: Some("A bejeweled sword is hidden in the chest.")
+        )
+      ]),
+    ),
+    Item(
+      id: "open chest",
+      name: "Chest",
+      type: Furniture,
+      tiles: [(2, 8)]
+    )
+  ]
+)

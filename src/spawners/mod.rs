@@ -9,6 +9,13 @@ pub use actors::*;
 mod areas;
 pub use areas::*;
 
+mod templates;
+
+pub fn load_actors() {
+    let actors = templates::Actors::load();
+    println!("actors are {:?}", actors);
+}
+
 pub fn spawn_player(ecs: &mut World, pt: Point) {
     ecs.push(
         (
