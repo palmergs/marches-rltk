@@ -16,6 +16,11 @@ pub fn load_actors() {
     println!("actors are {:?}", actors);
 }
 
+pub fn load_items() {
+    let items = templates::Items::load();
+    println!("items are {:?}", items);
+}
+
 pub fn spawn_player(ecs: &mut World, pt: Point) {
     ecs.push(
         (

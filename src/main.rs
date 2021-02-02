@@ -53,6 +53,7 @@ pub fn tile_index(row: usize, col: usize) -> usize {
 
 fn main() -> BError {
     load_actors();
+    load_items();
     let context = BTermBuilder::new()
         .with_title("The Western Marches")
         .with_dimensions(SCREEN_WIDTH, SCREEN_HEIGHT)

@@ -45,12 +45,28 @@ impl Actors {
     }
 }
 
+#[derive(Debug, Clone, Deserialize)]
 pub enum ItemCategory {
     Jewelry,
+    Treasure,
     Furniture,
+    Consumable,
     Weapon { armor: i32, power: i32, speed: i32 },
 }
 
+#[derive(Clone, Debug, Deserialize)]
+pub enum ItemEffect {
+    Light(i32),
+    Power(i32),
+    Armor(i32),
+    Speed(i32),
+    Focus(i32),
+    Vigor(i32),
+    Replace(String),
+    Spawn(String),
+}
+
+#[derive(Debug, Clone, Deserialize)]
 pub struct ItemAction {
 
     // if the item supports multiple actions, this can be used
@@ -70,17 +86,7 @@ pub struct ItemAction {
     chance: Option<i32>,
 }
 
-pub enum ItemEffect {
-    Light(i32),
-    Power(i32),
-    Armor(i32),
-    Speed(i32),
-    Focus(i32),
-    Vigor(i32),
-    Replace(String),
-    Spawn(String),
-}
-
+#[derive(Clone, Debug, Deserialize)]
 pub struct Item {
     pub id: String,
     pub name: String, 
@@ -108,6 +114,15 @@ pub struct Item {
 }
 
 #[derive(Clone, Debug, Deserialize)]
-pub struct Items [
+pub struct Items {
     items: Vec<Item>
+}
+
+impl Items {
+    pub fn load() -> Self {
+        let file = File::open("resources/items.ron")
+            .expect("failed opening items template file");
+        from_reader(file)
+            .expect("unable to load items templates")
+    }
 }
