@@ -262,7 +262,7 @@ pub fn healing_potion_tuple(pt: Point) -> (Item, Point, Render, Stats, Consumabl
     )
 }
 
-pub fn mushroom1_tuple(pt: Point) -> (Item, Point, Render, Stats, Consumable, RestoresVigor ) {
+pub fn mushroom1_tuple(pt: Point) -> (Item, Point, Render, Stats, Consumable, RestoresVigor, FieldOfLight) {
     (
         Item{
             id: "nourishing mushroom".to_string(),
@@ -284,10 +284,11 @@ pub fn mushroom1_tuple(pt: Point) -> (Item, Point, Render, Stats, Consumable, Re
         },
         Consumable{ count: 1 },
         RestoresVigor{ amount: 1 },
+        FieldOfLight::new(2),
     )
 }
 
-pub fn mushroom2_tuple(pt: Point) -> (Item, Point, Render, Stats, Consumable, RestoresVigor) {
+pub fn mushroom2_tuple(pt: Point) -> (Item, Point, Render, Stats, Consumable, RestoresVigor, FieldOfLight) {
     (
         Item{
             id: "posion mushroom".to_string(),
@@ -309,6 +310,7 @@ pub fn mushroom2_tuple(pt: Point) -> (Item, Point, Render, Stats, Consumable, Re
         },
         Consumable{ count: 1 },
         RestoresVigor{ amount: -3 },        
+        FieldOfLight::new(2),
     )
 }
 
